@@ -1,0 +1,45 @@
+---
+/** Circular photo avatar with an optional ring. */
+interface Props {
+  src?: string;
+  alt?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | number;
+  ring?: boolean;
+  initials?: string;
+  class?: string;
+}
+
+const sizes = { sm: 44, md: 64, lg: 96, xl: 128 } as const;
+const { src, alt = '', size = 'md', ring = false, initials, class: className = '' } = Astro.props;
+const px = typeof size === 'number' ? size : sizes[size];
+---
+
+<span
+  class:list={['avatar', ring && 'avatar--ring', className]}
+  style={`--size:${px}px`}
+>
+  {src ? <img src={src} alt={alt} loading="lazy" decoding="async" /> : initials ? <span class="avatar__initials">{initials}</span> : null}
+</span>
+
+<style>
+  .avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--sky-100);
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+  }
+  .avatar--ring { box-shadow: 0 0 0 4px #fff, 0 0 0 5px var(--line-300), var(--shadow-sm); }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar__initials {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: calc(var(--size) * 0.36);
+    color: var(--navy-600);
+  }
+</style>

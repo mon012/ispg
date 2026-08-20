@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Card from '../components/ui/Card.astro';
+import Icon from '../components/site/Icon.astro';
+import { contact } from '../data/site';
+
+const channels = [
+  {
+    icon: 'mail' as const,
+    label: 'Admissions',
+    value: contact.email,
+    href: `mailto:${contact.email}`,
+    note: 'We usually reply within one working day.',
+  },
+  {
+    icon: 'phone' as const,
+    label: 'Phone',
+    value: contact.phoneDisplay,
+    href: contact.phoneHref,
+    note: 'Office hours, Monday to Friday.',
+  },
+  {
+    icon: 'message-circle' as const,
+    label: 'WhatsApp',
+    value: contact.whatsappDisplay,
+    href: contact.whatsapp,
+    note: 'Quickest for a short question.',
+    external: true,
+  },
+  {
+    icon: 'message-circle' as const,
+    label: 'LINE',
+    value: 'Add ISPG on LINE',
+    href: contact.line,
+    note: 'Popular with our Thailand-based families.',
+    external: true,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact & Address, Koh Phangan"
+  description="Contact ISPG — admissions email, phone, WhatsApp and LINE, plus our address on Koh Phangan and how to find us."
+  image="/media/site/parents-2.webp"
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Get in <em>touch</em>"
+    lead="Questions about enrolment, visits or school life? Our admissions team is here to help — drop us a message and we will come back to you quickly."
+    image="/media/site/parents-2.webp"
+  />
+
+  {/* --------------------------------------------------------- channels */}
+  <section class="section">
+    <div class="container">
+      <ul class="channels">
+        {channels.map((c, i) => (
+          <li data-reveal data-reveal-delay={i * 80}>
+            <a
+              href={c.href}
+              target={c.external ? '_blank' : undefined}
+              rel={c.external ? 'noopener noreferrer' : undefined}
+            >
+              <span class="channels__icon"><Icon name={c.icon} size={20} /></span>
+              <span class="channels__label">{c.label}</span>
+              <span class="channels__value">{c.value}</span>
+              <span class="channels__note">{c.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------- find us / map */}
+  <section class="section alt">
+    <div class="container">
+      <div class="find">
+        <div class="find__body" data-reveal>
+          <SectionHeading
+            size="sm"
+            eyebrow="Dropping by"
+            title="Where to <em>find us</em>"
+            lead="Our campus sits in a convenient spot on Koh Phangan, easy to reach by road. On-site parking is available, so you can drive right up to our door."
+          />
+
+          <address class="find__addr">
+            <Icon name="map-pin" size={18} />
+            <span>
+              {contact.address.street}<br />
+              {contact.address.locality}<br />
+              {contact.address.region} {contact.address.postcode}<br />
+              {contact.address.country}
+            </span>
+          </address>
+
+          <a class="find__link" href={contact.mapLink} target="_blank" rel="noopener noreferrer">
+            Open in Google Maps
+            <Icon name="external-link" size={14} />
+          </a>
+
+          <Card tone="sky" elevation="none" class="qr">
+            <img src="/media/brand/whatsapp-qr.webp" alt="QR code to start a WhatsApp chat with ISPG" width="120" height="120" loading="lazy" />
+            <div>
+              <h3>Scan to message us</h3>
+              <p>Point your camera at the code to open a WhatsApp chat with our admissions team.</p>
+            </div>
+          </Card>
+        </div>
+
+        <div class="find__map" data-reveal data-reveal-delay="90">
+          <iframe
+            src={contact.mapEmbed}
+            title="Map showing the location of the International School of Phangan"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* --------------------------------------------------------- visiting */}
+  <section class="section navy-deep">
+    <div class="container narrow visit" data-reveal>
+      <SectionHeading
+        align="center"
+        tone="dark"
+        size="sm"
+        eyebrow="Book a visit"
+        eyebrowColor="var(--sky-300)"
+        title="A tour takes about <em>an hour</em>"
+        lead="You will see the classrooms in use, meet the teachers for your child's stage, walk the grounds and the pool, and have time to ask everything. Children are very welcome to come along."
+      />
+      <p class="visit__cta">
+        Email <a href={`mailto:${contact.email}`}>{contact.email}</a> or message us on
+        <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        with your child’s age and a couple of dates that suit you.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .channels {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+  .channels a {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
+    padding: var(--sp-8) var(--sp-6);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .channels a:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .channels__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--sky-100);
+    color: var(--sky-600);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--sp-3);
+  }
+  .channels__label {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    color: var(--accent-primary);
+  }
+  .channels__value { font-family: var(--font-display); font-size: 1.3rem; color: var(--navy-700); font-weight: var(--fw-semibold); line-height: 1.2; word-break: break-word; }
+  .channels__note { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.5; }
+
+  .find { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(var(--sp-8), 5vw, var(--sp-16)); align-items: start; }
+  .find__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-6); }
+
+  .find__addr {
+    display: flex;
+    gap: var(--sp-3);
+    font-style: normal;
+    color: var(--ink-700);
+    line-height: 1.7;
+  }
+  .find__addr :global(.icon) { color: var(--sky-600); margin-top: 5px; }
+
+  .find__link { display: inline-flex; align-items: center; gap: 7px; font-size: var(--fs-sm); font-weight: var(--fw-bold); }
+
+  .qr { display: flex; gap: var(--sp-5); align-items: center; width: 100%; }
+  .qr img { width: 110px; height: 110px; border-radius: var(--r-sm); background: #fff; padding: 6px; flex-shrink: 0; }
+  .qr h3 { margin: 0 0 4px; font-size: 1.2rem; }
+  .qr p { margin: 0; font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.55; }
+
+  .find__map {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 4 / 3;
+    background: var(--paper-2);
+  }
+  .find__map iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  .visit { text-align: center; }
+  .visit__cta { margin: var(--sp-8) 0 0; color: var(--text-on-navy-muted); line-height: 1.8; }
+  .visit__cta a { color: var(--sky-300); margin-inline: 3px; }
+
+  @media (max-width: 1000px) { .channels { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) { .find { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .channels { grid-template-columns: 1fr; }
+    .qr { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import Button from '../ui/Button.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+/** Closing "start your journey" band. Every page ends with one.
+ *  Contact details are deliberately left out — the footer immediately below
+ *  every page already carries phone, email, WhatsApp and LINE in full. */
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  eyebrow = 'Admissions',
+  title = 'Start your journey <em>with us</em>',
+  lead = 'Book a personal tour and discover how ISPG supports your family. We usually reply within one working day.',
+} = Astro.props;
+---
+
+<section class="section navy-deep cta">
+  <div class="container cta__inner">
+    <div data-reveal>
+      <SectionHeading tone="dark" size="md" eyebrow={eyebrow} eyebrowColor="var(--sky-300)" title={title} lead={lead} />
+    </div>
+
+    <div class="cta__side" data-reveal data-reveal-delay="90">
+      <div class="cta__actions">
+        <Button variant="primary" size="lg" href="/contact/">Book a Visit</Button>
+        <Button variant="onNavy" size="lg" href="/admission/">How to apply</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__inner {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(var(--sp-10), 6vw, var(--sp-16));
+    align-items: center;
+  }
+  .cta__side { display: flex; flex-direction: column; justify-content: center; }
+
+  .cta__actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .cta__inner { grid-template-columns: 1fr; }
+  }
+</style>

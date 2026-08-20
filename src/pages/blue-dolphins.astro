@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Card from '../components/ui/Card.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/site/Icon.astro';
+import GumletVideo from '../components/sections/GumletVideo.astro';
+import DeftForm from '../components/sections/DeftForm.astro';
+import { embeds, contact } from '../data/site';
+
+/** This page used to be raw, verbatim WordPress HTML rendered through the
+ *  generic [slug].astro/ContentPage pipeline (a Wufoo-style accordion, inline
+ *  SVG checkmarks, an AI-generated cartoon dolphin crest). Rebuilt here in the
+ *  site's own components so it matches every other program page — see
+ *  school-life.astro's "Blue Dolphins" teaser section, which already links
+ *  here and sets the age-band names this page has to stay consistent with. */
+
+const features = [
+  'Experienced, qualified coaches who guide every child at their own pace',
+  'Full 25-metre pool — built to professional standards',
+  'Structured levels from toddler to advanced — real progress, every step',
+  'Safe, clean, and nurturing environment your whole family can trust',
+];
+
+const levels = [
+  {
+    badge: 'Ages 2–3',
+    name: 'Toddler & Basic',
+    intro: 'A parent or guardian joins the fun in the water.',
+    goal: 'Get comfortable and stay safe in the pool.',
+    detailLabel: 'Skills',
+    detail: 'Blowing bubbles, easy kicking, floating with help, and getting in and out safely.',
+  },
+  {
+    badge: 'Ages 3–5',
+    name: 'Levels 1–5 · Preschool',
+    intro: 'Kids start learning on their own, without a parent in the water.',
+    goal: 'Learn basic water safety and how to move by themselves.',
+    detailLabel: 'Skills',
+    detail: 'Floating on their front and back, gliding, treading water, and swimming short distances alone.',
+  },
+  {
+    badge: 'Ages 6–12',
+    name: 'Levels 6–7 · School-age',
+    intro: 'Kids are grouped with others at their same skill level.',
+    goal: 'Learn the four basic swimming strokes.',
+    detailLabel: 'Next steps',
+    detail: 'Ready for more? Students can join our swim team for fun competitions.',
+  },
+];
+
+const gallery = [
+  { src: '/media/2026/02/YING1674-1.webp', alt: 'Two children laughing in the pool at Blue Dolphins' },
+  { src: '/media/2026/02/YING1850.webp', alt: 'A coach helping a young swimmer at the starting blocks' },
+  { src: '/media/2026/02/S__62652467zz.webp', alt: 'The full 25-metre Blue Dolphins pool' },
+];
+---
+
+<BaseLayout
+  title="Blue Dolphins Swimming Academy, Koh Phangan"
+  description="Expert coaches, a professional 25-metre pool and structured levels from toddler to advanced — swimming lessons at ISPG."
+  image="/media/2026/02/S__62652467zz.webp"
+>
+  <PageHero
+    eyebrow="Swimming Centre"
+    title="Blue Dolphins <em>Swimming Academy</em>"
+    lead="Give your child a skill that lasts a lifetime — expert coaches, a professional 25-metre pool, and real progress at every level."
+    image="/media/2026/02/S__62652467zz.webp"
+    emblem="/media/brand/blue-dolphins.webp"
+  />
+
+  {/* ------------------------------------------------------------- intro */}
+  <section class="section">
+    <div class="container">
+      <div class="intro">
+        <div class="intro__body" data-reveal>
+          <SectionHeading
+            size="sm"
+            eyebrow="Why families choose us"
+            title="Expert coaches. Professional pool. Real progress."
+          />
+          <ul class="checks">
+            {features.map((f) => (
+              <li><Icon name="check" size={18} /><span>{f}</span></li>
+            ))}
+          </ul>
+        </div>
+        <div class="intro__strip" data-reveal data-reveal-delay="90">
+          {gallery.map((g, i) => (
+            <img class:list={[i === 1 && 'is-offset']} src={g.src} alt={g.alt} loading="lazy" decoding="async" />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------ levels */}
+  <section class="section alt">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading
+          align="center"
+          size="md"
+          eyebrow="How lessons progress"
+          title="Three stages, one clear <em>pathway</em>"
+          lead="Every swimmer moves through the same structured levels — at their own pace."
+        />
+      </div>
+      <div class="grid cols-3">
+        {levels.map((l, i) => (
+          <div data-reveal data-reveal-delay={i * 100}>
+            <Card padding="var(--sp-8)" elevation="sm" class="lvl">
+              <Badge tone="sky">{l.badge}</Badge>
+              <h3 class="lvl__name">{l.name}</h3>
+              <p class="lvl__intro">{l.intro}</p>
+              <dl class="lvl__facts">
+                <div>
+                  <dt>Goal</dt>
+                  <dd>{l.goal}</dd>
+                </div>
+                <div>
+                  <dt>{l.detailLabel}</dt>
+                  <dd>{l.detail}</dd>
+                </div>
+              </dl>
+            </Card>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* -------------------------------------------------------------- film */}
+  <section class="section">
+    <div class="container film">
+      <div class="film__head" data-reveal>
+        <SectionHeading align="center" size="sm" eyebrow="See it in action" title="A morning at <em>Blue Dolphins</em>" />
+      </div>
+      <div data-reveal data-reveal-delay="90">
+        <GumletVideo id={embeds.blueDolphinsFilm} title="Blue Dolphins Swimming Academy" />
+      </div>
+    </div>
+  </section>
+
+  {/* -------------------------------------------------------- trial offer */}
+  <section class="section navy-deep" id="trial">
+    <div class="container reg">
+      <div data-reveal>
+        <SectionHeading
+          tone="dark"
+          size="sm"
+          eyebrow="Limited spots"
+          eyebrowColor="var(--sky-300)"
+          title="Try the first class <em>free</em>"
+          lead="Claim a free trial class — worth 890 THB — and see how your child takes to the water."
+        />
+        <ul class="reg__contact">
+          <li><Icon name="phone" size={17} /><a href={contact.phoneHref}>{contact.phoneDisplay}</a></li>
+          <li><Icon name="mail" size={17} /><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+        </ul>
+      </div>
+      <div data-reveal data-reveal-delay="90">
+        <DeftForm formId={embeds.blueDolphinsTrialForm} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ------------------------------------------------------------- intro */
+  .intro { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(var(--sp-8), 5vw, var(--sp-16)); align-items: center; }
+
+  .checks { list-style: none; margin: var(--sp-6) 0 0; padding: 0; display: grid; gap: var(--sp-4); }
+  .checks li { display: flex; gap: 12px; align-items: flex-start; }
+  .checks :global(.icon) { flex-shrink: 0; color: var(--coral-500); margin-top: 2px; }
+  .checks span { color: var(--text-body); line-height: 1.5; }
+
+  .intro__strip { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .intro__strip img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    display: block;
+  }
+  /* Third photo spans the full width beneath the first pair — reads as the
+     establishing shot of the pool once the first two have set the mood. */
+  .intro__strip img:last-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  .intro__strip img.is-offset { margin-top: 28px; }
+
+  /* -------------------------------------------------------------- levels */
+  .lvl { height: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  .lvl__name { margin: var(--sp-2) 0 0; font-family: var(--font-display); font-size: 1.3rem; color: var(--navy-700); }
+  .lvl__intro { margin: 0; color: var(--text-muted); line-height: var(--lh-body); }
+  .lvl__facts { list-style: none; margin: var(--sp-2) 0 0; padding: 0; display: grid; gap: 10px; width: 100%; }
+  .lvl__facts div { display: flex; flex-direction: column; gap: 2px; padding-top: var(--sp-3); border-top: 1px solid var(--border-hairline); }
+  .lvl__facts dt { margin: 0; font-size: var(--fs-xs); font-weight: var(--fw-bold); letter-spacing: var(--ls-caps); text-transform: uppercase; color: var(--sky-600); }
+  .lvl__facts dd { margin: 0; font-size: var(--fs-sm); color: var(--ink-700); line-height: 1.5; }
+
+  /* -------------------------------------------------------------- film
+     Wider than .narrow (720px) so the video reads as a real centrepiece —
+     matches the .container.film idiom used on about.astro/openhouse.astro. */
+  .film { max-width: 960px; }
+  .film__head { margin-bottom: var(--sp-8); }
+
+  /* --------------------------------------------------------- trial offer */
+  .reg { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(var(--sp-10), 5vw, var(--sp-16)); align-items: start; }
+  .reg__contact { list-style: none; margin: var(--sp-8) 0 0; padding: 0; display: grid; gap: 12px; }
+  .reg__contact li { display: flex; gap: 12px; align-items: center; color: var(--text-on-navy); }
+  .reg__contact :global(.icon) { color: var(--sky-300); }
+  .reg__contact a { color: var(--text-on-navy); text-decoration: none; }
+  .reg__contact a:hover { color: var(--sky-300); }
+
+  @media (max-width: 900px) {
+    .intro { grid-template-columns: 1fr; }
+    .reg { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .intro__strip { grid-template-columns: 1fr; }
+    .intro__strip img.is-offset { margin-top: 0; }
+    .intro__strip img:last-child { grid-column: auto; aspect-ratio: 4 / 3; }
+  }
+</style>

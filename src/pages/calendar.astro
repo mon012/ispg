@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Card from '../components/ui/Card.astro';
+import Icon from '../components/site/Icon.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import { embeds } from '../data/site';
+
+/** The only date confirmed in static content — everything else comes live from
+ *  the embedded Google Calendar, which the school maintains directly. */
+const firstDay = { iso: '2026-08-31', label: 'Monday 31 August 2026', note: 'Term 1 begins' };
+
+const src = `https://calendar.google.com/calendar/embed?src=${embeds.googleCalendarSrc}&ctz=Asia%2FBangkok&wkst=2&showTitle=0&showPrint=0&showTabs=1&showCalendars=0&mode=`;
+---
+
+<BaseLayout
+  title="School Calendar"
+  description="Term dates and everything happening at ISPG — the school's own calendar, live on the page."
+  image="/media/site/badges.webp"
+>
+  <PageHero
+    eyebrow="Dates"
+    title="School <em>calendar</em>"
+    lead="Term dates, events and closures come straight from the school's own calendar, so what you see here is always current."
+    size="sm"
+    image="/media/site/badges.webp"
+  />
+
+  {/* ---------------------------------------------------------- first day */}
+  <section class="section tight">
+    <div class="container">
+      <Card tone="sky" elevation="none" class="firstday" data-reveal>
+        <Icon name="calendar" size={26} />
+        <div>
+          <span class="firstday__label">{firstDay.note}</span>
+          <time class="firstday__date" datetime={firstDay.iso}>{firstDay.label}</time>
+        </div>
+      </Card>
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------------- embed */}
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading
+          size="sm"
+          eyebrow="Live calendar"
+          title="What’s <em>coming up</em>"
+          lead="Tap an event for details."
+        />
+      </div>
+
+      <div class="cal" data-reveal data-reveal-delay="80">
+        <iframe
+          class="cal__month"
+          src={`${src}MONTH`}
+          title="ISPG school calendar, month view"
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <p class="calnote">
+        <Icon name="clock" size={15} />
+        Times shown in Indochina Time (Asia/Bangkok). If an event does not appear,
+        it has not been published yet — contact the school office to confirm.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Planning a visit"
+    title="Come on a <em>normal</em> school day"
+    lead="Tours run during term time so you see the school as it actually is."
+  />
+</BaseLayout>
+
+<style>
+  .firstday { display: flex; align-items: center; gap: var(--sp-5); }
+  .firstday :global(.icon) { color: var(--sky-600); }
+  .firstday__label {
+    display: block;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    color: var(--accent-primary);
+    margin-bottom: 4px;
+  }
+  .firstday__date {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: var(--fw-semibold);
+    color: var(--navy-700);
+    line-height: 1.15;
+  }
+
+  .cal {
+    margin-top: var(--sp-10);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-hairline);
+    box-shadow: var(--shadow-sm);
+    background: var(--surface-card);
+  }
+  .cal iframe { width: 100%; border: 0; display: block; }
+  .cal__month { height: 640px; }
+
+  .calnote {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    margin: var(--sp-5) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--text-caption);
+    line-height: 1.6;
+  }
+  .calnote :global(.icon) { margin-top: 3px; flex-shrink: 0; }
+</style>

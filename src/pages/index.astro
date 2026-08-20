@@ -1,0 +1,860 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Badge from '../components/ui/Badge.astro';
+import Card from '../components/ui/Card.astro';
+import ImageCard from '../components/ui/ImageCard.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Avatar from '../components/ui/Avatar.astro';
+import Icon from '../components/site/Icon.astro';
+import PupilPathway from '../components/sections/PupilPathway.astro';
+import GumletVideo from '../components/sections/GumletVideo.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import { site, embeds } from '../data/site';
+import { pillars } from '../data/flair';
+import { articles } from '../lib/content';
+import { principalQuote } from '../data/teachers';
+
+const latest = articles.slice(0, 3);
+
+/* ---------------------------------------------------------------- FLAIR dial
+   The five pillars drawn as a 180° fan of donut segments around a central hub.
+   Geometry is resolved at build time so the markup ships as plain SVG paths. */
+const DIAL = { cx: 94, cy: 258, rIn: 80, rOut: 250, hub: 86, w: 356, h: 516 };
+const SPAN = 180 / pillars.length;
+
+/* Dial-local palette. The pillar accents are tuned for small dots on light
+   surfaces; blown up to wedge size on a navy section two of them break down —
+   flair-nature (navy-600) all but vanishes into the background, and white
+   labels drop below 4.5:1 on the gold, orange and sky fills. So the dial fixes
+   its own fill/ink pairs and leaves --flair-* untouched for the rest of site. */
+const DIAL_INK: Record<string, { fill: string; ink: string }> = {
+  F: { fill: 'var(--coral-500)', ink: '#fff' },
+  L: { fill: 'var(--gold-500)', ink: 'var(--navy-900)' },
+  A: { fill: 'var(--orange-500)', ink: 'var(--navy-900)' },
+  I: { fill: 'var(--sky-500)', ink: 'var(--navy-900)' },
+  R: { fill: 'var(--sky-300)', ink: 'var(--navy-900)' },
+};
+
+const polar = (r: number, deg: number) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return [DIAL.cx + r * Math.cos(a), DIAL.cy + r * Math.sin(a)];
+};
+const round = (n: number) => Math.round(n * 100) / 100;
+
+/** Break a pillar name into two balanced lines — SVG text will not wrap. */
+const twoLines = (name: string) => {
+  const words = name.split(' ');
+  if (words.length < 2) return [name];
+  let at = 1;
+  let closest = Infinity;
+  for (let k = 1; k < words.length; k++) {
+    const gap = Math.abs(words.slice(0, k).join(' ').length - words.slice(k).join(' ').length);
+    if (gap < closest) { closest = gap; at = k; }
+  }
+  return [words.slice(0, at).join(' '), words.slice(at).join(' ')];
+};
+
+const wedges = pillars.map((p, i) => {
+  const a1 = i * SPAN;
+  const a2 = a1 + SPAN;
+  const mid = a1 + SPAN / 2;
+  const [x1, y1] = polar(DIAL.rIn, a1);
+  const [x2, y2] = polar(DIAL.rOut, a1);
+  const [x3, y3] = polar(DIAL.rOut, a2);
+  const [x4, y4] = polar(DIAL.rIn, a2);
+  const [lx, ly] = polar(123, mid);
+  const [nx, ny] = polar(195, mid);
+  const rad = ((mid - 90) * Math.PI) / 180;
+  return {
+    ...p,
+    ...DIAL_INK[p.letter],
+    lines: twoLines(p.name),
+    d: [
+      `M${round(x1)} ${round(y1)}`,
+      `L${round(x2)} ${round(y2)}`,
+      `A${DIAL.rOut} ${DIAL.rOut} 0 0 1 ${round(x3)} ${round(y3)}`,
+      `L${round(x4)} ${round(y4)}`,
+      `A${DIAL.rIn} ${DIAL.rIn} 0 0 0 ${round(x1)} ${round(y1)}`,
+      'Z',
+    ].join(' '),
+    lx: round(lx), ly: round(ly),
+    nx: round(nx), ny: round(ny),
+    // Radial nudge — the classic "exploded slice" lift on hover.
+    dx: round(Math.cos(rad) * 10),
+    dy: round(Math.sin(rad) * 10),
+  };
+});
+
+const completeEducation = [
+  { image: '/media/site/campus-aerial.webp', eyebrow: 'Rooted in Nature', label: 'A classroom without walls', href: '/flair/' },
+  { image: '/media/site/swim-lesson.webp', eyebrow: 'Blue Dolphins', label: 'Swimming for life', href: '/blue-dolphins/' },
+  { image: '/media/site/meals.webp', eyebrow: 'Wellbeing', label: 'Meals that fuel growth', href: '/school-life/' },
+];
+
+/* Gumlet-hosted clips play muted/looping as background tiles — no chrome, no
+   audio autoplay issue. IDs come straight from the /watch/{id}/ share links;
+   play.gumlet.io/embed/{id} is the same endpoint GumletVideo.astro uses for
+   the full school-film player, just with background=true swapped in. */
+const gumletBg = (id: string) =>
+  `https://play.gumlet.io/embed/${id}?background=true&autoplay=true&loop=true&muted=true&disable_player_controls=true`;
+
+type MosaicTile =
+  | { kind: 'image'; src: string; size?: 'wide' | 'tall' }
+  | { kind: 'video'; id: string; label: string };
+
+const mosaic: MosaicTile[] = [
+  { kind: 'image', src: '/media/site/swim-joy.webp' },
+  { kind: 'video', id: '6a866973ed1e919cbbb2798c', label: 'ISPG school life clip 1' },
+  { kind: 'image', src: '/media/site/climbing-2.webp' },
+  { kind: 'image', src: '/media/site/circle-time.webp' },
+  { kind: 'video', id: '6a86697327a811c66a1bb664', label: 'ISPG school life clip 2' },
+  { kind: 'image', src: '/media/site/celebrate.webp', size: 'wide' },
+  { kind: 'image', src: '/media/site/swim-pair.webp' },
+  { kind: 'video', id: '6a866973f180d34362d5f34e', label: 'ISPG school life clip 3' },
+  { kind: 'image', src: '/media/site/medals.webp', size: 'wide' },
+  { kind: 'video', id: '6a86697327a811c66a1bb663', label: 'ISPG school life clip 4' },
+];
+
+const stages = [
+  {
+    image: '/media/site/one-to-one.webp',
+    tag: 'Ages 2–5',
+    title: 'Kindergarten',
+    body:
+      'The Montessori approach woven into the Cambridge Curriculum. Child-led, play-based learning lets children choose their own materials and work at their own pace, building the habits they carry into Primary.',
+    points: ['Nursery (2–3)', 'Casa (3–5)'],
+    href: '/academics/kindergarten/',
+  },
+  {
+    image: '/media/site/active.webp',
+    tag: 'Ages 5–11',
+    title: 'Primary',
+    body:
+      'Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within the Cambridge Curriculum.',
+    points: ['Key Stage 1 (5–8)', 'Key Stage 2 (8–11)'],
+    href: '/academics/primary/',
+  },
+];
+---
+
+<BaseLayout title="International School of Phangan, Koh Phangan" floatingHeader>
+  {/* ------------------------------------------------------------- hero */}
+  <section class="hero">
+    <div class="hero__media">
+      <img src="/media/site/campus-aerial-2.webp" alt="" fetchpriority="high" decoding="async" />
+      <div class="hero__scrim"></div>
+    </div>
+    <div class="container hero__inner">
+      <Eyebrow color="var(--sky-300)" align="center">Welcome to ISPG · Koh Phangan</Eyebrow>
+      <h1 class="hero__title">A Cambridge education that develops the <em>whole child</em></h1>
+      <p class="hero__lead">
+        We guide families through every stage of learning, from Montessori
+        foundations to the Cambridge Curriculum.
+      </p>
+      <div class="hero__actions">
+        <Button variant="primary" size="lg" href="/contact/">Book a Visit</Button>
+        <Button variant="onNavy" size="lg" href="/about/#film">
+          <Icon name="play" size={16} slot="icon-left" />
+          Watch the school film
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------ intro */}
+  <section class="section">
+    <div class="container narrow intro" data-reveal>
+      <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
+      <p class="intro__body">
+        The International School of Phangan is a Cambridge Curriculum school that develops
+        the whole child. Our <strong>FLAIR</strong> philosophy shapes every day at ISPG —
+        Future Leadership, Lifelong Learning, Active Living, an International Mindset and
+        being Rooted in Nature.
+      </p>
+      <Button variant="secondary" href="/flair/">
+        Discover our approach
+        <Icon name="arrow-right" size={15} slot="icon-right" />
+      </Button>
+    </div>
+  </section>
+
+  {/* --------------------------------------------------- accreditation */}
+  <section class="section tight accred">
+    <div class="container accred__inner" data-reveal>
+      <Eyebrow align="center">Trusted Partners</Eyebrow>
+      <p class="accred__title">In <em>partnership</em> with Cambridge</p>
+      <div class="accred__row">
+        <span class="accred__by">Officially Accredited by</span>
+        <span class="accred__divider" aria-hidden="true"></span>
+        <img src="/media/brand/cambridge.webp" alt="Cambridge Assessment International Education" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------------- pathway */}
+  <PupilPathway />
+
+  {/* ------------------------------------------------------------ quote */}
+  <section class="section tight">
+    <div class="container narrow quote" data-reveal>
+      <span class="quote__mark" aria-hidden="true">&ldquo;</span>
+      <blockquote class="quote__body">
+        <p>{principalQuote.text}</p>
+        <footer class="quote__attr">
+          <Avatar size="md" src="/media/teachers/cedric-portrait.webp" alt={principalQuote.attribution} />
+          <span>
+            <span class="quote__name">{principalQuote.attribution}</span>
+            <span class="quote__org">{principalQuote.organisation}</span>
+          </span>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------------- mosaic */}
+  <div class="container">
+    <div class="mosaic">
+      {mosaic.map((tile, i) => (
+        <div
+          class:list={['mosaic__tile', tile.kind === 'video' && 'is-tall', tile.kind === 'image' && tile.size === 'wide' && 'is-wide']}
+          data-reveal
+          data-reveal-delay={i * 60}
+        >
+          {tile.kind === 'image' ? (
+            <img src={tile.src} alt="" loading="lazy" decoding="async" />
+          ) : (
+            <iframe
+              data-src={gumletBg(tile.id)}
+              title={tile.label}
+              loading="lazy"
+              referrerpolicy="origin"
+              allow="autoplay"
+            ></iframe>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <script>
+    // The mosaic sits well below the fold, and the browser's own lazy loading
+    // still fetches an iframe more than a screen early — so the four Gumlet
+    // players are held back until the mosaic is nearly in view. Nothing
+    // third-party is requested on first paint.
+    const tiles = document.querySelectorAll<HTMLIFrameElement>('.mosaic__tile iframe');
+    // The clips autoplay on loop by design, but that's exactly the kind of
+    // motion prefers-reduced-motion exists to opt out of — matches the check
+    // BaseLayout already runs for scroll-reveal.
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const load = (el: HTMLIFrameElement) => {
+      const src = el.dataset.src;
+      if (!src) return;
+      el.src = still ? src.replace('autoplay=true&loop=true', 'autoplay=false&loop=false') : src;
+      delete el.dataset.src;
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          load(entry.target as HTMLIFrameElement);
+          io.unobserve(entry.target);
+        }
+      },
+      { rootMargin: '300px 0px' },
+    );
+    tiles.forEach((el) => io.observe(el));
+  </script>
+
+  {/* ------------------------------------------- a complete education */}
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading
+          align="center"
+          eyebrow="The whole child"
+          title="A <em>complete education</em> — nature, movement and wellbeing"
+        />
+      </div>
+      <div class="grid cols-3 tiles">
+        {completeEducation.map((c, i) => (
+          <div data-reveal data-reveal-delay={i * 110}>
+            <ImageCard src={c.image} eyebrow={c.eyebrow} label={c.label} href={c.href} ratio="4 / 5" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------ FLAIR */}
+  <section class="section navy">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading
+          align="center"
+          tone="dark"
+          size="md"
+          eyebrow="Our philosophy"
+          eyebrowColor="var(--sky-300)"
+          title="The <em>FLAIR</em> model"
+          lead="Five commitments that shape every classroom, coach and conversation at ISPG."
+        />
+      </div>
+      <div class="fan" data-reveal>
+        <svg
+          class="dial"
+          viewBox={`0 0 ${DIAL.w} ${DIAL.h}`}
+          width={DIAL.w}
+          height={DIAL.h}
+        >
+          <g class="dial__wedges">
+            {wedges.map((w, i) => (
+              <g class="wedge" data-p={i} style={`--i:${i}; --accent:${w.fill}; --ink:${w.ink}; --dx:${w.dx}px; --dy:${w.dy}px`}>
+                <a class="wedge__a" href="/flair/" aria-label={`${w.name} — ${w.short}`}>
+                  <path class="wedge__shape" d={w.d} />
+                  <text class="wedge__letter" x={w.lx} y={w.ly}>{w.letter}</text>
+                  <text class="wedge__name" x={w.nx} y={w.ny - 8}>
+                    {w.lines.map((line, k) => (
+                      <tspan x={w.nx} dy={k === 0 ? 0 : 16}>{line}</tspan>
+                    ))}
+                  </text>
+                </a>
+              </g>
+            ))}
+          </g>
+          <g class="dial__hub" aria-hidden="true">
+            <circle class="hub__disc" cx={DIAL.cx} cy={DIAL.cy} r={DIAL.hub} />
+            <text class="hub__word" x={DIAL.cx} y={DIAL.cy - 6}>FLAIR</text>
+            {pillars.map((p, i) => (
+              <circle class="hub__dot" cx={DIAL.cx + (i - 2) * 17} cy={DIAL.cy + 28} r="4.5" style={`fill:${p.accent}`} />
+            ))}
+          </g>
+        </svg>
+
+        <div class="fan__panels">
+          {pillars.map((p, i) => (
+            <article class="fan__panel" data-p={i} style={`--accent:${p.accent}`}>
+              <span class="fan__badge" aria-hidden="true">{p.letter}</span>
+              <h3 class="fan__title">{p.name}</h3>
+              <p class="fan__text">{p.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div class="flair__cta" data-reveal>
+        <Button variant="onNavy" href="/flair/">
+          Explore FLAIR in full
+          <Icon name="arrow-right" size={15} slot="icon-right" />
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------------- stages */}
+  <section class="section">
+    <div class="container">
+      <div class="stages__head" data-reveal>
+        <SectionHeading size="sm" eyebrow="Curriculum" title="Learning that <em>grows</em> with your child" />
+        <Button variant="ghost" href="/academics/">
+          All academics
+          <Icon name="arrow-right" size={15} slot="icon-right" />
+        </Button>
+      </div>
+      <div class="grid cols-2">
+        {stages.map((s, i) => (
+          <div data-reveal data-reveal-delay={i * 110}>
+            <Card padding="0" elevation="md" class="stagecard">
+              <img class="stagecard__img" src={s.image} alt={`${s.title} at ISPG`} loading="lazy" decoding="async" />
+              <div class="stagecard__body">
+                <Badge tone="sky">{s.tag}</Badge>
+                <h3 class="stagecard__title">{s.title}</h3>
+                <p class="stagecard__copy">{s.body}</p>
+                <div class="stagecard__pills">
+                  {s.points.map((p) => <Badge tone="coral">{p}</Badge>)}
+                </div>
+                <Button variant="secondary" size="sm" href={s.href}>
+                  Explore stage
+                  <Icon name="arrow-right" size={15} slot="icon-right" />
+                </Button>
+              </div>
+            </Card>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------- film */}
+  <section class="section alt">
+    <div class="container film__wrap">
+      <div class="film__head" data-reveal>
+        <SectionHeading
+          align="center"
+          size="sm"
+          eyebrow="Take a look"
+          title="See the school <em>for yourself</em>"
+          lead="A few minutes on campus — the classrooms, the pool, the grounds and the children who fill them."
+        />
+      </div>
+      <div data-reveal data-reveal-delay="120">
+        <GumletVideo id={embeds.schoolFilm} title="ISPG school film" />
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------- news */}
+  <section class="section">
+    <div class="container">
+      <div class="news__head" data-reveal>
+        <SectionHeading size="sm" eyebrow="News & Events" title="The latest from <em>campus</em>" />
+        <Button variant="ghost" href="/blog/">
+          All news
+          <Icon name="arrow-right" size={15} slot="icon-right" />
+        </Button>
+      </div>
+      <div class="grid cols-3">
+        {latest.map((n, i) => (
+          <a class="news__card" href={`/${n.slug}/`} data-reveal data-reveal-delay={i * 100}>
+            {n.hero && <img src={n.hero} alt={n.title} loading="lazy" decoding="async" />}
+            <div class="news__body">
+              {n.topic && <Badge tone="gold">{n.topic}</Badge>}
+              <h3>{n.title}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  /* ------------------------------------------------------------- hero */
+  .hero { position: relative; background: var(--navy-800); isolation: isolate; }
+  .hero__media { position: absolute; inset: 0; overflow: hidden; z-index: -1; }
+  .hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keep the pool and the shoreline in frame when the hero is wide and short. */
+    object-position: center 58%;
+    opacity: 0.62;
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 41, 66, 0.55) 0%,
+      rgba(13, 41, 66, 0.35) 40%,
+      rgba(13, 41, 66, 0.78) 100%
+    );
+  }
+  .hero__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--sp-5);
+    padding-block: calc(var(--header-h) + clamp(4rem, 11vw, 8.5rem)) clamp(4rem, 9vw, 7.5rem);
+  }
+  .hero__title {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-display-1);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .hero__title em { font-style: italic; }
+  .hero__lead {
+    margin: 0;
+    max-width: 52ch;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .hero__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: var(--sp-3); }
+
+  /* ------------------------------------------------------------ intro */
+  .intro { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--sp-5); }
+  .intro__kicker {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--coral-500);
+    margin: 0;
+  }
+  .intro__body { margin: 0; font-size: 1.3rem; line-height: 1.7; color: var(--ink-700); }
+  .intro__body strong { color: var(--navy-700); }
+
+  /* ---------------------------------------------------- accreditation */
+  .accred { padding-top: 0; }
+  .accred__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-5);
+    padding-block: var(--sp-12);
+    border-top: 1px solid var(--border-hairline);
+    border-bottom: 1px solid var(--border-hairline);
+    text-align: center;
+  }
+  .accred__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.2;
+    color: var(--navy-700);
+  }
+  .accred__title em { font-style: italic; color: var(--accent-primary); }
+
+  .accred__row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--sp-3);
+  }
+  .accred__by {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--accent-primary);
+  }
+  .accred__divider { width: 1px; height: 32px; background: var(--border-strong); }
+  .accred__row img { width: 180px; height: auto; }
+
+  @media (max-width: 480px) {
+    .accred__divider { display: none; }
+  }
+
+  /* ------------------------------------------------------------ quote */
+  .quote { display: flex; gap: var(--sp-6); align-items: flex-start; }
+  .quote__mark {
+    font-family: var(--font-display);
+    font-size: 90px;
+    line-height: 0.8;
+    color: var(--sky-400);
+    flex-shrink: 0;
+  }
+  .quote__body { margin: 0; }
+  .quote__body p {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    line-height: 1.35;
+    color: var(--navy-700);
+    margin: 0 0 var(--sp-6);
+    font-weight: var(--fw-medium);
+  }
+  .quote__attr { display: flex; align-items: center; gap: 14px; }
+  .quote__name { display: block; font-weight: var(--fw-bold); color: var(--navy-700); }
+  .quote__org { display: block; font-size: 14px; color: var(--ink-400); }
+
+  /* ---------------------------------------------------------- mosaic
+     A dense grid of fixed-height rows — every tile just declares how many
+     rows it spans and object-fit does the cropping, so photos (4:3-ish) and
+     the vertical Gumlet clips (~9:16) sit in the same grid without needing
+     matching source aspect ratios. Videos always span --tall so the portrait
+     footage never gets squashed into a landscape box. */
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 90px;
+    grid-auto-flow: dense;
+    gap: 14px;
+  }
+  .mosaic__tile {
+    position: relative;
+    grid-row: span 2;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background: var(--navy-800);
+  }
+  .mosaic__tile.is-wide { grid-column: span 2; grid-row: span 3; }
+  .mosaic__tile.is-tall { grid-row: span 5; }
+  .mosaic__tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .mosaic__tile iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+  }
+
+  .tiles { margin-top: var(--sp-12); }
+
+  /* ------------------------------------------------------------ FLAIR
+     A 180° dial: five donut segments fanned around a central hub. Pointing at
+     a segment lifts it out along its own radius and swaps the copy alongside.
+     Mobile-first — every panel is simply stacked until the dial has room. */
+  .fan { margin-top: var(--sp-12); display: grid; gap: var(--sp-8); justify-items: center; }
+
+  .dial {
+    width: 100%;
+    max-width: 356px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .wedge {
+    opacity: 0;
+    transform: rotate(-16deg);
+    transform-box: view-box;
+    transform-origin: 94px 258px;
+    transition:
+      opacity 480ms var(--ease-out),
+      transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i) * 110ms + 260ms);
+  }
+  .fan.is-visible .wedge { opacity: 1; transform: none; }
+
+  /* Nested so the entrance rotation and the hover lift never fight. */
+  .wedge__a {
+    cursor: pointer;
+    transform: translate(0, 0);
+    transition: transform 340ms var(--ease-out), filter var(--dur-base) var(--ease-standard);
+  }
+  .wedge__shape {
+    fill: var(--accent);
+    stroke: var(--navy-800);
+    stroke-width: 5;
+    stroke-linejoin: round;
+  }
+  .wedge__letter {
+    fill: var(--ink);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 30px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .wedge__name {
+    fill: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: var(--fw-semibold);
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .wedge__letter, .wedge__name { pointer-events: none; }
+
+  .hub__disc {
+    fill: var(--navy-800);
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 2;
+  }
+  .hub__word {
+    fill: #fff;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 34px;
+    letter-spacing: 0.06em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .dial__hub {
+    opacity: 0;
+    transform: scale(0.85);
+    transform-box: view-box;
+    transform-origin: 94px 258px;
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform 640ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 80ms;
+  }
+  .fan.is-visible .dial__hub { opacity: 1; transform: none; }
+
+  .fan__panels { display: grid; gap: var(--sp-6); width: 100%; }
+  .fan__panel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px var(--sp-4);
+    align-items: center;
+  }
+  .fan__badge {
+    grid-row: span 2;
+    align-self: start;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 20px;
+  }
+  .fan__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: var(--fw-semibold);
+    color: #fff;
+    line-height: 1.2;
+  }
+  .fan__text { margin: 0; color: var(--text-on-navy-muted); font-size: 15px; line-height: 1.6; }
+
+  /* Stacked, all five are visible at once — trim them so the section does not
+     turn into a wall of copy. The full text lives on /flair/. */
+  @media (max-width: 900px) {
+    .fan__text {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  /* Once the dial has a column of its own, the panels stack and cross-fade. */
+  @media (min-width: 901px) {
+    .fan {
+      grid-template-columns: minmax(0, 356px) minmax(0, 1fr);
+      gap: var(--sp-10);
+      align-items: center;
+      justify-items: stretch;
+    }
+    .fan__panels {
+      position: relative;
+      min-height: 260px;
+      display: block;
+    }
+    .fan__panel {
+      position: absolute;
+      inset: 0;
+      align-content: center;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      /* Leaves fast and undelayed. Every panel occupies the same box, so any
+         moment where two are part-way visible renders as overlapping text. */
+      transition: opacity 120ms var(--ease-out), transform 120ms var(--ease-out);
+    }
+    .fan__title { font-size: 1.6rem; }
+    .fan__text { font-size: 16px; }
+
+    /* Exactly one segment may be singled out at a time. The pointer always
+       wins and focus only speaks when the pointer is elsewhere — hover and
+       focus are independent states, so an ungated pair on two different
+       segments would light both panels at once, stacking their copy. */
+    .dial__wedges:has(.wedge:hover) .wedge,
+    .dial__wedges:not(:has(.wedge:hover)):has(.wedge__a:focus-visible) .wedge { opacity: 0.42; }
+    .fan.is-visible .wedge:hover,
+    .fan.is-visible:not(:has(.wedge:hover)) .wedge:has(.wedge__a:focus-visible) { opacity: 1; }
+    .wedge:hover .wedge__a,
+    .fan:not(:has(.wedge:hover)) .wedge__a:focus-visible {
+      transform: translate(var(--dx), var(--dy));
+      filter: brightness(1.1);
+    }
+    .wedge__a:focus-visible { outline: none; }
+    .wedge__a:focus-visible .wedge__shape { stroke: #fff; }
+
+    /* Resting state — the first pillar reads as selected. */
+    .fan:not(:has(.wedge:hover)):not(:has(.wedge__a:focus-visible)) .fan__panel[data-p="0"],
+    .fan:has(.wedge[data-p="0"]:hover) .fan__panel[data-p="0"],
+    .fan:has(.wedge[data-p="1"]:hover) .fan__panel[data-p="1"],
+    .fan:has(.wedge[data-p="2"]:hover) .fan__panel[data-p="2"],
+    .fan:has(.wedge[data-p="3"]:hover) .fan__panel[data-p="3"],
+    .fan:has(.wedge[data-p="4"]:hover) .fan__panel[data-p="4"],
+    .fan:not(:has(.wedge:hover)):has(.wedge[data-p="0"] .wedge__a:focus-visible) .fan__panel[data-p="0"],
+    .fan:not(:has(.wedge:hover)):has(.wedge[data-p="1"] .wedge__a:focus-visible) .fan__panel[data-p="1"],
+    .fan:not(:has(.wedge:hover)):has(.wedge[data-p="2"] .wedge__a:focus-visible) .fan__panel[data-p="2"],
+    .fan:not(:has(.wedge:hover)):has(.wedge[data-p="3"] .wedge__a:focus-visible) .fan__panel[data-p="3"],
+    .fan:not(:has(.wedge:hover)):has(.wedge[data-p="4"] .wedge__a:focus-visible) .fan__panel[data-p="4"] {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+      /* Holds until the outgoing panel has fully cleared. */
+      transition: opacity 200ms var(--ease-out) 130ms, transform 200ms var(--ease-out) 130ms;
+    }
+    .fan:not(:has(.wedge:hover, .wedge:focus-within)) .wedge[data-p="0"] .wedge__a {
+      transform: translate(var(--dx), var(--dy));
+    }
+  }
+
+  .flair__cta { margin-top: var(--sp-10); display: flex; justify-content: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wedge, .dial__hub {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .wedge__a { transition: none; }
+    .fan__panel { transition: none; }
+  }
+
+  /* ----------------------------------------------------------- stages */
+  .stages__head, .news__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-10);
+  }
+  .stagecard { overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+  .stagecard__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+  .stagecard__body { padding: var(--sp-8); display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  .stagecard__title {
+    margin: 6px 0 0;
+    font-size: var(--fs-display-3);
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    color: var(--navy-700);
+  }
+  .stagecard__copy { margin: 0; color: var(--text-muted); }
+  .stagecard__pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: var(--sp-2); }
+
+  /* ------------------------------------------------------------- film */
+  .film__wrap { max-width: 980px; }
+  .film__head { margin-bottom: var(--sp-10); }
+
+  /* ------------------------------------------------------------- news */
+  .news__card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .news__card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .news__card img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+  .news__body { padding: var(--sp-6); display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .news__body h3 { margin: 0; font-size: 1.3rem; line-height: 1.25; color: var(--navy-700); }
+
+  /* ------------------------------------------------------- responsive */
+  @media (max-width: 860px) {
+    .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 84px; }
+  }
+  @media (max-width: 620px) {
+    .quote { flex-direction: column; gap: var(--sp-2); }
+    .quote__mark { font-size: 64px; }
+    .quote__body p { font-size: 1.5rem; }
+    .mosaic { gap: 10px; grid-auto-rows: 66px; }
+    .mosaic__tile.is-tall { grid-row: span 4; }
+  }
+</style>

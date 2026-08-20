@@ -1,0 +1,171 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/site/Icon.astro';
+import '../styles/legacy-content.css';
+
+/** Renders migrated WordPress content. Copy is preserved close to verbatim and
+ *  styled by `.legacy-content`; the chrome around it is the new design. */
+interface RelatedItem { slug: string; title: string; topic: string | null; hero: string | null }
+
+interface Props {
+  title: string;
+  description?: string;
+  html: string;
+  kind: 'page' | 'article';
+  topic?: string | null;
+  hero?: string | null;
+  published?: string | null;
+  updated?: string | null;
+  noindex?: boolean;
+  related?: RelatedItem[];
+  eyebrow?: string;
+}
+
+const {
+  title,
+  description,
+  html,
+  kind,
+  topic,
+  hero,
+  published,
+  updated,
+  noindex = false,
+  related = [],
+  eyebrow,
+} = Astro.props;
+
+const isArticle = kind === 'article';
+
+// Migrated pages can carry vendor embeds whose <script> the migration stripped.
+// Re-add only the ones the markup actually needs.
+const needsDeftform = html.includes('class="deftform"');
+const fmt = (d?: string | null) =>
+  d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex} image={hero ?? undefined}>
+  <PageHero
+    eyebrow={eyebrow ?? topic ?? undefined}
+    title={title}
+    image={hero ?? '/media/site/campus-aerial.webp'}
+    size={isArticle ? 'md' : 'sm'}
+  >
+    {isArticle && published && (
+      <p class="meta">
+        <Icon name="calendar" size={15} />
+        <time datetime={published}>{fmt(published)}</time>
+        {updated && updated !== published && <span class="meta__upd">· Updated {fmt(updated)}</span>}
+      </p>
+    )}
+  </PageHero>
+
+  <article class="section">
+    <div class:list={['container', isArticle ? 'reading' : 'narrow']}>
+      <div class="legacy-content" set:html={html} />
+    </div>
+  </article>
+
+  {needsDeftform && <script is:inline src="https://cdn.deftform.com/embed.js" async />}
+
+  <script>
+    // Click-to-load YouTube: the player only arrives once a reader asks for it.
+    document.querySelectorAll<HTMLElement>('.yt').forEach((wrap) => {
+      // Not every video has a maxres poster. YouTube answers those requests
+      // with a 120px placeholder rather than a 404, so check the size too.
+      const poster = wrap.querySelector('img')!;
+      const check = () => {
+        if (poster.naturalWidth < 200) poster.src = poster.src.replace('maxresdefault', 'hqdefault');
+      };
+      if (poster.complete) check();
+      poster.addEventListener('load', check, { once: true });
+      poster.addEventListener('error', check, { once: true });
+
+      wrap.querySelector('button')?.addEventListener('click', () => {
+        const frame = document.createElement('iframe');
+        frame.src = `https://www.youtube-nocookie.com/embed/${wrap.dataset.yt}?autoplay=1&rel=0`;
+        frame.title = wrap.querySelector('.yt__title')?.textContent ?? 'YouTube video';
+        frame.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        frame.allowFullscreen = true;
+        wrap.replaceChild(frame, wrap.firstElementChild!);
+      });
+    });
+  </script>
+
+  {related.length > 0 && (
+    <section class="section alt">
+      <div class="container">
+        <h2 class="related__title">Keep <em>reading</em></h2>
+        <div class="related__grid">
+          {related.map((r) => (
+            <a class="related__card" href={`/${r.slug}/`}>
+              {r.hero && <img src={r.hero} alt="" loading="lazy" decoding="async" />}
+              <div class="related__body">
+                {r.topic && <Badge tone="gold">{r.topic}</Badge>}
+                <h3>{r.title}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .meta :global(.icon) { color: var(--sky-300); }
+  .meta__upd { opacity: 0.75; }
+
+  .related__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-display-3);
+    color: var(--navy-700);
+    margin: 0 0 var(--sp-8);
+  }
+  .related__title em { font-style: italic; }
+
+  .related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6);
+  }
+  .related__card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .related__card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .related__card img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+  .related__body { padding: var(--sp-6); display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .related__body h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--navy-700);
+    font-weight: var(--fw-semibold);
+  }
+
+  @media (max-width: 900px) { .related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .related__grid { grid-template-columns: 1fr; } }
+</style>

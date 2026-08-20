@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import PupilPathway from '../../components/sections/PupilPathway.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/site/Icon.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import { kindergarten, primary } from '../../data/curriculum';
+
+const summaries = [
+  {
+    tag: 'Ages 2–5',
+    title: 'Kindergarten',
+    href: '/academics/kindergarten/',
+    image: '/media/site/one-to-one.webp',
+    body:
+      'We integrate the Montessori approach with the Cambridge Curriculum. Children explore, discover and build literacy, numeracy and communication skills through child-led, play-based learning.',
+    stages: kindergarten,
+  },
+  {
+    tag: 'Ages 5–11',
+    title: 'Primary',
+    href: '/academics/primary/',
+    image: '/media/site/active.webp',
+    body:
+      'Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within the Cambridge Curriculum.',
+    stages: primary,
+  },
+];
+---
+
+<BaseLayout
+  title="Academics: Cambridge Curriculum"
+  description="One connected pathway from Nursery to Key Stage 2 — Montessori foundations inside the Cambridge Curriculum."
+  image="/media/site/pupils-line.webp"
+>
+  <PageHero
+    eyebrow="Academics"
+    title="Learning that <em>grows</em> with your child"
+    lead="One connected pathway from age two to age eleven, built so that each stage prepares for the next without ever rushing it."
+    image="/media/site/pupils-line.webp"
+  />
+
+  <PupilPathway
+    eyebrow="The journey"
+    title="Four stages, <em>one</em> continuous education"
+    lead="Children move between stages when they are ready — not when a calendar says so. Teachers hand over what they know about each child, so nothing has to be rediscovered."
+    bg="paper"
+  />
+
+  {summaries.map((s, i) => (
+    <section class:list={['section', i % 2 === 0 && 'alt']}>
+      <div class="container">
+        <div class:list={['sum', i % 2 === 1 && 'is-reversed']}>
+          <div class="sum__media" data-reveal>
+            <img src={s.image} alt={`${s.title} at ISPG`} loading="lazy" decoding="async" />
+          </div>
+          <div class="sum__body" data-reveal data-reveal-delay="90">
+            <Badge tone="sky">{s.tag}</Badge>
+            <SectionHeading size="sm" title={s.title} as="h2" />
+            <p class="sum__copy">{s.body}</p>
+
+            <ul class="sum__stages">
+              {s.stages.map((st) => (
+                <li>
+                  <a href={`${s.href}#${st.slug}`}>
+                    <span class="sum__stage-name">{st.name}</span>
+                    <span class="sum__stage-ages">{st.ages}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <div class="sum__pills">
+              {s.stages[0].keyAreas.slice(0, 5).map((a) => <Badge tone="navy">{a.name}</Badge>)}
+            </div>
+
+            <Button variant="secondary" href={s.href}>
+              Explore {s.title}
+              <Icon name="arrow-right" size={15} slot="icon-right" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .sum { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(var(--sp-8), 5vw, var(--sp-16)); align-items: center; }
+  .sum.is-reversed .sum__media { order: 2; }
+
+  .sum__media { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+  .sum__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+
+  .sum__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-5); }
+  .sum__copy { margin: 0; color: var(--text-muted); line-height: var(--lh-body); }
+
+  .sum__stages { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--sp-3); flex-wrap: wrap; width: 100%; }
+  .sum__stages li { flex: 1 1 160px; }
+  .sum__stages a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-4) var(--sp-5);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-md);
+    text-decoration: none;
+    transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  .sum__stages a:hover { border-color: var(--sky-400); box-shadow: var(--shadow-sm); }
+  .sum__stage-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: var(--fw-semibold); color: var(--navy-700); }
+  .sum__stage-ages { font-size: var(--fs-xs); color: var(--text-caption); letter-spacing: 0.04em; }
+
+  .sum__pills { display: flex; gap: 7px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .sum { grid-template-columns: 1fr; }
+    .sum.is-reversed .sum__media { order: 0; }
+  }
+</style>

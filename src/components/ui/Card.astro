@@ -1,0 +1,55 @@
+---
+/** Elevated content card on a warm paper surface. */
+interface Props {
+  padding?: string;
+  elevation?: 'none' | 'sm' | 'md' | 'lg';
+  tone?: 'surface' | 'sky' | 'cream';
+  href?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  padding = 'var(--sp-8)',
+  elevation = 'sm',
+  tone = 'surface',
+  href,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  class:list={['card', `card--${tone}`, `card--e-${elevation}`, href && 'card--link', className]}
+  style={`--card-padding:${padding}`}
+  href={href}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    background: var(--surface-card);
+    border-radius: var(--r-card);
+    border: 1px solid var(--border-hairline);
+    padding: var(--card-padding);
+    display: block;
+  }
+  .card--sky { background: var(--sky-100); }
+  .card--cream { background: var(--paper-2); }
+
+  .card--e-none { box-shadow: none; }
+  .card--e-sm { box-shadow: var(--shadow-sm); }
+  .card--e-md { box-shadow: var(--shadow-md); }
+  .card--e-lg { box-shadow: var(--shadow-lg); }
+
+  .card--link {
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .card--link:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); color: inherit; }
+</style>

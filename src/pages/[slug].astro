@@ -1,0 +1,35 @@
+---
+import ContentPage from '../layouts/ContentPage.astro';
+import { allRecords, related, excerpt } from '../lib/content';
+
+/** Every migrated WordPress record — the 10 articles plus the pages whose copy
+ *  is preserved verbatim (application form, thank-you, legal). */
+export function getStaticPaths() {
+  return allRecords.map((r) => ({ params: { slug: r.slug }, props: { record: r } }));
+}
+
+const { record } = Astro.props;
+const rel = record.kind === 'article' ? related(record.slug, 3) : [];
+
+const eyebrowFor = (slug: string) =>
+  ({
+    form: 'Admissions',
+    thx: 'Thank you',
+    'privacy-policy': 'Legal',
+    terms: 'Legal',
+  })[slug];
+---
+
+<ContentPage
+  title={record.title}
+  description={record.description || excerpt(record.html, 160)}
+  html={record.html}
+  kind={record.kind}
+  topic={record.topic}
+  hero={record.hero}
+  published={record.published}
+  updated={record.updated}
+  noindex={record.noindex}
+  eyebrow={eyebrowFor(record.slug)}
+  related={rel.map((r) => ({ slug: r.slug, title: r.title, topic: r.topic, hero: r.hero }))}
+/>

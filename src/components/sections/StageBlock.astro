@@ -1,0 +1,76 @@
+---
+import Badge from '../ui/Badge.astro';
+import KeyAreas from './KeyAreas.astro';
+import type { Stage } from '../../data/curriculum';
+
+/** One curriculum stage: portrait photo, copy and its Key Areas infographic. */
+interface Props {
+  stage: Stage;
+  accent?: string;
+  reversed?: boolean;
+  alt?: boolean;
+}
+
+const { stage, accent = 'var(--sky-500)', reversed = false, alt = false } = Astro.props;
+---
+
+<section class:list={['section', alt && 'alt']} id={stage.slug}>
+  <div class="container">
+    <div class:list={['stage', reversed && 'stage--reversed']}>
+      <div class="stage__media" data-reveal>
+        <img src={stage.image} alt={`${stage.name} at ISPG`} loading="lazy" decoding="async" />
+      </div>
+      <div class="stage__body" data-reveal data-reveal-delay="90">
+        <Badge tone="sky">{stage.ages}</Badge>
+        <h2 class="stage__title">{stage.name}</h2>
+        <p class="stage__intro">{stage.intro}</p>
+        <p class="stage__copy">{stage.body}</p>
+      </div>
+    </div>
+
+    <div class="stage__areas">
+      <h3 class="stage__areas-title">Key Areas of Learning</h3>
+      <KeyAreas lead={stage.keyAreasLead} areas={stage.keyAreas} accent={accent} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .stage {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(var(--sp-8), 5vw, var(--sp-16));
+    align-items: center;
+  }
+  .stage--reversed .stage__media { order: 2; }
+
+  .stage__media { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+  .stage__media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+
+  .stage__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-4); }
+  .stage__title {
+    margin: var(--sp-1) 0 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-display-2);
+    line-height: var(--lh-display);
+    color: var(--navy-700);
+  }
+  .stage__intro { margin: 0; font-size: var(--fs-lead); line-height: 1.5; color: var(--navy-600); font-family: var(--font-display); font-style: italic; }
+  .stage__copy { margin: 0; color: var(--text-muted); line-height: var(--lh-body); }
+
+  .stage__areas { margin-top: clamp(var(--sp-12), 6vw, var(--sp-20)); }
+  .stage__areas-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-display-3);
+    font-weight: var(--fw-medium);
+    color: var(--navy-700);
+    margin: 0 0 var(--sp-5);
+  }
+
+  @media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; }
+    .stage--reversed .stage__media { order: 0; }
+    .stage__media img { aspect-ratio: 16 / 10; }
+  }
+</style>

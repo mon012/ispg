@@ -1,0 +1,14 @@
+# Legacy WordPress URLs that still carry Search Console impressions.
+# Static-host redirect map (Netlify / Cloudflare Pages syntax). Astro's own
+# `redirects` config in astro.config.mjs covers this for any other host.
+/bluedolphins/ /blue-dolphins/ 301
+/playgroup/ /academics/kindergarten/ 301
+/academics/early-years/ /academics/kindergarten/ 301
+/academics/key-stage/ /academics/primary/ 301
+/thailands-national-triathlon-team/ /blog/ 301
+/category/news/ /blog/ 301
+/category/nature-based-education/ /blog/ 301
+/category/child-development-learning/ /blog/ 301
+/adp/ / 301
+/privateop/ / 301
+/parenting-ai-world/ /parenting-ai-age/ 301

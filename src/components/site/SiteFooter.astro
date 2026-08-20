@@ -1,0 +1,156 @@
+---
+import Icon from './Icon.astro';
+import { site, contact, social, footerNav, legalNav, staffPortal } from '../../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr__grid">
+      <div class="ftr__brand">
+        <div class="ftr__mark">
+          <!-- White knockout of the crest — the colour version disappears
+               against the navy footer. -->
+          <img src="/media/brand/ispg-crest-white.webp" alt={site.name} width="209" height="232" />
+        </div>
+        <p class="ftr__blurb">
+          A Cambridge Curriculum school on Koh Phangan, developing the whole child
+          through Montessori foundations and our FLAIR philosophy.
+        </p>
+        <ul class="ftr__social">
+          {social.map((s) => (
+            <li>
+              <a href={s.href} rel="noopener noreferrer" target="_blank" aria-label={s.name}>
+                <Icon name={s.icon} size={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {footerNav.map((col) => (
+        <nav class="ftr__col" aria-label={col.heading}>
+          <h2 class="ftr__heading">{col.heading}</h2>
+          <ul class="ftr__links">
+            {col.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </nav>
+      ))}
+
+      <div class="ftr__col">
+        <h2 class="ftr__heading">Get in touch</h2>
+        <ul class="ftr__contact">
+          <li>
+            <Icon name="map-pin" size={15} />
+            <a href={contact.mapLink} rel="noopener noreferrer" target="_blank">{contact.address.full}</a>
+          </li>
+          <li><Icon name="phone" size={15} /><a href={contact.phoneHref}>{contact.phoneDisplay}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr__base">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <ul class="ftr__legal">
+        <li>
+          <a class="ftr__portal" href={staffPortal.href} target="_blank" rel="noopener noreferrer">
+            {staffPortal.label}
+            <Icon name="external-link" size={13} />
+          </a>
+        </li>
+        {legalNav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: var(--navy-900);
+    color: var(--text-on-navy);
+    padding-block: var(--sp-20) var(--sp-10);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ftr__grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr) 1.3fr;
+    gap: var(--sp-12);
+    align-items: start;
+  }
+
+  .ftr__brand { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .ftr__mark { display: flex; align-items: center; }
+  .ftr__mark img { height: 64px; width: auto; }
+  .ftr__blurb { margin: 0; color: var(--text-on-navy-muted); font-size: 14px; max-width: 300px; line-height: 1.6; }
+
+  .ftr__social { display: flex; gap: 10px; list-style: none; margin: var(--sp-2) 0 0; padding: 0; }
+  .ftr__social a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+  }
+  .ftr__social a:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.5); color: #fff; }
+
+  .ftr__heading {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sky-300);
+    margin: 4px 0 16px;
+  }
+
+  .ftr__links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+  .ftr__links a { color: var(--text-on-navy); font-size: 14px; text-decoration: none; opacity: 0.9; }
+  .ftr__links a:hover { color: var(--sky-300); opacity: 1; }
+
+  .ftr__contact { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+  .ftr__contact li { display: flex; gap: 9px; align-items: flex-start; line-height: 1.45; }
+  .ftr__contact :global(.icon) { color: var(--sky-300); margin-top: 3px; }
+  /* min-width:0 lets the address text wrap inside its own flex item instead
+     of the whole item dropping the icon onto its own line above it. */
+  .ftr__contact a { min-width: 0; color: var(--text-on-navy); text-decoration: none; }
+  .ftr__contact a:hover { color: var(--sky-300); }
+
+  .ftr__base {
+    margin-top: var(--sp-16);
+    padding-top: var(--sp-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-on-navy-muted);
+  }
+  .ftr__base p { margin: 0; max-width: 62ch; }
+  .ftr__legal { display: flex; flex-wrap: wrap; gap: 20px; list-style: none; margin: 0; padding: 0; }
+  .ftr__legal a { color: var(--text-on-navy-muted); text-decoration: none; }
+  .ftr__legal a:hover { color: var(--sky-300); }
+  /* Staff link — same weight as the legal links, with the usual "leaves the
+     site" marker so nobody expects it to be a page of ours. */
+  .ftr__portal { display: inline-flex; align-items: center; gap: 6px; }
+
+  @media (max-width: 1080px) {
+    .ftr__grid { grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-10); }
+    .ftr__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 640px) {
+    .ftr__grid { grid-template-columns: 1fr 1fr; }
+    .ftr__brand { grid-column: 1 / -1; }
+    .ftr__blurb { max-width: none; }
+  }
+  @media (max-width: 420px) {
+    .ftr__grid { grid-template-columns: 1fr; }
+  }
+</style>

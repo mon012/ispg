@@ -1,0 +1,33 @@
+---
+/** Deftform embed (application / open-house registration).
+ *  The vendor script is loaded once per page that uses the component. */
+interface Props {
+  formId: string;
+  class?: string;
+}
+const { formId, class: className = '' } = Astro.props;
+---
+
+<div class:list={['deft', className]}>
+  <div class="deftform" data-form-id={formId} data-form-width="100%" data-form-align="center" data-form-auto-height="1"></div>
+  <noscript>
+    <p class="deft__fallback">
+      This form needs JavaScript. Please email
+      <a href="mailto:admissions@ispg.ac.th">admissions@ispg.ac.th</a> and we will send it to you directly.
+    </p>
+  </noscript>
+</div>
+
+<script is:inline src="https://cdn.deftform.com/embed.js" async></script>
+
+<style>
+  .deft {
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: clamp(var(--sp-5), 3vw, var(--sp-10));
+    min-height: 320px;
+  }
+  .deft__fallback { margin: 0; color: var(--text-muted); }
+</style>

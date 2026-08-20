@@ -1,0 +1,140 @@
+---
+import type { KeyArea } from '../../data/curriculum';
+
+/**
+ * Key Areas of Learning — labelled nodes that animate in on scroll.
+ * These labels used to exist only as text baked into PNG diagrams; they are
+ * real HTML here, so they are readable, searchable and translatable.
+ *
+ * Up to five areas fan across a shallow arc (they fit on one row). Larger sets
+ * wrap onto a second row, where an arc would read as misalignment rather than
+ * intent, so they sit on a flat four-column grid instead.
+ */
+interface Props {
+  lead?: string;
+  areas: KeyArea[];
+  accent?: string;
+}
+
+const { lead, areas, accent = 'var(--sky-500)' } = Astro.props;
+
+const n = areas.length;
+const arced = n <= 5;
+const offset = (i: number) => (arced ? Math.round(Math.sin((i / (n - 1)) * Math.PI) * -20) : 0);
+---
+
+<div class="ka" style={`--accent:${accent}`}>
+  {lead && <p class="ka__lead" data-reveal>{lead}</p>}
+
+  <ol class:list={['ka__list', arced ? 'is-arced' : 'is-grid']}>
+    {areas.map((a, i) => (
+      <li class="ka__item" style={`--dy:${offset(i)}px; --i:${i}`} data-reveal data-reveal-delay={80 + i * 80}>
+        <span class="ka__node" aria-hidden="true">
+          <span class="ka__pulse"></span>
+          <span class="ka__num">{i + 1}</span>
+        </span>
+        <span class="ka__body">
+          <span class="ka__name">{a.name}</span>
+          {a.detail && <span class="ka__detail">{a.detail}</span>}
+        </span>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .ka { display: flex; flex-direction: column; gap: var(--sp-8); }
+  .ka__lead { margin: 0; max-width: 68ch; color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; }
+
+  .ka__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-5); }
+  .ka__list.is-arced { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ka__list.is-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .ka__item {
+    transform: translateY(var(--dy));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: var(--sp-6);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .ka__item:hover { box-shadow: var(--shadow-md); }
+
+  /* The reveal transform must compose with the arc offset while animating in. */
+  :global(.js) .ka__item { transform: translateY(calc(var(--dy) + 18px)); }
+  :global(.js) .ka__item.is-visible { transform: translateY(var(--dy)); }
+
+  .ka__node {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 15%, white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transform: scale(0.6);
+    opacity: 0;
+    transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity var(--dur-base) var(--ease-out);
+    transition-delay: 120ms;
+  }
+  :global(.js) .ka__item.is-visible .ka__node { transform: scale(1); opacity: 1; }
+  .ka__num {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 16px;
+    color: var(--accent);
+  }
+  /* A soft ring that pulses out from each node once it has landed — keeps the
+     infographic gently alive at rest instead of going still after reveal. */
+  .ka__pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0;
+  }
+  :global(.js) .ka__item.is-visible .ka__pulse {
+    animation: ka-pulse 2600ms var(--ease-out) infinite;
+    animation-delay: calc(var(--i) * 320ms);
+  }
+  @keyframes ka-pulse {
+    0%   { opacity: 0.55; transform: scale(1); }
+    70%  { opacity: 0; transform: scale(1.7); }
+    100% { opacity: 0; transform: scale(1.7); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ka__node { transform: none; opacity: 1; transition: none; }
+    :global(.js) .ka__item.is-visible .ka__pulse { animation: none; }
+  }
+
+  .ka__body { display: flex; flex-direction: column; gap: 6px; }
+  .ka__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: var(--navy-700);
+  }
+  .ka__detail { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.55; }
+
+  /* Below the arc breakpoint everything flattens — the offsets would only skew rows. */
+  @media (max-width: 1000px) {
+    .ka__list.is-arced, .ka__list.is-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ka__item { transform: none; }
+    :global(.js) .ka__item { transform: translateY(18px); }
+    :global(.js) .ka__item.is-visible { transform: none; }
+  }
+  @media (max-width: 720px) {
+    .ka__list.is-arced, .ka__list.is-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 460px) {
+    .ka__list.is-arced, .ka__list.is-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

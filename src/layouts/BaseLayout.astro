@@ -1,0 +1,135 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import { site, contact, social } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Header floats transparently over a dark hero. */
+  floatingHeader?: boolean;
+  noindex?: boolean;
+  image?: string;
+  /** Extra <head> content is passed through the "head" slot. */
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  floatingHeader = false,
+  noindex = false,
+  image = '/media/site/campus-aerial-2.webp',
+  bodyClass = '',
+} = Astro.props;
+
+const fullTitle = title === site.name ? title : `${title} — ${site.shortName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL(image, Astro.site ?? site.url).href;
+
+/** Organisation-level structured data, emitted once per page. */
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'School',
+  name: site.name,
+  alternateName: site.shortName,
+  legalName: site.legalName,
+  description: site.description,
+  url: site.url,
+  logo: new URL('/media/brand/ispg-crest.png', Astro.site ?? site.url).href,
+  image: ogImage,
+  email: contact.email,
+  telephone: contact.phoneDisplay,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.address.street,
+    addressLocality: contact.address.locality,
+    addressRegion: contact.address.region,
+    postalCode: contact.address.postcode,
+    addressCountry: 'TH',
+  },
+  sameAs: social.map((s) => s.href),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" type="image/png" href="/media/brand/ispg-crest.png" />
+    <link rel="apple-touch-icon" href="/media/brand/ispg-crest.png" />
+    <meta name="theme-color" content="#164a7a" />
+
+    <!-- The two faces every page paints with; the rest load on demand. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/dm-sans-400-700-normal-latin.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/cormorant-garamond-400-700-normal-latin.woff2"
+      crossorigin
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      // Mark JS as available so scroll-reveal can start from a hidden state
+      // without ever hiding content for non-JS visitors.
+      document.documentElement.classList.add('js');
+    </script>
+
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+    <slot name="head" />
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader floating={floatingHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <script>
+      // Scroll reveal — one shared observer for every [data-reveal] element.
+      const els = document.querySelectorAll('[data-reveal]');
+      if (els.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const el = entry.target as HTMLElement;
+              const delay = Number(el.dataset.revealDelay ?? 0);
+              window.setTimeout(() => el.classList.add('is-visible'), delay);
+              io.unobserve(el);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

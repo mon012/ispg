@@ -1,0 +1,216 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import { pathway } from '../../data/curriculum';
+
+/** The animated Pupil Pathway — a dotted curve that draws in on scroll with a
+ *  portrait medallion at each stage. Shared by the homepage and /academics/. */
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  bg?: 'paper' | 'alt';
+}
+
+const {
+  eyebrow = 'From 2 to 11',
+  title = 'A seamless <em>Pupil Pathway</em> from Nursery to Key Stage 2',
+  lead = 'One connected journey. Each stage builds on the last, so every child grows in confidence, skill and independence.',
+  bg = 'alt',
+} = Astro.props;
+
+// Vertical offset of each medallion from the top of the track, in px. These are
+// tied to the SVG path below: the track is 320px tall over a 240-unit viewBox,
+// so a node at y_svg sits at y_svg * (320/240) px. Medallions are 84px (small)
+// and 104px (large, every second one), so the centres land on the curve.
+const tops = [150, 40, 130, 10];
+
+// The medallions are 84–104px circles, so they load a 256px crop of the stage
+// photo (public/media/site/thumb/) rather than the full-width original the
+// stage pages use as their hero.
+---
+
+<section class:list={['section', 'pathway-section', bg === 'alt' && 'alt']}>
+  <div class="container">
+    <div class="pathway__head" data-reveal>
+      <SectionHeading size="md" eyebrow={eyebrow} title={title} lead={lead} />
+    </div>
+
+    <div class="pathway" data-pathway>
+      <!-- Dotted line continues past the curve into the page margins, all the
+           way to the true viewport edge — the curve itself stays anchored to
+           the medallions (container-relative); these two just carry the same
+           dot pattern outward. pathway-section clips the 50vw overshoot. -->
+      <span class="pathway__bleed pathway__bleed--start" aria-hidden="true"></span>
+      <span class="pathway__bleed pathway__bleed--end" aria-hidden="true"></span>
+      <svg class="pathway__line" viewBox="0 0 1000 240" preserveAspectRatio="none" aria-hidden="true">
+        <!-- Passes through the centre of each medallion: 12.5% / 37.5% / 62.5% / 87.5%. -->
+        <path
+          d="M 20 160 C 60 150 90 146 125 144 C 230 140 260 69 375 69 C 490 69 520 129 625 129 C 730 129 770 46.5 875 46.5 C 930 46.5 960 40 985 36"
+          fill="none"
+          stroke="var(--sky-400)"
+          stroke-width="2.5"
+          stroke-dasharray="2 9"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <ol class="pathway__stages">
+        {pathway.map((p, i) => (
+          <li class="pathway__stage" style={`--top:${tops[i]}px`} data-reveal data-reveal-delay={i * 110}>
+            <a href={p.href}>
+              <span class:list={['pathway__medal', i % 2 === 1 && 'is-large']}>
+                <img
+                  src={p.image.replace('/site/', '/site/thumb/')}
+                  alt={`${p.stage} at ISPG`}
+                  width="256"
+                  height="256"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <span class="pathway__name">{p.stage}</span>
+              <span class="pathway__ages">{p.ages}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pathway__head { max-width: 620px; margin-bottom: var(--sp-12); }
+
+  /* Clips the bleed lines' 50vw overshoot at the true viewport edge without
+     touching vertical overflow (clip, unlike hidden, doesn't force overflow-y
+     to auto). */
+  :global(.pathway-section) { overflow-x: clip; }
+
+  .pathway { position: relative; }
+
+  .pathway__bleed {
+    position: absolute;
+    width: 50vw;
+    height: 3px;
+    background-image: radial-gradient(circle, var(--sky-400) 1.3px, transparent 1.3px);
+    background-size: 11px 3px;
+    background-repeat: repeat-x;
+    pointer-events: none;
+  }
+  /* y matches the curve's start/end point (160 and 36 on a 240-tall viewBox
+     scaled to the line's 320px height); x picks up right where the curve's
+     20/985 (of 1000) inset leaves off, so the dots read as one continuous line. */
+  .pathway__bleed--start { top: 213px; right: 98%; background-position: right center; }
+  .pathway__bleed--end { top: 47px; left: 98.5%; background-position: left center; }
+
+  .pathway__line {
+    position: absolute;
+    inset: 0 0 auto;
+    width: 100%;
+    height: 320px;
+    overflow: visible;
+  }
+  .pathway__line path {
+    stroke-dashoffset: 0;
+  }
+  /* Draw-in: a long dash pattern collapses to the dotted one as it reveals. */
+  :global(.js) .pathway__line path {
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 1600;
+  }
+  :global(.js) .pathway.is-drawn .pathway__line path {
+    animation: pathway-draw 1600ms var(--ease-out) forwards;
+  }
+  @keyframes pathway-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  /* Once drawn, swap to the dotted look and keep the dots drifting along the
+     path — reads as the journey continuing, Nursery toward Key Stage 2. -88
+     is a multiple of the 11-unit "2 9" dash cycle so the loop has no seam. */
+  :global(.js) .pathway.is-dotted .pathway__line path {
+    animation: pathway-flow 1800ms linear infinite;
+    stroke-dasharray: 2 9;
+  }
+  @keyframes pathway-flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -88; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pathway__line path { animation: none !important; }
+  }
+
+  .pathway__stages {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 340px;
+  }
+  .pathway__stage { display: flex; justify-content: center; padding-top: var(--top); }
+  .pathway__stage a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .pathway__medal {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--sky-200);
+    box-shadow: 0 0 0 4px var(--paper-2), 0 0 0 5px var(--line-300), var(--shadow-sm);
+    margin-bottom: 10px;
+    transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+  }
+  .pathway__medal.is-large { width: 104px; height: 104px; }
+  .pathway__medal img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pathway__stage a:hover .pathway__medal { transform: translateY(-4px); box-shadow: 0 0 0 4px var(--paper-2), 0 0 0 5px var(--sky-400), var(--shadow-md); }
+
+  .pathway__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 20px;
+    color: var(--navy-700);
+  }
+  .pathway__ages {
+    font-size: 13px;
+    color: var(--ink-400);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 860px) {
+    .pathway__line, .pathway__bleed { display: none; }
+    .pathway__stages { grid-template-columns: repeat(2, 1fr); gap: var(--sp-8); min-height: 0; }
+    .pathway__stage { padding-top: 0; }
+    .pathway__medal, .pathway__medal.is-large { width: 92px; height: 92px; }
+  }
+  @media (max-width: 420px) {
+    .pathway__stages { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-pathway]');
+  if (track && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        track.classList.add('is-drawn');
+        // After the draw completes, settle into the dotted resting state.
+        window.setTimeout(() => track.classList.add('is-dotted'), 1600);
+        io.disconnect();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(track);
+  } else {
+    track?.classList.add('is-dotted');
+  }
+</script>

@@ -1,0 +1,247 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import StageBlock from '../../components/sections/StageBlock.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/site/Icon.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import { kindergarten, montessoriPrinciples } from '../../data/curriculum';
+
+const accents = ['var(--flair-active)', 'var(--flair-international)'];
+
+/* The four principles sit on the same dotted-arc rail as PupilPathway.astro —
+   reusing its exact curve (tuned for 4 evenly-spaced nodes: centres at
+   12.5/37.5/62.5/87.5%) keeps this page visually consistent with the
+   homepage's pathway rather than inventing a second arc shape. Track is
+   320px tall over a 240-unit viewBox, so top_px = y_svg * (320/240). */
+const principleTops = [150, 40, 130, 10];
+---
+
+<BaseLayout
+  title="Kindergarten & Montessori, Koh Phangan"
+  description="Nursery (2–3) and Casa (3–5) at ISPG: the Montessori approach woven into the Cambridge Curriculum, with real Key Areas of Learning at every stage."
+  image="/media/site/pupils.webp"
+>
+  <PageHero
+    eyebrow="Ages 2–5 · International Kindergarten"
+    title="Kindergarten in Koh Phangan — <em>where curiosity is given room to work</em>"
+    lead="Our Kindergarten combines the Montessori framework with nature-based, play-led learning. Children learn through exploration, hands-on activity and guided play."
+    image="/media/site/pupils.webp"
+  />
+
+  {/* ------------------------------------------------- montessori intro */}
+  <section class="section">
+    <div class="container">
+      <div class="approach">
+        <div data-reveal>
+          <SectionHeading
+            size="sm"
+            eyebrow="Our approach"
+            title="Our <em>Montessori</em>-inspired approach"
+          />
+        </div>
+        <div class="approach__copy" data-reveal data-reveal-delay="80">
+          <p>
+            We believe the most powerful learning happens when a child’s natural curiosity has
+            room to grow. That’s why we weave Montessori principles — independence,
+            self-motivation, hands-on discovery — into the Cambridge framework from day one.
+          </p>
+          <p>
+            Our tropical island setting gives us a genuine classroom without walls. It fits
+            naturally with the Montessori focus on nature and hands-on discovery.
+          </p>
+        </div>
+      </div>
+
+      <div class="principles" data-principles>
+        <svg class="principles__line" viewBox="0 0 1000 240" preserveAspectRatio="none" aria-hidden="true">
+          <!-- Passes through the centre of each medallion: 12.5% / 37.5% / 62.5% / 87.5%. -->
+          <path
+            d="M 20 160 C 60 150 90 146 125 144 C 230 140 260 69 375 69 C 490 69 520 129 625 129 C 730 129 770 46.5 875 46.5 C 930 46.5 960 40 985 36"
+            fill="none"
+            stroke="var(--flair-lifelong)"
+            stroke-width="2.5"
+            stroke-dasharray="2 9"
+            stroke-linecap="round"
+          />
+        </svg>
+        <ol class="principles__list">
+          {montessoriPrinciples.map((p, i) => (
+            <li class="principles__item" style={`--top:${principleTops[i]}px`} data-reveal data-reveal-delay={i * 110}>
+              <span class="principles__medal" aria-hidden="true">{i + 1}</span>
+              <span class="principles__title">{p.title}</span>
+              <span class="principles__body">{p.body}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------ the stages */}
+  {kindergarten.map((stage, i) => (
+    <StageBlock stage={stage} accent={accents[i]} reversed={i % 2 === 1} alt={i % 2 === 0} />
+  ))}
+
+  {/* ------------------------------------------------------- next stage */}
+  <section class="section tight">
+    <div class="container">
+      <a class="next" href="/academics/primary/" data-reveal>
+        <span class="next__label">Next stage</span>
+        <span class="next__title">Primary — Key Stage 1 &amp; 2, ages 5–11</span>
+        <Icon name="arrow-right" size={20} class="next__arrow" />
+      </a>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Kindergarten admissions"
+    title="Come and see a <em>Montessori</em> morning"
+    lead="The best way to understand a prepared environment is to stand in one while it is being used."
+  />
+</BaseLayout>
+
+<style>
+  .approach {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(var(--sp-8), 5vw, var(--sp-16));
+    align-items: start;
+  }
+  .approach__copy { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .approach__copy p { margin: 0; color: var(--text-muted); font-size: 1.05rem; line-height: var(--lh-body); }
+
+  /* ---------------------------------------------------------- principles
+     Same dotted-arc-rail technique as PupilPathway.astro: an SVG curve draws
+     in on scroll, settles into a looping "flow" once drawn, and numbered
+     medallions sit on the curve at fixed px offsets tied to its path. */
+  .principles { position: relative; margin-top: clamp(var(--sp-10), 5vw, var(--sp-16)); }
+
+  .principles__line {
+    position: absolute;
+    inset: 0 0 auto;
+    width: 100%;
+    height: 320px;
+    overflow: visible;
+  }
+  :global(.js) .principles__line path {
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 1600;
+  }
+  :global(.js) .principles.is-drawn .principles__line path {
+    animation: principles-draw 1600ms var(--ease-out) forwards;
+  }
+  @keyframes principles-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  :global(.js) .principles.is-dotted .principles__line path {
+    animation: principles-flow 1800ms linear infinite;
+    stroke-dasharray: 2 9;
+  }
+  @keyframes principles-flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -88; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .principles__line path { animation: none !important; }
+  }
+
+  .principles__list {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 320px;
+  }
+  .principles__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: var(--top) var(--sp-4) 0;
+    text-align: center;
+    transition: transform var(--dur-base) var(--ease-standard);
+  }
+  .principles__item:hover { transform: translateY(-4px); }
+
+  .principles__medal {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--flair-lifelong) 15%, white);
+    color: var(--flair-lifelong);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 30px;
+    box-shadow: 0 0 0 4px var(--paper-2), 0 0 0 5px var(--line-300), var(--shadow-sm);
+    margin-bottom: 12px;
+    transition: box-shadow var(--dur-base) var(--ease-standard);
+  }
+  .principles__item:hover .principles__medal { box-shadow: 0 0 0 4px var(--paper-2), 0 0 0 5px var(--flair-lifelong), var(--shadow-md); }
+
+  .principles__title { font-family: var(--font-display); font-size: 1.15rem; font-weight: var(--fw-semibold); color: var(--navy-700); line-height: 1.25; }
+  .principles__body { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.5; max-width: 24ch; }
+
+  @media (max-width: 860px) {
+    .principles__line { display: none; }
+    .principles__list { grid-template-columns: repeat(2, 1fr); gap: var(--sp-8); min-height: 0; }
+    .principles__item { padding-top: 0; }
+  }
+  @media (max-width: 480px) {
+    .principles__list { grid-template-columns: 1fr; }
+  }
+
+  .next {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-8);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .next:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .next__label {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    color: var(--accent-primary);
+  }
+  .next__title { font-family: var(--font-display); font-size: 1.4rem; color: var(--navy-700); font-weight: var(--fw-semibold); }
+  .next__arrow { color: var(--accent-primary); }
+
+  @media (max-width: 900px) { .approach { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) {
+    .next { grid-template-columns: 1fr auto; }
+    .next__label { grid-column: 1 / -1; }
+  }
+</style>
+
+<script>
+  const rail = document.querySelector<HTMLElement>('[data-principles]');
+  if (rail && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        rail.classList.add('is-drawn');
+        window.setTimeout(() => rail.classList.add('is-dotted'), 1600);
+        io.disconnect();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(rail);
+  } else {
+    rail?.classList.add('is-dotted');
+  }
+</script>

@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import ImageCard from '../components/ui/ImageCard.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/site/Icon.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+
+const facilities = [
+  {
+    image: '/media/site/pool.webp',
+    eyebrow: 'Sport',
+    label: 'A 25-metre pool',
+    body: 'A professional 25-metre pool on campus, used every week by every year group.',
+  },
+  {
+    image: '/media/site/circle-time.webp',
+    eyebrow: 'Kindergarten',
+    label: 'Montessori rooms',
+    body: 'Prepared environments where the materials are within reach and the shelves make sense to a three-year-old.',
+  },
+  {
+    image: '/media/site/climbing.webp',
+    eyebrow: 'Sport & play',
+    label: 'Climbing wall and sports hall',
+    body: 'Climbing, running and the kind of unstructured play that turns out to be the most structured learning of all.',
+  },
+  {
+    image: '/media/site/meals.webp',
+    eyebrow: 'Dining',
+    label: 'The dining room',
+    body: 'Meals are cooked fresh on site and eaten together — lunch is part of the school day, not an interruption to it.',
+  },
+];
+---
+
+<BaseLayout
+  title="School Life"
+  description="Campus facilities, Blue Dolphins swimming and nutrition at ISPG — the parts of the day that are not on a timetable."
+  image="/media/site/climbing-2.webp"
+>
+  <PageHero
+    eyebrow="School life"
+    title="The hours <em>between</em> the lessons"
+    lead="A school day is more than its timetable. This is the pool, the grounds, the food and the routines that make up the rest of it."
+    image="/media/site/climbing-2.webp"
+  />
+
+  {/* ------------------------------------------------------- facilities */}
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading
+          size="sm"
+          eyebrow="Campus"
+          title="Everything on <em>one</em> site"
+          lead="Nothing here requires a bus ride. The pool, the classrooms, the grounds and the kitchen are all within a two-minute walk of each other."
+        />
+      </div>
+
+      <ul class="fac">
+        {facilities.map((f, i) => (
+          <li data-reveal data-reveal-delay={i * 90}>
+            <ImageCard src={f.image} eyebrow={f.eyebrow} label={f.label} ratio="4 / 3" />
+            <p class="fac__body">{f.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------- blue dolphins */}
+  <section class="section alt">
+    <div class="container">
+      <div class="spot">
+        <div class="spot__media" data-reveal>
+          <img src="/media/site/swim-lesson.webp" alt="A Blue Dolphins swimming lesson at ISPG" loading="lazy" decoding="async" />
+        </div>
+        <div class="spot__body" data-reveal data-reveal-delay="90">
+          <Badge tone="sky">On campus</Badge>
+          <SectionHeading size="sm" title="Blue Dolphins <em>Swimming Centre</em>" as="h2" />
+          <p class="spot__claim">Expert coaches. Professional 25-metre pool. Real progress at every level.</p>
+          <p class="spot__copy">
+            Our coaches work with every child — from confident beginners to skilled swimmers.
+            Every lesson builds water confidence, technique and a lifelong love of active living.
+          </p>
+          <ul class="spot__levels">
+            <li><strong>Toddler &amp; Basic</strong><span>Ages 2–3 · water comfort and first movement</span></li>
+            <li><strong>Levels 1–5</strong><span>Ages 3–5 · stroke technique and water safety</span></li>
+            <li><strong>Levels 6–7</strong><span>Ages 6–12 · endurance across all strokes</span></li>
+          </ul>
+          <Button variant="secondary" href="/blue-dolphins/">
+            Blue Dolphins in full
+            <Icon name="arrow-right" size={15} slot="icon-right" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* -------------------------------------------------------- nutrition */}
+  <section class="section">
+    <div class="container">
+      <div class="spot is-reversed">
+        <div class="spot__media" data-reveal>
+          <img src="/media/site/fruit.webp" alt="Lunch being served at ISPG" loading="lazy" decoding="async" />
+        </div>
+        <div class="spot__body" data-reveal data-reveal-delay="90">
+          <SectionHeading size="sm" eyebrow="Nutrition" title="Meals that <em>fuel growth</em>" as="h2" />
+          <p class="spot__copy">
+            We prepare nutritious meals daily to support your child’s development. Our menus
+            prioritise proteins and healthy fats while limiting sugars and refined carbohydrates.
+            We offer international options and accommodate dietary needs. Meals are included in
+            tuition fees.
+          </p>
+          <div class="allergen">
+            <Icon name="check" size={18} />
+            <p><strong>All meals are free of nuts, shellfish and molluscs.</strong> Tell us about any other dietary requirement and our kitchen will work with you directly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Visit us"
+    title="Stay for <em>lunch</em>"
+    lead="Tours can run over the lunch hour if you would like to see a normal day rather than a curated one."
+  />
+</BaseLayout>
+
+<style>
+  .fac {
+    list-style: none;
+    margin: var(--sp-12) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(var(--sp-6), 3vw, var(--sp-10));
+  }
+  .fac__body { margin: var(--sp-4) 0 0; color: var(--text-muted); line-height: var(--lh-body); }
+
+  .spot { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(var(--sp-8), 5vw, var(--sp-16)); align-items: center; }
+  .spot.is-reversed .spot__media { order: 2; }
+  .spot__media { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+  .spot__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+
+  .spot__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-4); }
+  .spot__claim {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--navy-600);
+    line-height: 1.4;
+  }
+  .spot__copy { margin: 0; color: var(--text-muted); line-height: var(--lh-body); }
+
+  .spot__levels { list-style: none; margin: var(--sp-2) 0; padding: 0; display: grid; gap: 10px; width: 100%; }
+  .spot__levels li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--border-hairline);
+  }
+  .spot__levels strong { color: var(--navy-700); font-size: var(--fs-sm); letter-spacing: 0.02em; }
+  .spot__levels span { color: var(--text-muted); font-size: var(--fs-sm); }
+
+  .allergen {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: flex-start;
+    padding: var(--sp-5) var(--sp-6);
+    background: var(--sky-100);
+    border-radius: var(--r-lg);
+  }
+  .allergen :global(.icon) { color: var(--sky-600); margin-top: 3px; }
+  .allergen p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--ink-700); }
+  .allergen strong { color: var(--navy-700); }
+
+  @media (max-width: 900px) {
+    .fac { grid-template-columns: 1fr; }
+    .spot { grid-template-columns: 1fr; }
+    .spot.is-reversed .spot__media { order: 0; }
+  }
+</style>

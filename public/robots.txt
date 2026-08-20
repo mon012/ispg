@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ispg.ac.th/sitemap-index.xml

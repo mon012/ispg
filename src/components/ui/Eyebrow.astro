@@ -1,0 +1,43 @@
+---
+/**
+ * Small uppercase overline label with a short accent rule — sits above section
+ * titles throughout the site.
+ */
+interface Props {
+  color?: string;
+  align?: 'left' | 'center';
+  rule?: boolean;
+  as?: string;
+  class?: string;
+}
+
+const {
+  color = 'var(--accent-primary)',
+  align = 'left',
+  rule = true,
+  as: Tag = 'span',
+  class: className = '',
+} = Astro.props;
+---
+
+<Tag class:list={['eyebrow', align === 'center' && 'is-center', className]} style={`--eyebrow-color:${color}`}>
+  {rule && <span class="eyebrow__rule" aria-hidden="true"></span>}
+  <slot />
+</Tag>
+
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: var(--fs-eyebrow);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--eyebrow-color);
+    justify-content: flex-start;
+  }
+  .eyebrow.is-center { justify-content: center; }
+  .eyebrow__rule { width: 26px; height: 2px; background: currentColor; opacity: 0.7; flex-shrink: 0; }
+</style>

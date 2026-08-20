@@ -1,0 +1,34 @@
+---
+/** Gumlet-hosted film embed, preserved from the WordPress site. Kept in a
+ *  16:9 shell with a rounded frame so it matches the card language. */
+interface Props {
+  id: string;
+  title?: string;
+  class?: string;
+}
+const { id, title = 'School film', class: className = '' } = Astro.props;
+const src = `https://play.gumlet.io/embed/${id}?background=false&autoplay=false&loop=false&disable_player_controls=false`;
+---
+
+<div class:list={['film', className]}>
+  <iframe
+    src={src}
+    title={title}
+    loading="lazy"
+    referrerpolicy="origin"
+    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+    allowfullscreen
+  ></iframe>
+</div>
+
+<style>
+  .film {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--navy-800);
+    box-shadow: var(--shadow-lg);
+  }
+  .film iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>

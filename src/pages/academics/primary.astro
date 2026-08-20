@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import StageBlock from '../../components/sections/StageBlock.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Icon from '../../components/site/Icon.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import { primary } from '../../data/curriculum';
+
+const accents = ['var(--flair-future)', 'var(--flair-nature)'];
+---
+
+<BaseLayout
+  title="Primary School (Ages 5–11), Koh Phangan"
+  description="Key Stage 1 (5–8) and Key Stage 2 (8–11) at ISPG — the Cambridge Curriculum with enquiry-led, outdoor learning across eight subject areas."
+  image="/media/site/pupils-3.webp"
+>
+  <PageHero
+    eyebrow="Ages 5–11 · International Primary School"
+    title="Primary School in Koh Phangan — <em>learning how to think, not what to remember</em>"
+    lead="Our Primary programme combines the Cambridge Curriculum with nature-based, enquiry-led learning. Children deepen subject knowledge and grow as confident, curious learners."
+    image="/media/site/pupils-3.webp"
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="intro">
+        <div data-reveal>
+          <SectionHeading size="sm" eyebrow="The programme" title="Rigour and <em>joy</em>, in the same lesson" />
+        </div>
+        <div class="intro__copy" data-reveal data-reveal-delay="80">
+          <p>
+            We balance academic rigour with creativity and outdoor learning. Lessons are built
+            around inquiry, collaboration and practical problem-solving, so children learn how
+            to think rather than what to remember.
+          </p>
+          <p>
+            Eight subject areas run through both key stages — English, Mathematics, Science,
+            Humanities, Creativity, Vitality, Wellbeing and Innovation. The subjects stay
+            constant; the depth, independence and ambition grow.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {primary.map((stage, i) => (
+    <StageBlock stage={stage} accent={accents[i]} reversed={i % 2 === 1} alt={i % 2 === 0} />
+  ))}
+
+  <section class="section tight">
+    <div class="container">
+      <a class="prev" href="/academics/kindergarten/" data-reveal>
+        <Icon name="arrow-left" size={20} class="prev__arrow" />
+        <span class="prev__label">Previous stage</span>
+        <span class="prev__title">Kindergarten — Nursery &amp; Casa, ages 2–5</span>
+      </a>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(var(--sp-8), 5vw, var(--sp-16));
+    align-items: start;
+  }
+  .intro__copy { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .intro__copy p { margin: 0; color: var(--text-muted); font-size: 1.05rem; line-height: var(--lh-body); }
+
+  .prev {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-8);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .prev:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .prev__arrow { color: var(--accent-primary); }
+  .prev__label {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    color: var(--accent-primary);
+  }
+  .prev__title { font-family: var(--font-display); font-size: 1.4rem; color: var(--navy-700); font-weight: var(--fw-semibold); }
+
+  @media (max-width: 900px) { .intro { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) {
+    .prev { grid-template-columns: auto 1fr; }
+    .prev__title { grid-column: 1 / -1; }
+  }
+</style>

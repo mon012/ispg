@@ -1,0 +1,85 @@
+---
+import Eyebrow from './Eyebrow.astro';
+
+/**
+ * Editorial section header: optional eyebrow, a large display-serif title
+ * (use <em> inside the `title` slot for the italic emphasis), optional lead.
+ */
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  align?: 'left' | 'center';
+  tone?: 'light' | 'dark';
+  size?: 'sm' | 'md' | 'lg';
+  eyebrowColor?: string;
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lead,
+  align = 'left',
+  tone = 'light',
+  size = 'lg',
+  eyebrowColor,
+  as: Tag = 'h2',
+  class: className = '',
+} = Astro.props;
+
+const onDark = tone === 'dark';
+const ec = eyebrowColor || (onDark ? 'var(--sky-400)' : 'var(--accent-primary)');
+---
+
+<div class:list={['sh', `sh--${align}`, onDark && 'sh--dark', className]}>
+  {eyebrow && <Eyebrow color={ec} align={align}>{eyebrow}</Eyebrow>}
+  <Tag class:list={['sh__title', `sh__title--${size}`]}>
+    {title ? <Fragment set:html={title} /> : <slot name="title" />}
+  </Tag>
+  {(lead || Astro.slots.has('lead')) && (
+    <p class="sh__lead">{lead ? <Fragment set:html={lead} /> : <slot name="lead" />}</p>
+  )}
+  <slot />
+</div>
+
+<style>
+  .sh {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .sh--center {
+    align-items: center;
+    text-align: center;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .sh__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-display);
+    letter-spacing: var(--ls-display);
+    color: var(--navy-700);
+  }
+  .sh__title--sm { font-size: var(--fs-display-3); }
+  .sh__title--md { font-size: var(--fs-display-2); }
+  .sh__title--lg { font-size: var(--fs-display-1); }
+  .sh__title :global(em) { font-style: italic; }
+
+  .sh__lead {
+    margin: 0;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: var(--text-muted);
+    max-width: 620px;
+  }
+
+  .sh--dark .sh__title { color: var(--text-on-navy); }
+  .sh--dark .sh__lead { color: var(--text-on-navy-muted); }
+</style>

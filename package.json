@@ -1,0 +1,20 @@
+{
+  "name": "ispg-redesign",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:overflow": "node scripts/check-overflow.mjs",
+    "check:console": "node scripts/check-console.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.6.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

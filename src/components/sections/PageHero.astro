@@ -1,0 +1,125 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+
+/** Standard interior-page hero: a photograph under a navy protection gradient,
+ *  with an eyebrow, display-serif title and optional lead. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  image?: string;
+  align?: 'left' | 'center';
+  size?: 'sm' | 'md';
+  /** Sub-brand logo shown beside the title — a transparent PNG/WebP. */
+  emblem?: string;
+  emblemAlt?: string;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lead,
+  image = '/media/site/campus-aerial.webp',
+  align = 'left',
+  size = 'md',
+  emblem,
+  emblemAlt = '',
+  class: className = '',
+} = Astro.props;
+---
+
+<section class:list={['phero', `phero--${size}`, `phero--${align}`, emblem && 'phero--emblem', className]}>
+  <div class="phero__media">
+    <img src={image} alt="" fetchpriority="high" decoding="async" />
+    <div class="phero__scrim"></div>
+  </div>
+  <div class="container phero__inner">
+    <div class="phero__text">
+      {eyebrow && <Eyebrow color="var(--sky-300)" align={align}>{eyebrow}</Eyebrow>}
+      <h1 class="phero__title" set:html={title} />
+      {lead && <p class="phero__lead">{lead}</p>}
+      <slot />
+    </div>
+    {emblem && (
+      <img class="phero__emblem" src={emblem} alt={emblemAlt} width="360" height="360" decoding="async" />
+    )}
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    background: var(--navy-800);
+    isolation: isolate;
+  }
+  .phero__media { position: absolute; inset: 0; overflow: hidden; z-index: -1; }
+  .phero__media img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+  .phero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 41, 66, 0.72) 0%,
+      rgba(13, 41, 66, 0.42) 45%,
+      rgba(13, 41, 66, 0.82) 100%
+    );
+  }
+
+  .phero__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: calc(var(--header-h) + clamp(3rem, 7vw, 6rem)) clamp(3rem, 7vw, 5.5rem);
+  }
+  .phero__text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .phero--sm .phero__inner { padding-block: calc(var(--header-h) + clamp(2.25rem, 5vw, 4rem)) clamp(2.25rem, 5vw, 4rem); }
+  .phero--center .phero__inner,
+  .phero--center .phero__text { align-items: center; text-align: center; }
+
+  /* With an emblem the hero becomes a lockup: wordmark left, logo right, both
+     optically centred on the same line. */
+  .phero--emblem .phero__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(var(--sp-8), 5vw, var(--sp-16));
+  }
+  .phero__emblem {
+    flex-shrink: 0;
+    width: clamp(132px, 17vw, 200px);
+    height: auto;
+    filter: drop-shadow(0 8px 24px rgba(13, 41, 66, 0.45));
+  }
+  @media (max-width: 780px) {
+    .phero--emblem .phero__inner { flex-direction: column-reverse; align-items: flex-start; gap: var(--sp-6); }
+    .phero__emblem { width: 116px; }
+  }
+
+  .phero__title {
+    margin: 0;
+    max-width: 20ch;
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-display-2);
+    line-height: var(--lh-display);
+    letter-spacing: var(--ls-display);
+    color: #fff;
+  }
+  .phero__title :global(em) { font-style: italic; }
+  .phero--center .phero__title { max-width: 22ch; }
+
+  .phero__lead {
+    margin: 0;
+    max-width: 56ch;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.9);
+  }
+</style>

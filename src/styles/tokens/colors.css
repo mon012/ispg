@@ -1,0 +1,74 @@
+/* ISPG color system — derived from the school crest.
+   Base scales first, then semantic aliases. */
+:root {
+  /* — Navy (primary / ink) — the heraldic lions & wordmark — */
+  --navy-900: #0d2942;
+  --navy-800: #123452;
+  --navy-700: #164a7a; /* brand navy */
+  --navy-600: #1d5891;
+  --navy-500: #2e6fa3;
+  --navy-400: #4d8bbd;
+
+  /* — Sky (island water / crest banner & waves) — */
+  --sky-600: #3f9bd6;
+  --sky-500: #5aafe4;
+  --sky-400: #78c0f0; /* crest sky blue */
+  --sky-300: #a3d5f5;
+  --sky-200: #c5e4f8;
+  --sky-100: #e6f3fc;
+
+  /* — Warm accents (the children figures & globe) — */
+  --coral-600: #c5331f;
+  --coral-500: #e0402f; /* primary warm accent / CTA */
+  --coral-400: #e9614f;
+  --orange-500: #f0803a;
+  --orange-400: #f79a5c;
+  --gold-500: #f0b030;
+  --gold-400: #f6c661;
+
+  /* — Neutrals (warm paper) — */
+  --paper: #fbfaf6;      /* app background */
+  --paper-2: #f4f1ea;    /* alt section / cream band */
+  --surface: #ffffff;    /* cards */
+  --line-200: #e7e2d8;   /* hairline on paper */
+  --line-300: #d8d2c5;
+  --ink-900: #16233a;    /* primary text (navy-black) */
+  --ink-700: #2f3d52;
+  --ink-500: #5b6675;    /* secondary text */
+  --ink-400: #808a98;    /* muted / captions */
+  --white: #ffffff;
+
+  /* — Semantic aliases — */
+  --text-heading: var(--navy-700);
+  --text-body: var(--ink-700);
+  --text-muted: var(--ink-500);
+  --text-caption: var(--ink-400);
+  --text-on-navy: #eef4fb;
+  --text-on-navy-muted: #a9c1da;
+
+  --bg-app: var(--paper);
+  --bg-alt: var(--paper-2);
+  --surface-card: var(--surface);
+  --surface-navy: var(--navy-700);
+  --surface-navy-deep: var(--navy-900);
+  --surface-sky-tint: var(--sky-100);
+
+  --border-hairline: var(--line-200);
+  --border-strong: var(--line-300);
+
+  --accent-primary: var(--coral-500);   /* buttons, links, eyebrows */
+  --accent-primary-hover: var(--coral-600);
+  --accent-sky: var(--sky-400);
+  --accent-gold: var(--gold-500);
+  --accent-orange: var(--orange-500);
+
+  --focus-ring: var(--sky-500);
+
+  /* FLAIR category hues (Future Leadership / Lifelong Learning / Active Living /
+     International mindset / Rooted in nature) — drawn from crest warm+cool set */
+  --flair-future: var(--coral-500);
+  --flair-lifelong: var(--gold-500);
+  --flair-active: var(--orange-500);
+  --flair-international: var(--sky-500);
+  --flair-nature: var(--navy-600);
+}
