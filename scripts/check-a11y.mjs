@@ -95,11 +95,16 @@ for (const route of ROUTES) {
       for (let cur = el; cur; cur = cur.offsetParent) y += cur.offsetTop;
       return y;
     };
+    // Astro only stamps data-image-component in dev (it exists for the toolbar),
+    // so against a production build every <Image> looks unprocessed. Detect the
+    // build by the absence of the toolbar and skip the rule rather than report
+    // hundreds of phantom findings.
+    const isDevServer = !!document.querySelector('astro-dev-toolbar');
     for (const el of document.querySelectorAll('img, iframe')) {
       if (el.closest('astro-dev-toolbar')) continue;
       const aboveFold = documentTop(el) < vh;
       const loading = el.getAttribute('loading');
-      if (el.tagName === 'IMG' && !el.hasAttribute('data-image-component')) {
+      if (isDevServer && el.tagName === 'IMG' && !el.hasAttribute('data-image-component')) {
         out.push({ kind: 'perf', rule: 'Use the Image component', el: label(el), note: el.getAttribute('src') ?? '' });
       }
       if (!aboveFold && (!loading || loading === 'eager')) {
