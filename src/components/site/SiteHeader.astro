@@ -184,13 +184,17 @@ const isActive = (item: (typeof mainNav)[number]) =>
     box-shadow: var(--shadow-lg);
     padding: var(--sp-2);
     opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), visibility var(--dur-fast);
+    /* Closed state hides the panel with opacity, not visibility: a
+       visibility:hidden subtree can't take focus, so :focus-within below could
+       never fire and the dropdown was unreachable by keyboard. pointer-events
+       keeps the invisible panel from swallowing clicks meant for the page. */
+    pointer-events: none;
+    transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
   }
   .nav__item.has-menu:hover .menu,
   .nav__item.has-menu:focus-within .menu {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto;
     transform: translateX(-50%) translateY(0);
   }
   /* Bridge the gap so the pointer can travel into the menu. */

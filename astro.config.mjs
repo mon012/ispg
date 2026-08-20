@@ -6,7 +6,7 @@ export default defineConfig({
   site: 'https://ispg.ac.th',
   trailingSlash: 'always',
   build: { format: 'directory' },
-  devToolbar: { enabled: false },
+  devToolbar: { enabled: true },
 
   // Warm the next page while a visitor is still deciding: every internal link
   // is fetched on hover, which makes navigation feel instant on the small

@@ -87,8 +87,17 @@ const gallery = [
           </ul>
         </div>
         <div class="intro__strip" data-reveal data-reveal-delay="90">
+          {/* The strip sits alongside the intro copy, high enough that the
+              first pair is already on screen at load — lazy there just delays
+              the LCP. */}
           {gallery.map((g, i) => (
-            <img class:list={[i === 1 && 'is-offset']} src={g.src} alt={g.alt} loading="lazy" decoding="async" />
+            <img
+              class:list={[i === 1 && 'is-offset']}
+              src={g.src}
+              alt={g.alt}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
           ))}
         </div>
       </div>

@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:overflow": "node scripts/check-overflow.mjs",
-    "check:console": "node scripts/check-console.mjs"
+    "check:console": "node scripts/check-console.mjs",
+    "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
