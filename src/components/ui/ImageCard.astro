@@ -3,6 +3,9 @@
  * Rounded photo card with a caption overlaid at the base and a soft protection
  * gradient so the label stays legible on any photograph.
  */
+import { Image } from 'astro:assets';
+import { img } from '../../lib/images';
+
 interface Props {
   src: string;
   alt?: string;
@@ -26,10 +29,24 @@ const {
 } = Astro.props;
 
 const Tag = href ? 'a' : 'div';
+
+/** Undefined for migrated WordPress imagery, which stays unprocessed in public/. */
+const asset = img(src);
 ---
 
 <Tag class:list={['imgcard', className]} href={href} style={`--ratio:${ratio}`}>
-  <img src={src} alt={alt} loading={loading} decoding="async" />
+  {asset ? (
+    <Image
+      src={asset}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      widths={[400, 800]}
+      sizes="(min-width: 900px) 400px, 90vw"
+    />
+  ) : (
+    <img src={src} alt={alt} loading={loading} decoding="async" />
+  )}
   {label && (
     <div class="imgcard__overlay">
       {eyebrow && <span class="imgcard__eyebrow">{eyebrow}</span>}

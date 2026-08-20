@@ -9,7 +9,7 @@ import { readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const BASE = process.argv[2] ?? 'http://localhost:4321';
-const THIRD_PARTY = /gumlet|deftform|google|gstatic|canva|doubleclick/i;
+const THIRD_PARTY = /gumlet|deftform|google|gstatic|canva|doubleclick|facebook|fbcdn|ytimg|youtube/i;
 
 function routes(dir, root = dir, acc = []) {
   for (const entry of readdirSync(dir)) {

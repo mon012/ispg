@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { site, contact, social, footerNav, legalNav, staffPortal } from '../../data/site';
+import { img } from '../../lib/images';
 
 const year = new Date().getFullYear();
 ---
@@ -12,7 +14,14 @@ const year = new Date().getFullYear();
         <div class="ftr__mark">
           <!-- White knockout of the crest — the colour version disappears
                against the navy footer. -->
-          <img src="/media/brand/ispg-crest-white.webp" alt={site.name} width="209" height="232" />
+          <Image
+            src={img('/media/brand/ispg-crest-white.webp')!}
+            alt={site.name}
+            widths={[64, 128]}
+            sizes="58px"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <p class="ftr__blurb">
           A Cambridge Curriculum school on Koh Phangan, developing the whole child

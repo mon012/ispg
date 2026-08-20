@@ -53,11 +53,13 @@ const src = `https://calendar.google.com/calendar/embed?src=${embeds.googleCalen
       </div>
 
       <div class="cal" data-reveal data-reveal-delay="80">
+        <!-- The month grid is the point of this page and sits above the fold,
+             so it loads with everything else rather than after a scroll. -->
         <iframe
           class="cal__month"
           src={`${src}MONTH`}
           title="ISPG school calendar, month view"
-          loading="lazy"
+          loading="eager"
         ></iframe>
       </div>
 

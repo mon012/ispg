@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '../ui/Button.astro';
 import { mainNav, contact } from '../../data/site';
+import { img } from '../../lib/images';
 
 interface Props {
   /** Transparent, floating over a dark hero — used on pages that open with one. */
@@ -18,7 +20,14 @@ const isActive = (item: (typeof mainNav)[number]) =>
 <header class:list={['hdr', floating && 'hdr--floating']} data-header>
   <div class="hdr__inner container">
     <a class="brand" href="/" aria-label={`${'International School of Phangan'} — home`}>
-      <img class="brand__crest" src="/media/brand/ispg-crest.webp" alt="" width="47" height="52" />
+      <Image
+        class="brand__crest"
+        src={img('/media/brand/ispg-crest.webp')!}
+        alt=""
+        width={47}
+        height={52}
+        loading="eager"
+      />
       <span class="brand__text">
         <span class="brand__name">International School</span>
         <span class="brand__sub">Of Pha Ngan</span>
@@ -184,13 +193,17 @@ const isActive = (item: (typeof mainNav)[number]) =>
     box-shadow: var(--shadow-lg);
     padding: var(--sp-2);
     opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), visibility var(--dur-fast);
+    /* Closed state hides the panel with opacity, not visibility: a
+       visibility:hidden subtree can't take focus, so :focus-within below could
+       never fire and the dropdown was unreachable by keyboard. pointer-events
+       keeps the invisible panel from swallowing clicks meant for the page. */
+    pointer-events: none;
+    transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
   }
   .nav__item.has-menu:hover .menu,
   .nav__item.has-menu:focus-within .menu {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto;
     transform: translateX(-50%) translateY(0);
   }
   /* Bridge the gap so the pointer can travel into the menu. */

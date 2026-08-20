@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
@@ -76,7 +78,14 @@ const facilities = [
     <div class="container">
       <div class="spot">
         <div class="spot__media" data-reveal>
-          <img src="/media/site/swim-lesson.webp" alt="A Blue Dolphins swimming lesson at ISPG" loading="lazy" decoding="async" />
+          <Image
+            src={img('/media/site/swim-lesson.webp')!}
+            alt="A Blue Dolphins swimming lesson at ISPG"
+            widths={[560, 1120]}
+            sizes="(min-width: 900px) 560px, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div class="spot__body" data-reveal data-reveal-delay="90">
           <Badge tone="sky">On campus</Badge>
@@ -105,7 +114,14 @@ const facilities = [
     <div class="container">
       <div class="spot is-reversed">
         <div class="spot__media" data-reveal>
-          <img src="/media/site/fruit.webp" alt="Lunch being served at ISPG" loading="lazy" decoding="async" />
+          <Image
+            src={img('/media/site/fruit.webp')!}
+            alt="Lunch being served at ISPG"
+            widths={[560, 1120]}
+            sizes="(min-width: 900px) 560px, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div class="spot__body" data-reveal data-reveal-delay="90">
           <SectionHeading size="sm" eyebrow="Nutrition" title="Meals that <em>fuel growth</em>" as="h2" />

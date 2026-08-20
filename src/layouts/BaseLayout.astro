@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import { site, contact, social } from '../data/site';
+import { img } from '../lib/images';
 
 interface Props {
   title: string;
@@ -26,7 +27,10 @@ const {
 
 const fullTitle = title === site.name ? title : `${title} — ${site.shortName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
-const ogImage = new URL(image, Astro.site ?? site.url).href;
+// Social scrapers need an absolute URL to a file that actually exists. Site
+// imagery now lives in src/assets and is emitted under a content-hashed name,
+// so resolve to that; migrated WordPress paths still resolve against public/.
+const ogImage = new URL(img(image)?.src ?? image, Astro.site ?? site.url).href;
 
 /** Organisation-level structured data, emitted once per page. */
 const schema = {

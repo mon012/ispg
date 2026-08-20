@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import Badge from '../components/ui/Badge.astro';
@@ -39,7 +41,9 @@ const [lead, ...rest] = articles;
     <section class="section" style="padding-top:0">
       <div class="container">
         <a class="feature" href={`/${lead.slug}/`} data-article data-topic={lead.topic ?? ''}>
-          {lead.hero && <img class="feature__img" src={lead.hero} alt={lead.title} loading="eager" decoding="async" />}
+          {lead.hero && (img(lead.hero)
+            ? <Image class="feature__img" src={img(lead.hero)!} alt={lead.title} widths={[640, 1280]} sizes="(min-width: 900px) 620px, 100vw" loading="eager" decoding="async" />
+            : <img class="feature__img" src={lead.hero} alt={lead.title} loading="eager" decoding="async" />)}
           <div class="feature__body">
             <div class="feature__meta">
               {lead.topic && <Badge tone="gold">{lead.topic}</Badge>}
@@ -61,7 +65,9 @@ const [lead, ...rest] = articles;
         {rest.map((a, i) => (
           <li data-article data-topic={a.topic ?? ''} data-reveal data-reveal-delay={Math.min(i, 5) * 70}>
             <a href={`/${a.slug}/`}>
-              {a.hero && <img src={a.hero} alt={a.title} loading="lazy" decoding="async" />}
+              {a.hero && (img(a.hero)
+                ? <Image src={img(a.hero)!} alt={a.title} widths={[360, 720]} sizes="(min-width: 900px) 360px, 90vw" loading="lazy" decoding="async" />
+                : <img src={a.hero} alt={a.title} loading="lazy" decoding="async" />)}
               <div class="posts__body">
                 <div class="posts__meta">
                   {a.topic && <Badge tone="gold">{a.topic}</Badge>}

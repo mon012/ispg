@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
@@ -143,7 +145,15 @@ const stages = [
   {/* ------------------------------------------------------------- hero */}
   <section class="hero">
     <div class="hero__media">
-      <img src="/media/site/campus-aerial-2.webp" alt="" fetchpriority="high" decoding="async" />
+      <Image
+        src={img('/media/site/campus-aerial-2.webp')!}
+        alt=""
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
       <div class="hero__scrim"></div>
     </div>
     <div class="container hero__inner">
@@ -188,7 +198,14 @@ const stages = [
       <div class="accred__row">
         <span class="accred__by">Officially Accredited by</span>
         <span class="accred__divider" aria-hidden="true"></span>
-        <img src="/media/brand/cambridge.webp" alt="Cambridge Assessment International Education" loading="lazy" decoding="async" />
+        <Image
+          src={img('/media/brand/cambridge.webp')!}
+          alt="Cambridge Assessment International Education"
+          widths={[180, 360]}
+          sizes="180px"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     </div>
   </section>
@@ -223,7 +240,14 @@ const stages = [
           data-reveal-delay={i * 60}
         >
           {tile.kind === 'image' ? (
-            <img src={tile.src} alt="" loading="lazy" decoding="async" />
+            <Image
+              src={img(tile.src)!}
+              alt=""
+              widths={[560, 1120]}
+              sizes="(min-width: 900px) 560px, 100vw"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <iframe
               data-src={gumletBg(tile.id)}
@@ -367,7 +391,15 @@ const stages = [
         {stages.map((s, i) => (
           <div data-reveal data-reveal-delay={i * 110}>
             <Card padding="0" elevation="md" class="stagecard">
-              <img class="stagecard__img" src={s.image} alt={`${s.title} at ISPG`} loading="lazy" decoding="async" />
+              <Image
+                class="stagecard__img"
+                src={img(s.image)!}
+                alt={`${s.title} at ISPG`}
+                widths={[560, 1120]}
+                sizes="(min-width: 900px) 560px, 100vw"
+                loading="lazy"
+                decoding="async"
+              />
               <div class="stagecard__body">
                 <Badge tone="sky">{s.tag}</Badge>
                 <h3 class="stagecard__title">{s.title}</h3>
@@ -418,7 +450,9 @@ const stages = [
       <div class="grid cols-3">
         {latest.map((n, i) => (
           <a class="news__card" href={`/${n.slug}/`} data-reveal data-reveal-delay={i * 100}>
-            {n.hero && <img src={n.hero} alt={n.title} loading="lazy" decoding="async" />}
+            {n.hero && (img(n.hero)
+              ? <Image src={img(n.hero)!} alt={n.title} widths={[360, 720]} sizes="(min-width: 900px) 360px, 90vw" loading="lazy" decoding="async" />
+              : <img src={n.hero} alt={n.title} loading="lazy" decoding="async" />)}
             <div class="news__body">
               {n.topic && <Badge tone="gold">{n.topic}</Badge>}
               <h3>{n.title}</h3>

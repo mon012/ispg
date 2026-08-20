@@ -2,7 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import { Image } from 'astro:assets';
 import { teachers, departments } from '../data/teachers';
+import { img } from '../lib/images';
 
 const grouped = departments
   .map((d) => ({ department: d, people: teachers.filter((t) => t.department === d) }))
@@ -13,7 +15,7 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
   id,
   name,
   role,
-  photoHero,
+  photoHero: img(photoHero)?.src ?? photoHero,
   bio,
   quote,
   quoteLabel,
@@ -47,7 +49,17 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
             <li data-reveal data-reveal-delay={i * 60}>
               <button class="person" type="button" data-person={t.id} aria-haspopup="dialog">
                 <span class="person__photo">
-                  <img src={t.photo} alt={`${t.name}, ${t.role} at ISPG`} loading="lazy" decoding="async" />
+                  {/* The opening row of the first department sits above the
+                      fold — lazy-loading it delays the LCP instead of saving
+                      anything. Everything further down stays lazy. */}
+                  <Image
+                    src={img(t.photo)!}
+                    alt={`${t.name}, ${t.role} at ISPG`}
+                    widths={[140, 280]}
+                    sizes="140px"
+                    loading={gi === 0 && i < 2 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
                 </span>
                 <span class="person__name">{t.name}</span>
                 <span class="person__role">{t.role}</span>
@@ -61,7 +73,7 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
   ))}
 
   {/* Modal shell — populated from the button that opened it. */}
-  <dialog class="modal" data-modal>
+  <dialog class="modal" data-modal aria-labelledby="modal-name">
     <div class="modal__inner">
       <button class="modal__close" type="button" data-modal-close aria-label="Close">&times;</button>
 
@@ -70,7 +82,7 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
       </div>
 
       <div class="modal__body">
-        <h2 data-modal-name></h2>
+        <h2 id="modal-name" data-modal-name></h2>
         <p class="modal__role" data-modal-role></p>
 
         <blockquote class="modal__quote" data-modal-quote hidden>
