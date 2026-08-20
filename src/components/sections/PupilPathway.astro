@@ -36,16 +36,14 @@ const tops = [150, 40, 130, 10];
     </div>
 
     <div class="pathway" data-pathway>
-      <!-- Dotted line continues past the curve into the page margins, all the
-           way to the true viewport edge — the curve itself stays anchored to
-           the medallions (container-relative); these two just carry the same
-           dot pattern outward. pathway-section clips the 50vw overshoot. -->
-      <span class="pathway__bleed pathway__bleed--start" aria-hidden="true"></span>
-      <span class="pathway__bleed pathway__bleed--end" aria-hidden="true"></span>
+      <!-- The path's straight tails (past x=20 and x=985) carry the same
+           stroke out into the page margins, all the way to the true viewport
+           edge — one continuous line/animation instead of a separate static
+           graphic. pathway-section clips the overshoot at the true edge. -->
       <svg class="pathway__line" viewBox="0 0 1000 240" preserveAspectRatio="none" aria-hidden="true">
         <!-- Passes through the centre of each medallion: 12.5% / 37.5% / 62.5% / 87.5%. -->
         <path
-          d="M 20 160 C 60 150 90 146 125 144 C 230 140 260 69 375 69 C 490 69 520 129 625 129 C 730 129 770 46.5 875 46.5 C 930 46.5 960 40 985 36"
+          d="M -3000 160 L 20 160 C 60 150 90 146 125 144 C 230 140 260 69 375 69 C 490 69 520 129 625 129 C 730 129 770 46.5 875 46.5 C 930 46.5 960 40 985 36 L 4000 36"
           fill="none"
           stroke="var(--sky-400)"
           stroke-width="2.5"
@@ -88,21 +86,6 @@ const tops = [150, 40, 130, 10];
 
   .pathway { position: relative; }
 
-  .pathway__bleed {
-    position: absolute;
-    width: 50vw;
-    height: 3px;
-    background-image: radial-gradient(circle, var(--sky-400) 1.3px, transparent 1.3px);
-    background-size: 11px 3px;
-    background-repeat: repeat-x;
-    pointer-events: none;
-  }
-  /* y matches the curve's start/end point (160 and 36 on a 240-tall viewBox
-     scaled to the line's 320px height); x picks up right where the curve's
-     20/985 (of 1000) inset leaves off, so the dots read as one continuous line. */
-  .pathway__bleed--start { top: 213px; right: 98%; background-position: right center; }
-  .pathway__bleed--end { top: 47px; left: 98.5%; background-position: left center; }
-
   .pathway__line {
     position: absolute;
     inset: 0 0 auto;
@@ -113,10 +96,12 @@ const tops = [150, 40, 130, 10];
   .pathway__line path {
     stroke-dashoffset: 0;
   }
-  /* Draw-in: a long dash pattern collapses to the dotted one as it reveals. */
+  /* Draw-in: a long dash pattern collapses to the dotted one as it reveals.
+     8000 comfortably exceeds the path's real length (curve + the two ~3000-unit
+     bleed tails) — the reveal duration is fixed by the animation, not by this. */
   :global(.js) .pathway__line path {
-    stroke-dasharray: 1600;
-    stroke-dashoffset: 1600;
+    stroke-dasharray: 8000;
+    stroke-dashoffset: 8000;
   }
   :global(.js) .pathway.is-drawn .pathway__line path {
     animation: pathway-draw 1600ms var(--ease-out) forwards;
@@ -186,7 +171,7 @@ const tops = [150, 40, 130, 10];
   }
 
   @media (max-width: 860px) {
-    .pathway__line, .pathway__bleed { display: none; }
+    .pathway__line { display: none; }
     .pathway__stages { grid-template-columns: repeat(2, 1fr); gap: var(--sp-8); min-height: 0; }
     .pathway__stage { padding-top: 0; }
     .pathway__medal, .pathway__medal.is-large { width: 92px; height: 92px; }
