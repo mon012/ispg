@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Eyebrow from '../ui/Eyebrow.astro';
+import { img } from '../../lib/images';
 
 /** Standard interior-page hero: a photograph under a navy protection gradient,
  *  with an eyebrow, display-serif title and optional lead. */
@@ -27,11 +29,26 @@ const {
   emblemAlt = '',
   class: className = '',
 } = Astro.props;
+
+const heroAsset = img(image);
+const emblemAsset = img(emblem);
 ---
 
 <section class:list={['phero', `phero--${size}`, `phero--${align}`, emblem && 'phero--emblem', className]}>
   <div class="phero__media">
-    <img src={image} alt="" fetchpriority="high" decoding="async" />
+    {heroAsset ? (
+      <Image
+        src={heroAsset}
+        alt=""
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    ) : (
+      <img src={image} alt="" fetchpriority="high" decoding="async" />
+    )}
     <div class="phero__scrim"></div>
   </div>
   <div class="container phero__inner">
@@ -42,7 +59,19 @@ const {
       <slot />
     </div>
     {emblem && (
-      <img class="phero__emblem" src={emblem} alt={emblemAlt} width="360" height="360" decoding="async" />
+      emblemAsset ? (
+        <Image
+          class="phero__emblem"
+          src={emblemAsset}
+          alt={emblemAlt}
+          widths={[360, 720]}
+          sizes="360px"
+          loading="eager"
+          decoding="async"
+        />
+      ) : (
+        <img class="phero__emblem" src={emblem} alt={emblemAlt} width="360" height="360" decoding="async" />
+      )
     )}
   </div>
 </section>

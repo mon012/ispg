@@ -2,7 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import { Image } from 'astro:assets';
 import { teachers, departments } from '../data/teachers';
+import { img } from '../lib/images';
 
 const grouped = departments
   .map((d) => ({ department: d, people: teachers.filter((t) => t.department === d) }))
@@ -13,7 +15,7 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
   id,
   name,
   role,
-  photoHero,
+  photoHero: img(photoHero)?.src ?? photoHero,
   bio,
   quote,
   quoteLabel,
@@ -50,9 +52,11 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
                   {/* The opening row of the first department sits above the
                       fold — lazy-loading it delays the LCP instead of saving
                       anything. Everything further down stays lazy. */}
-                  <img
-                    src={t.photo}
+                  <Image
+                    src={img(t.photo)!}
                     alt={`${t.name}, ${t.role} at ISPG`}
+                    widths={[140, 280]}
+                    sizes="140px"
                     loading={gi === 0 && i < 2 ? 'eager' : 'lazy'}
                     decoding="async"
                   />

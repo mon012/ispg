@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '../ui/Button.astro';
 import { mainNav, contact } from '../../data/site';
+import { img } from '../../lib/images';
 
 interface Props {
   /** Transparent, floating over a dark hero — used on pages that open with one. */
@@ -18,7 +20,14 @@ const isActive = (item: (typeof mainNav)[number]) =>
 <header class:list={['hdr', floating && 'hdr--floating']} data-header>
   <div class="hdr__inner container">
     <a class="brand" href="/" aria-label={`${'International School of Phangan'} — home`}>
-      <img class="brand__crest" src="/media/brand/ispg-crest.webp" alt="" width="47" height="52" />
+      <Image
+        class="brand__crest"
+        src={img('/media/brand/ispg-crest.webp')!}
+        alt=""
+        width={47}
+        height={52}
+        loading="eager"
+      />
       <span class="brand__text">
         <span class="brand__name">International School</span>
         <span class="brand__sub">Of Pha Ngan</span>

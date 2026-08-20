@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import SectionHeading from '../ui/SectionHeading.astro';
 import { pathway } from '../../data/curriculum';
+import { img } from '../../lib/images';
 
 /** The animated Pupil Pathway — a dotted curve that draws in on scroll with a
  *  portrait medallion at each stage. Shared by the homepage and /academics/. */
@@ -57,11 +59,11 @@ const tops = [150, 40, 130, 10];
           <li class="pathway__stage" style={`--top:${tops[i]}px`} data-reveal data-reveal-delay={i * 110}>
             <a href={p.href}>
               <span class:list={['pathway__medal', i % 2 === 1 && 'is-large']}>
-                <img
-                  src={p.image.replace('/site/', '/site/thumb/')}
+                <Image
+                  src={img(p.image.replace('/site/', '/site/thumb/'))!}
                   alt={`${p.stage} at ISPG`}
-                  width="256"
-                  height="256"
+                  widths={[110, 220]}
+                  sizes="110px"
                   loading="lazy"
                   decoding="async"
                 />

@@ -7,11 +7,15 @@
  * audit/rules/{a11y,perf}.js — notably the accessible-name rule, which reads
  * innerText (empty for anything visibility:hidden) rather than textContent.
  *
- * Usage: node scripts/check-a11y.mjs [baseUrl]
+ * Usage: node scripts/check-a11y.mjs [baseUrl] [viewportHeight]
  */
 import pagesJson from '../src/data/pages.json' with { type: 'json' };
 
 const BASE = process.argv[2] ?? 'http://localhost:4331';
+// The lazy/eager rules compare against the viewport height, so an image sitting
+// near the fold flips verdict between window sizes. Override to spot-check:
+//   node scripts/check-a11y.mjs http://localhost:4331 977
+const VH = Number(process.argv[3]) || 900;
 
 const STATIC = [
   '/', '/about/', '/flair/', '/our-teachers/', '/school-life/',
@@ -28,16 +32,15 @@ if (!chromium) {
 }
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const page = await browser.newPage({ viewport: { width: 1440, height: VH } });
 let total = 0;
 
 for (const route of ROUTES) {
   const res = await page.goto(BASE + route, { waitUntil: 'load' });
   if (!res?.ok()) { console.log(`${route} -> HTTP ${res?.status()}`); total++; continue; }
-  // Above/below-the-fold verdicts are read off getBoundingClientRect, so the
-  // layout has to have stopped moving first: fonts swapping in and the
-  // data-reveal entrance animations both shift elements across the fold line
-  // and otherwise make the run report different images from one pass to the next.
+  // Wait for webfonts before measuring: a Georgia fallback standing in for
+  // Cormorant Garamond reflows the page, which moves every element's document
+  // position and flips the fold verdicts from one run to the next.
   await page.evaluate(() => document.fonts?.ready).catch(() => {});
   await page.waitForTimeout(400);
 
@@ -80,11 +83,21 @@ for (const route of ROUTES) {
     }
 
     // --- perf: raw <img> (not the Image component) + loading attribute fit
+    //
+    // Fold position is measured the way the toolbar measures it: summing
+    // offsetTop up the offsetParent chain. That is a document coordinate, so
+    // unlike getBoundingClientRect it doesn't move with the scroll position or
+    // with the data-reveal entrance transforms — using the rect here quietly
+    // under-reported images sitting near the fold.
     const vh = window.innerHeight;
+    const documentTop = (el) => {
+      let y = 0;
+      for (let cur = el; cur; cur = cur.offsetParent) y += cur.offsetTop;
+      return y;
+    };
     for (const el of document.querySelectorAll('img, iframe')) {
       if (el.closest('astro-dev-toolbar')) continue;
-      const r = el.getBoundingClientRect();
-      const aboveFold = r.top < vh;
+      const aboveFold = documentTop(el) < vh;
       const loading = el.getAttribute('loading');
       if (el.tagName === 'IMG' && !el.hasAttribute('data-image-component')) {
         out.push({ kind: 'perf', rule: 'Use the Image component', el: label(el), note: el.getAttribute('src') ?? '' });
@@ -98,6 +111,28 @@ for (const route of ROUTES) {
     }
     return out;
   });
+
+  // Second pass, after the loading-attribute verdicts are already recorded:
+  // images live in src/assets now but are still referenced by their old /media
+  // path, so a missed mapping surfaces as a 404 here rather than a build error.
+  // Lazy images are forced to fetch so every one of them gets checked.
+  const broken = await page.evaluate(async () => {
+    const imgs = [...document.querySelectorAll('img')].filter(
+      (i) => !i.closest('astro-dev-toolbar') && i.getAttribute('src'),
+    );
+    for (const i of imgs) i.loading = 'eager';
+    await Promise.all(
+      imgs.map((i) => (i.complete ? null : new Promise((r) => {
+        i.addEventListener('load', r, { once: true });
+        i.addEventListener('error', r, { once: true });
+        setTimeout(r, 5000);
+      }))),
+    );
+    return imgs
+      .filter((i) => i.complete && i.naturalWidth === 0)
+      .map((i) => ({ kind: 'broken', rule: 'Image failed to load', el: i.tagName.toLowerCase(), note: i.currentSrc || i.src }));
+  });
+  found.push(...broken);
 
   if (found.length) {
     total += found.length;

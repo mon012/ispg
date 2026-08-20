@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
@@ -52,7 +54,15 @@ const gallery = [
 >
   <section class="ohero">
     <div class="ohero__media">
-      <img src="/media/site/openhouse-climbing.webp" alt="" fetchpriority="high" decoding="async" />
+      <Image
+        src={img('/media/site/openhouse-climbing.webp')!}
+        alt=""
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
       <div class="ohero__scrim"></div>
     </div>
     <div class="container ohero__inner">
@@ -136,7 +146,14 @@ const gallery = [
       <ul class="gallery">
         {gallery.map((g, i) => (
           <li data-reveal data-reveal-delay={Math.min(i, 8) * 40}>
-            <img src={g.src} alt={g.alt} loading="lazy" decoding="async" />
+            <Image
+              src={img(g.src)!}
+              alt={g.alt}
+              widths={[400, 800]}
+              sizes="(min-width: 900px) 400px, 90vw"
+              loading="lazy"
+              decoding="async"
+            />
           </li>
         ))}
       </ul>

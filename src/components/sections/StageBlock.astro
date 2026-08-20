@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import Badge from '../ui/Badge.astro';
 import KeyAreas from './KeyAreas.astro';
 import type { Stage } from '../../data/curriculum';
+import { img } from '../../lib/images';
 
 /** One curriculum stage: portrait photo, copy and its Key Areas infographic. */
 interface Props {
@@ -18,7 +20,14 @@ const { stage, accent = 'var(--sky-500)', reversed = false, alt = false } = Astr
   <div class="container">
     <div class:list={['stage', reversed && 'stage--reversed']}>
       <div class="stage__media" data-reveal>
-        <img src={stage.image} alt={`${stage.name} at ISPG`} loading="lazy" decoding="async" />
+        <Image
+          src={img(stage.image)!}
+          alt={`${stage.name} at ISPG`}
+          widths={[560, 1120]}
+          sizes="(min-width: 900px) 560px, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="stage__body" data-reveal data-reveal-delay="90">
         <Badge tone="sky">{stage.ages}</Badge>
