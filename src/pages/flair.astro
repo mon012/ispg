@@ -5,6 +5,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
 import { pillars } from '../data/flair';
+
+/* Ink pairing for the badge fills below — mirrors the contrast fix already
+   applied to the homepage FLAIR dial: white reads fine on the coral and navy
+   fills, but gold/orange/sky need dark ink to clear 4.5:1. */
+const BADGE_INK: Record<string, string> = {
+  F: '#fff',
+  L: 'var(--navy-900)',
+  A: 'var(--navy-900)',
+  I: 'var(--navy-900)',
+  R: '#fff',
+};
 ---
 
 <BaseLayout
@@ -19,15 +30,20 @@ import { pillars } from '../data/flair';
     image="/media/site/celebrate.webp"
   />
 
-  {/* The acronym, laid out as a quick index into the rows below. */}
+  {/* The acronym, laid out as a quick index into the rows below — five
+      connected badges, each segment drawing in just before the next badge
+      lands, so the row reads as one chain rather than five loose icons. */}
   <section class="section tight">
     <div class="container">
-      <ol class="index" data-reveal>
-        {pillars.map((p) => (
-          <li>
+      <ol class="findex" data-reveal>
+        {pillars.map((p, i) => (
+          <li
+            class="findex__item"
+            style={`--i:${i}; --fill:${p.accent}; --ink:${BADGE_INK[p.letter]}`}
+          >
             <a href={`#${p.letter.toLowerCase()}-${p.name.toLowerCase().replace(/\s+/g, '-')}`}>
-              <span class="index__letter" style={`color:${p.accent}`}>{p.letter}</span>
-              <span class="index__name">{p.name}</span>
+              <span class="findex__badge">{p.letter}</span>
+              <span class="findex__name">{p.name}</span>
             </a>
           </li>
         ))}
@@ -72,26 +88,98 @@ import { pillars } from '../data/flair';
 </BaseLayout>
 
 <style>
-  .index {
+  .findex {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: var(--sp-6) 0;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: var(--sp-4);
     border-top: 1px solid var(--border-hairline);
     border-bottom: 1px solid var(--border-hairline);
   }
-  .index a {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    padding: var(--sp-6) var(--sp-2);
-    text-decoration: none;
+  .findex__item { position: relative; }
+  /* The segment connecting this badge back to the previous one — positioned
+     from the centre of the prior grid cell to the centre of this one, so it
+     needs no knowledge of the row's outer padding. */
+  .findex__item::before {
+    content: '';
+    position: absolute;
+    /* Badge centre = the link's own padding (--sp-2) plus the badge radius —
+       not just the radius, or the line rides above the circle instead of
+       passing through it. */
+    top: calc(var(--sp-2) + 22px);
+    left: -50%;
+    width: 100%;
+    height: 3px;
+    /* Round dots via a repeating radial gradient rather than a dashed
+       border — the 16px pitch matches the homepage Pupil Pathway line, and
+       being plain background tiling (not an SVG stretched to a fluid box)
+       it can't pick up the anisotropic-scaling wobble that line had. */
+    background-image: radial-gradient(circle, var(--line-300) 1.4px, transparent 1.6px);
+    background-repeat: repeat-x;
+    background-size: 16px 3px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 640ms var(--ease-out);
+    transition-delay: calc((var(--i) - 1) * 90ms + 200ms);
   }
-  .index__letter { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 2rem; line-height: 1; }
-  .index__name { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--navy-700); line-height: 1.3; }
-  .index a:hover .index__name { color: var(--accent-primary); }
+  .findex__item:first-child::before { display: none; }
+  .findex.is-visible .findex__item::before {
+    transform: scaleX(1);
+    animation: findex-flow 3200ms linear infinite;
+  }
+  @keyframes findex-flow {
+    from { background-position: 0 0; }
+    to { background-position: -16px 0; }
+  }
+
+  .findex__item a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: var(--sp-2);
+    text-decoration: none;
+    text-align: center;
+  }
+  .findex__item a {
+    opacity: 0;
+    transform: translateY(10px) scale(0.85);
+    transition: opacity 420ms var(--ease-out), transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: calc(var(--i) * 90ms + 260ms);
+  }
+  .findex.is-visible .findex__item a { opacity: 1; transform: none; }
+
+  .findex__badge {
+    position: relative;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--fill);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 1.2rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+  }
+  .findex__item a:hover .findex__badge,
+  .findex__item a:focus-visible .findex__badge {
+    transform: translateY(-3px) scale(1.06);
+    box-shadow: var(--shadow-md);
+  }
+  .findex__name { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--navy-700); line-height: 1.3; }
+  .findex__item a:hover .findex__name,
+  .findex__item a:focus-visible .findex__name { color: var(--accent-primary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .findex__item::before, .findex__item a { transition: none; opacity: 1; transform: none; }
+    .findex__item::before { animation: none !important; }
+  }
 
   .pillar__row {
     display: grid;
@@ -131,10 +219,56 @@ import { pillars } from '../data/flair';
   }
   .pillar__copy { margin: 0; color: var(--text-muted); line-height: var(--lh-body); font-size: 1.05rem; }
 
+  /* Below 900px the row can no longer fit five badges across, so it drops to
+     a single stacked column. A straight-down line behind stacked, centred
+     badge+label pairs would cut across the label text on every row, so the
+     layout switches to icon-left/label-right — the classic vertical-timeline
+     shape — keeping the line inside the icon column, clear of every word. */
   @media (max-width: 900px) {
-    .index { grid-template-columns: repeat(2, 1fr); }
+    .findex {
+      grid-template-columns: 1fr;
+      justify-items: stretch;
+      gap: 0;
+    }
+    /* Fixed row height, rather than letting each item size to its own
+       content, so the connector below can use the same "known offset from
+       the row's own top" math as the desktop version instead of guessing
+       where a variable-height row's badge sits. */
+    .findex__item { width: 100%; max-width: 320px; height: 64px; margin-inline: auto; }
+    .findex__item a {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: var(--sp-4);
+      padding: 6px 0;
+      text-align: left;
+    }
+    .findex__name { flex: 1; }
+    .findex__item::before {
+      display: block;
+      /* Starts at the previous row's badge centre (one full row height above
+         this row's own badge centre) and runs down to meet it — the same
+         "known fixed offset" logic as the desktop left:-50% trick, rotated
+         90° and pinned to the icon column instead of the row's midline. */
+      top: calc(6px + 22px - 64px);
+      left: 22px;
+      width: 3px;
+      height: 64px;
+      background-image: radial-gradient(circle, var(--line-300) 1.4px, transparent 1.6px);
+      background-repeat: repeat-y;
+      background-size: 3px 16px;
+      transform: translateX(-50%) scaleY(0);
+      transform-origin: top center;
+    }
+    .findex.is-visible .findex__item::before {
+      transform: translateX(-50%) scaleY(1);
+      animation: findex-flow-vertical 3200ms linear infinite;
+    }
+    @keyframes findex-flow-vertical {
+      from { background-position: 0 0; }
+      to { background-position: 0 -16px; }
+    }
     .pillar__row { grid-template-columns: 1fr; }
     .pillar__row.is-reversed .pillar__media { order: 0; }
   }
-  @media (max-width: 480px) { .index { grid-template-columns: 1fr; } }
 </style>

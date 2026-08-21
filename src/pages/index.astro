@@ -156,7 +156,7 @@ const stages = [
       />
       <div class="hero__scrim"></div>
     </div>
-    <div class="container hero__inner">
+    <div class="container hero__inner" data-reveal>
       <Eyebrow color="var(--sky-300)" align="center">Welcome to ISPG · Koh Phangan</Eyebrow>
       <h1 class="hero__title">A Cambridge education that develops the <em>whole child</em></h1>
       <p class="hero__lead">
@@ -477,6 +477,16 @@ const stages = [
     /* Keep the pool and the shoreline in frame when the hero is wide and short. */
     object-position: center 58%;
     opacity: 0.62;
+    /* One slow, one-time drift — never loops back, so it reads as ambient
+       stillness rather than a video-style loop. */
+    animation: hero-zoom 18s var(--ease-standard) forwards;
+  }
+  @keyframes hero-zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__media img { animation: none; }
   }
   .hero__scrim {
     position: absolute;
@@ -694,6 +704,17 @@ const stages = [
     fill: var(--navy-800);
     stroke: rgba(255, 255, 255, 0.22);
     stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  /* A near-imperceptible breathe once the dial has settled — just enough
+     ambient life to keep the hub from reading as a static badge. */
+  .fan.is-visible .hub__disc {
+    animation: hub-breathe 4200ms var(--ease-standard) 640ms infinite;
+  }
+  @keyframes hub-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.018); }
   }
   .hub__word {
     fill: #fff;
@@ -835,6 +856,7 @@ const stages = [
     }
     .wedge__a { transition: none; }
     .fan__panel { transition: none; }
+    .hub__disc { animation: none !important; }
   }
 
   /* ----------------------------------------------------------- stages */

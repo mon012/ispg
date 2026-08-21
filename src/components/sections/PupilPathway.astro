@@ -48,8 +48,8 @@ const tops = [150, 40, 130, 10];
           d="M -3000 160 L 20 160 C 60 150 90 146 125 144 C 230 140 260 69 375 69 C 490 69 520 129 625 129 C 730 129 770 46.5 875 46.5 C 930 46.5 960 40 985 36 L 4000 36"
           fill="none"
           stroke="var(--sky-400)"
-          stroke-width="2.5"
-          stroke-dasharray="2 9"
+          stroke-width="3"
+          stroke-dasharray="3 13"
           stroke-linecap="round"
         />
       </svg>
@@ -94,35 +94,29 @@ const tops = [150, 40, 130, 10];
     width: 100%;
     height: 320px;
     overflow: visible;
+    /* Reveal is a wipe on the element itself, not a dasharray swap — the dot
+       pattern below never changes, so there is nothing to "pop" once drawn. */
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1500ms var(--ease-out);
   }
-  .pathway__line path {
-    stroke-dashoffset: 0;
+  .pathway.is-drawn .pathway__line {
+    clip-path: inset(0 0 0 0);
   }
-  /* Draw-in: a long dash pattern collapses to the dotted one as it reveals.
-     8000 comfortably exceeds the path's real length (curve + the two ~3000-unit
-     bleed tails) — the reveal duration is fixed by the animation, not by this. */
+  /* The dots drift along the path continuously — reads as the journey
+     continuing, Nursery toward Key Stage 2. -160 is a multiple of the
+     16-unit "3 13" dash cycle so the loop has no seam. Kept slow and
+     large-spaced on purpose: a calmer cadence reads as considered rather
+     than busy, and hides the slight rhythm shift where the non-uniform
+     width/height scaling stretches the curve unevenly. */
   :global(.js) .pathway__line path {
-    stroke-dasharray: 8000;
-    stroke-dashoffset: 8000;
-  }
-  :global(.js) .pathway.is-drawn .pathway__line path {
-    animation: pathway-draw 1600ms var(--ease-out) forwards;
-  }
-  @keyframes pathway-draw {
-    to { stroke-dashoffset: 0; }
-  }
-  /* Once drawn, swap to the dotted look and keep the dots drifting along the
-     path — reads as the journey continuing, Nursery toward Key Stage 2. -88
-     is a multiple of the 11-unit "2 9" dash cycle so the loop has no seam. */
-  :global(.js) .pathway.is-dotted .pathway__line path {
-    animation: pathway-flow 1800ms linear infinite;
-    stroke-dasharray: 2 9;
+    animation: pathway-flow 3200ms linear infinite;
   }
   @keyframes pathway-flow {
     from { stroke-dashoffset: 0; }
-    to { stroke-dashoffset: -88; }
+    to { stroke-dashoffset: -160; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .pathway__line { clip-path: none; transition: none; }
     .pathway__line path { animation: none !important; }
   }
 
@@ -190,14 +184,12 @@ const tops = [150, 40, 130, 10];
       ([entry]) => {
         if (!entry.isIntersecting) return;
         track.classList.add('is-drawn');
-        // After the draw completes, settle into the dotted resting state.
-        window.setTimeout(() => track.classList.add('is-dotted'), 1600);
         io.disconnect();
       },
       { threshold: 0.25 },
     );
     io.observe(track);
   } else {
-    track?.classList.add('is-dotted');
+    track?.classList.add('is-drawn');
   }
 </script>
