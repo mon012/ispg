@@ -123,17 +123,22 @@ import { embeds } from '../data/site';
   .film__head { margin-bottom: var(--sp-8); }
 
   /* ---------------------------------------------------------------- rail
-     A dotted line threaded through the step numbers whose fill height tracks
-     scroll position directly (not a one-shot reveal) — it grows and shrinks
-     as you scroll past the section in either direction, and each number
-     lights up in its own colour the moment the line reaches it. Height (not
-     transform: scaleY) so the dash pattern itself never stretches. */
+     A dotted line in the gutter beside the step numbers (not through their
+     strokes — it used to bisect the glyphs, which read as a rendering
+     glitch rather than a deliberate line) whose fill height tracks scroll
+     position directly (not a one-shot reveal) — it grows and shrinks as you
+     scroll past the section in either direction, and each number lights up
+     in its own colour the moment the line reaches it. Height (not
+     transform: scaleY) so the dash pattern itself never stretches. A small
+     glowing node rides the tip of the fill as a leading marker, so the line
+     reads as something actively travelling rather than a static bar filling
+     in. */
   .steps__wrap { position: relative; }
   .steps__rail {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 38px;
+    left: calc(120px + clamp(var(--sp-5), 4vw, var(--sp-12)) / 2 - 1.5px);
     width: 3px;
     background: repeating-linear-gradient(to bottom, var(--border-hairline) 0 3px, transparent 3px 13px);
   }
@@ -143,6 +148,24 @@ import { embeds } from '../data/site';
     width: 100%;
     height: calc(var(--progress, 0) * 100%);
     background: repeating-linear-gradient(to bottom, var(--accent-primary) 0 3px, transparent 3px 13px);
+    transition: height 120ms linear;
+  }
+  .steps__rail-fill::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    transform: translate(-50%, 50%);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-primary) 16%, transparent);
+    opacity: var(--progress, 0);
+    transition: opacity 200ms var(--ease-out);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .steps__rail-fill { transition: none; }
   }
 
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }

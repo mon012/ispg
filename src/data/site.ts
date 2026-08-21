@@ -93,7 +93,6 @@ export const mainNav: NavItem[] = [
     children: [
       { label: 'How to Apply', href: '/admission/', note: 'Six steps to joining' },
       { label: 'School Fees', href: '/fees/', note: 'Tuition, bus and support' },
-      { label: 'Application Form', href: '/form/', note: 'Apply online' },
       { label: 'School Calendar', href: '/calendar/', note: 'Term dates and events' },
     ],
   },
