@@ -6,7 +6,7 @@ export const site = {
   legalName: 'International School Of Pha Ngan',
   tagline: 'A Cambridge education that develops the whole child',
   description:
-    'ISPG is a Cambridge Curriculum school on Koh Phangan that develops the whole child, guided by our FLAIR philosophy.',
+    'ISPG is a Cambridge Curriculum international school on Koh Phangan for children aged 2 to 11 — Montessori foundations, English-medium teaching and a whole-child approach guided by our FLAIR philosophy.',
   url: 'https://ispg.ac.th',
 } as const;
 

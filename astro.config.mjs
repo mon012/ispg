@@ -1,6 +1,20 @@
 // @ts-check
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+
+// Migrated articles carry real publish/update dates. Feeding them to the
+// sitemap as <lastmod> tells Google which pages are worth re-crawling; pages
+// without a trustworthy date are deliberately left without one rather than
+// stamped with the build time, which would mark the whole site fresh daily.
+const records = JSON.parse(
+  readFileSync(new URL('./src/data/pages.json', import.meta.url), 'utf8'),
+);
+const lastmod = new Map(
+  records
+    .filter((r) => r.updated || r.published)
+    .map((r) => [`https://ispg.ac.th/${r.slug}/`, new Date(r.updated ?? r.published)]),
+);
 
 export default defineConfig({
   site: 'https://ispg.ac.th',
@@ -38,7 +52,11 @@ export default defineConfig({
     sitemap({
       // Campaign and transactional pages stay out of the index.
       filter: (page) =>
-        !['/openhouse/', '/form/', '/thx/'].some((p) => page.endsWith(p)),
+        !['/openhouse/', '/form/', '/thx/', '/404/'].some((p) => page.endsWith(p)),
+      serialize: (item) => {
+        const date = lastmod.get(item.url);
+        return date ? { ...item, lastmod: date.toISOString() } : item;
+      },
     }),
   ],
 });

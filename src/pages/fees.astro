@@ -6,7 +6,11 @@ import Card from '../components/ui/Card.astro';
 import Badge from '../components/ui/Badge.astro';
 import Icon from '../components/site/Icon.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
+import ExploreLinks from '../components/sections/ExploreLinks.astro';
 import { contact } from '../data/site';
+import { feesFaq } from '../data/faq';
+import { faqSchema } from '../lib/seo';
 import {
   academicYear,
   oneOffFees,
@@ -23,8 +27,9 @@ const thb = (n: number) => n.toLocaleString('en-GB');
 ---
 
 <BaseLayout
-  title="School Fees & Tuition, Koh Phangan"
-  description={`ISPG school fees for the ${academicYear} academic year — tuition by year group, one-off fees, bus zones, learning support and payment terms.`}
+  title={`School Fees ${academicYear}: Tuition, Bus & Payment Terms`}
+  description={`The full ISPG fee schedule for ${academicYear} — tuition by year group, application and registration fees, school bus zones, sibling discounts and how to pay. All fees are billed in Thai Baht.`}
+  schema={faqSchema(feesFaq)}
 >
   <PageHero
     eyebrow={`Academic year ${academicYear}`}
@@ -193,6 +198,19 @@ const thb = (n: number) => n.toLocaleString('en-GB');
       </ol>
     </div>
   </section>
+
+  <FaqSection items={feesFaq} alt title="Fee questions families <em>ask us</em>" />
+
+  <ExploreLinks
+    eyebrow="Once the numbers make sense"
+    title="What <em>happens next</em>"
+    items={[
+      { title: 'How to apply', body: 'The six steps from first enquiry to your child’s start date.', href: '/admission/' },
+      { title: 'Academics', body: 'What the fees buy: the Cambridge pathway from age 2 to age 11.', href: '/academics/' },
+      { title: 'School life', body: 'Meals, the pool and the facilities included in the school day.', href: '/school-life/' },
+      { title: 'School calendar', body: 'Term dates, so you can see when payments fall.', href: '/calendar/' },
+    ]}
+  />
 
   <CtaBand
     eyebrow="Questions about fees"

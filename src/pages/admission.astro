@@ -5,15 +5,19 @@ import SectionHeading from '../components/ui/SectionHeading.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/site/Icon.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
 import GumletVideo from '../components/sections/GumletVideo.astro';
 import { steps, nextSteps } from '../data/admission';
 import { embeds } from '../data/site';
+import { admissionFaq } from '../data/faq';
+import { faqSchema } from '../lib/seo';
 ---
 
 <BaseLayout
-  title="Admissions: How to Apply"
-  description="Six steps to joining ISPG — enquiry and visit, application, fee, trial day, confirmation and start date."
+  title="Admissions: How to Apply in Six Steps"
+  description="How to enrol at ISPG on Koh Phangan: enquiry and campus visit, online application, THB 3,000 application fee, a trial day, written confirmation and your child's start date. Ages 2 to 11, mid-year entry welcome."
   image="/media/site/admissions-desk.webp"
+  schema={faqSchema(admissionFaq)}
 >
   <PageHero
     eyebrow="Admission"
@@ -112,6 +116,8 @@ import { embeds } from '../data/site';
       </div>
     </div>
   </section>
+
+  <FaqSection items={admissionFaq} alt title="Admission questions families <em>ask us</em>" />
 
   <CtaBand />
 </BaseLayout>

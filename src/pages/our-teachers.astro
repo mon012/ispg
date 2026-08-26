@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import ExploreLinks from '../components/sections/ExploreLinks.astro';
 import { Image } from 'astro:assets';
 import { teachers, departments } from '../data/teachers';
 import { img } from '../lib/images';
@@ -24,8 +25,8 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
 ---
 
 <BaseLayout
-  title="Our Teachers"
-  description="Meet the ISPG founding team — leadership, primary teachers and specialists building our school community on Koh Phangan."
+  title="Our Teachers & Leadership Team"
+  description="Meet the people your child spends the day with — the ISPG founding team of international leadership, primary teachers and specialists on Koh Phangan."
   image="/media/teachers/team-hero.webp"
 >
   <PageHero
@@ -96,6 +97,18 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
       </div>
     </div>
   </dialog>
+
+  <ExploreLinks
+    alt
+    eyebrow="More about the school"
+    title="Where they <em>teach</em>"
+    items={[
+      { title: 'Our story & campus', body: 'How ISPG began, and the site it grew on.', href: '/about/' },
+      { title: 'Our FLAIR approach', body: 'The five commitments every teacher plans against.', href: '/flair/' },
+      { title: 'Academics', body: 'The Cambridge pathway they deliver, from age 2 to 11.', href: '/academics/' },
+      { title: 'How to apply', body: 'Six steps to joining their classrooms.', href: '/admission/' },
+    ]}
+  />
 
   <CtaBand
     eyebrow="Meet us"

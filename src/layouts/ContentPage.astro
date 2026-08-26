@@ -6,6 +6,7 @@ import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
 import Badge from '../components/ui/Badge.astro';
 import Icon from '../components/site/Icon.astro';
+import { articleSchema } from '../lib/seo';
 import '../styles/legacy-content.css';
 
 /** Renders migrated WordPress content. Copy is preserved close to verbatim and
@@ -14,6 +15,7 @@ interface RelatedItem { slug: string; title: string; topic: string | null; hero:
 
 interface Props {
   title: string;
+  slug: string;
   description?: string;
   html: string;
   kind: 'page' | 'article';
@@ -28,6 +30,7 @@ interface Props {
 
 const {
   title,
+  slug,
   description,
   html,
   kind,
@@ -47,14 +50,38 @@ const isArticle = kind === 'article';
 const needsDeftform = html.includes('class="deftform"');
 const fmt = (d?: string | null) =>
   d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+
+// Articles sit at /slug/ but belong under News & Blog, so the trail says so.
+const crumbParent = isArticle ? { name: 'News & Blog', href: '/blog/' } : undefined;
+const schema = isArticle
+  ? articleSchema({
+      title,
+      slug,
+      description: description ?? '',
+      hero: hero ?? null,
+      published: published ?? null,
+      updated: updated ?? null,
+      topic: topic ?? null,
+    })
+  : undefined;
 ---
 
-<BaseLayout title={title} description={description} noindex={noindex} image={hero ?? undefined}>
+<BaseLayout
+  title={title}
+  description={description}
+  noindex={noindex}
+  image={hero ?? undefined}
+  crumbName={title}
+  crumbParent={crumbParent}
+  schema={schema}
+>
   <PageHero
     eyebrow={eyebrow ?? topic ?? undefined}
     title={title}
     image={hero ?? '/media/site/campus-aerial.webp'}
     size={isArticle ? 'md' : 'sm'}
+    crumbName={title}
+    crumbParent={crumbParent}
   >
     {isArticle && published && (
       <p class="meta">

@@ -9,6 +9,7 @@ import Button from '../components/ui/Button.astro';
 import Badge from '../components/ui/Badge.astro';
 import Icon from '../components/site/Icon.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import ExploreLinks from '../components/sections/ExploreLinks.astro';
 
 const facilities = [
   {
@@ -39,8 +40,8 @@ const facilities = [
 ---
 
 <BaseLayout
-  title="School Life"
-  description="Campus facilities, Blue Dolphins swimming and nutrition at ISPG — the parts of the day that are not on a timetable."
+  title="School Life: Campus, Pool & Meals"
+  description="The parts of an ISPG day that are not on a timetable — the campus and its facilities, daily swimming at Blue Dolphins, and the freshly cooked meals included in tuition."
   image="/media/site/climbing-2.webp"
 >
   <PageHero
@@ -139,6 +140,18 @@ const facilities = [
       </div>
     </div>
   </section>
+
+  <ExploreLinks
+    alt
+    eyebrow="Keep looking"
+    title="The rest of the <em>day</em>"
+    items={[
+      { title: 'Blue Dolphins Swimming Academy', body: 'Structured levels from toddler to advanced, in our own 25m pool.', href: '/blue-dolphins/' },
+      { title: 'Beyond the classroom', body: 'Six family spots on Koh Phangan worth a weekend.', href: '/beyond-classroom-koh-phangan-spots/' },
+      { title: 'Our teachers', body: 'The people your child spends these hours with.', href: '/our-teachers/' },
+      { title: 'School fees', body: 'What the school day includes, and what it costs.', href: '/fees/' },
+    ]}
+  />
 
   <CtaBand
     eyebrow="Visit us"

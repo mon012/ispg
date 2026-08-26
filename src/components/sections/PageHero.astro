@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Eyebrow from '../ui/Eyebrow.astro';
 import { img } from '../../lib/images';
+import { crumbsFor, type Crumb } from '../../lib/seo';
 
 /** Standard interior-page hero: a photograph under a navy protection gradient,
  *  with an eyebrow, display-serif title and optional lead. */
@@ -16,6 +17,10 @@ interface Props {
   emblem?: string;
   emblemAlt?: string;
   class?: string;
+  /** Names the last breadcrumb when the URL slug is not a readable label. */
+  crumbName?: string;
+  /** A section the page belongs to but does not sit under in the URL. */
+  crumbParent?: Crumb;
 }
 
 const {
@@ -28,10 +33,16 @@ const {
   emblem,
   emblemAlt = '',
   class: className = '',
+  crumbName,
+  crumbParent,
 } = Astro.props;
 
 const heroAsset = img(image);
 const emblemAsset = img(emblem);
+
+// The same trail BaseLayout emits as BreadcrumbList — shown here so the markup
+// and the structured data describe the same thing.
+const crumbs = crumbsFor(Astro.url.pathname, { currentName: crumbName, parent: crumbParent });
 ---
 
 <section class:list={['phero', `phero--${size}`, `phero--${align}`, emblem && 'phero--emblem', className]}>
@@ -53,6 +64,21 @@ const emblemAsset = img(emblem);
   </div>
   <div class="container phero__inner">
     <div class="phero__text">
+      {crumbs.length > 1 && (
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            {crumbs.map((crumb, i) => (
+              <li>
+                {i < crumbs.length - 1 ? (
+                  <a href={crumb.href}>{crumb.name}</a>
+                ) : (
+                  <span aria-current="page">{crumb.name}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
       {eyebrow && <Eyebrow color="var(--sky-300)" align={align}>{eyebrow}</Eyebrow>}
       <h1 class="phero__title" set:html={title} />
       {lead && <p class="phero__lead">{lead}</p>}
@@ -151,4 +177,32 @@ const emblemAsset = img(emblem);
     line-height: 1.55;
     color: rgba(255, 255, 255, 0.9);
   }
+
+  /* Breadcrumbs sit above the eyebrow, quiet enough not to compete with the
+     title but readable against the scrim (4.5:1 on the darkest hero photo). */
+  .crumbs { margin-bottom: -8px; }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-sm);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.42);
+  }
+  .crumbs a {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .crumbs a:hover { color: #fff; border-bottom-color: rgba(255, 255, 255, 0.5); }
+  .crumbs [aria-current='page'] { color: rgba(255, 255, 255, 0.72); }
+  .phero--center .crumbs ol { justify-content: center; }
 </style>

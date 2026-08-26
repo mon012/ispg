@@ -1,0 +1,66 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../site/Icon.astro';
+
+/** A row of onward links, the pattern the About page established. Its job is
+ *  navigational as much as editorial: every page should hand a reader — and a
+ *  crawler — somewhere sensible to go next. */
+export type ExploreItem = { title: string; body: string; href: string };
+
+interface Props {
+  items: ExploreItem[];
+  eyebrow?: string;
+  title?: string;
+  alt?: boolean;
+}
+
+const {
+  items,
+  eyebrow = 'Keep looking',
+  title = 'Explore <em>further</em>',
+  alt = false,
+} = Astro.props;
+---
+
+<section class:list={['section', alt && 'alt']}>
+  <div class="container">
+    <div data-reveal>
+      <SectionHeading size="sm" eyebrow={eyebrow} title={title} as="h2" />
+    </div>
+    <ul class="explore">
+      {items.map((e, i) => (
+        <li data-reveal data-reveal-delay={i * 80}>
+          <a href={e.href}>
+            <span class="explore__title">{e.title}</span>
+            <span class="explore__body">{e.body}</span>
+            <Icon name="arrow-right" size={18} class="explore__arrow" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .explore { list-style: none; margin: var(--sp-8) 0 0; padding: 0; display: grid; gap: 0; }
+  .explore li { border-top: 1px solid var(--border-hairline); }
+  .explore li:last-child { border-bottom: 1px solid var(--border-hairline); }
+  .explore a {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) 1fr auto;
+    align-items: center;
+    gap: var(--sp-6);
+    padding: var(--sp-6) var(--sp-2);
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease-standard), padding-inline var(--dur-base) var(--ease-standard);
+  }
+  .explore a:hover { background: var(--paper-2); padding-inline: var(--sp-5); }
+  .explore__title { font-family: var(--font-display); font-size: 1.5rem; color: var(--navy-700); font-weight: var(--fw-semibold); }
+  .explore__body { color: var(--text-muted); font-size: var(--fs-sm); }
+  .explore__arrow { color: var(--accent-primary); }
+
+  @media (max-width: 720px) {
+    .explore a { grid-template-columns: 1fr auto; }
+    .explore__body { grid-column: 1 / -1; }
+  }
+</style>

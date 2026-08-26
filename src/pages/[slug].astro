@@ -22,6 +22,7 @@ const eyebrowFor = (slug: string) =>
 
 <ContentPage
   title={record.title}
+  slug={record.slug}
   description={record.description || excerpt(record.html, 160)}
   html={record.html}
   kind={record.kind}

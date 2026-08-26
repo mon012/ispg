@@ -5,6 +5,7 @@ import StageBlock from '../../components/sections/StageBlock.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Icon from '../../components/site/Icon.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
+import ExploreLinks from '../../components/sections/ExploreLinks.astro';
 import { primary } from '../../data/curriculum';
 
 const accents = ['var(--flair-future)', 'var(--flair-nature)'];
@@ -57,6 +58,18 @@ const accents = ['var(--flair-future)', 'var(--flair-nature)'];
       </a>
     </div>
   </section>
+
+  <ExploreLinks
+    alt
+    eyebrow="Read further"
+    title="How we think about <em>these years</em>"
+    items={[
+      { title: 'Why we delay smartphones at school', body: 'What neuroscience says about the developing brain.', href: '/smartphones-and-children-brain-development/' },
+      { title: 'School life', body: 'The pool, the meals and the hours between lessons.', href: '/school-life/' },
+      { title: 'School fees', body: 'Tuition for Years 1 to 6, and what it covers.', href: '/fees/' },
+      { title: 'How to apply', body: 'Six steps, including a trial day in the class itself.', href: '/admission/' },
+    ]}
+  />
 
   <CtaBand />
 </BaseLayout>

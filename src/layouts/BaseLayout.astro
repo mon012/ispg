@@ -4,6 +4,7 @@ import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import { site, contact, social } from '../data/site';
 import { img } from '../lib/images';
+import { breadcrumbSchema, crumbsFor, type Crumb } from '../lib/seo';
 
 interface Props {
   title: string;
@@ -14,6 +15,12 @@ interface Props {
   image?: string;
   /** Extra <head> content is passed through the "head" slot. */
   bodyClass?: string;
+  /** Names the last breadcrumb when the URL slug is not a readable label. */
+  crumbName?: string;
+  /** A section the page belongs to but does not sit under in the URL. */
+  crumbParent?: Crumb;
+  /** Page-specific JSON-LD, emitted alongside the site-wide School graph. */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -23,6 +30,9 @@ const {
   noindex = false,
   image = '/media/site/campus-aerial-2.webp',
   bodyClass = '',
+  crumbName,
+  crumbParent,
+  schema: pageSchema,
 } = Astro.props;
 
 const fullTitle = title === site.name ? title : `${title} — ${site.shortName}`;
@@ -55,6 +65,13 @@ const schema = {
   },
   sameAs: social.map((s) => s.href),
 };
+
+/** Every JSON-LD block this page emits: the School graph, the breadcrumb trail
+ *  and whatever the page itself adds (Article, FAQPage). */
+const breadcrumbs = breadcrumbSchema(
+  crumbsFor(Astro.url.pathname, { currentName: crumbName, parent: crumbParent }),
+);
+const graphs = [schema, breadcrumbs, ...(pageSchema ? [pageSchema].flat() : [])].filter(Boolean);
 ---
 
 <!doctype html>
@@ -115,7 +132,10 @@ const schema = {
       document.documentElement.classList.add('js');
     </script>
 
-    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {!noindex &&
+      graphs.map((graph) => (
+        <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+      ))}
 
     <slot name="head" />
   </head>

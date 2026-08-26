@@ -1,0 +1,97 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import type { FaqItem } from '../../data/faq';
+
+/** Visible question-and-answer block. The page that renders it also emits the
+ *  matching FAQPage JSON-LD — see src/lib/seo.ts. Answers stay open-able
+ *  without JavaScript because they are plain <details>. */
+interface Props {
+  items: FaqItem[];
+  eyebrow?: string;
+  title?: string;
+  alt?: boolean;
+}
+
+const {
+  items,
+  eyebrow = 'Common questions',
+  title = 'Questions families <em>ask us</em>',
+  alt = false,
+} = Astro.props;
+---
+
+<section class:list={['section', alt && 'alt']}>
+  <div class="container narrow">
+    <div data-reveal>
+      <SectionHeading size="sm" eyebrow={eyebrow} title={title} as="h2" />
+    </div>
+    <div class="faq">
+      {items.map((item, i) => (
+        <details class="faq__item" data-reveal data-reveal-delay={i * 60}>
+          <summary>
+            <span class="faq__q">{item.q}</span>
+            <svg class="faq__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </summary>
+          <p class="faq__a">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+  .faq__item {
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding: var(--sp-5) var(--sp-6);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary:focus-visible {
+    outline: 2px solid var(--sky-500);
+    outline-offset: 2px;
+    border-radius: var(--r-lg);
+  }
+
+  .faq__q {
+    font-weight: var(--fw-semibold);
+    color: var(--navy-700);
+    line-height: 1.35;
+  }
+
+  .faq__chev {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: var(--sky-500);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--dur-base) var(--ease-standard);
+  }
+  .faq__item[open] .faq__chev { transform: rotate(180deg); }
+
+  .faq__a {
+    margin: 0;
+    padding: 0 var(--sp-6) var(--sp-6);
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__chev { transition: none; }
+  }
+</style>

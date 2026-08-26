@@ -6,6 +6,7 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/site/Icon.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
+import ExploreLinks from '../../components/sections/ExploreLinks.astro';
 import { kindergarten, montessoriPrinciples } from '../../data/curriculum';
 
 const accents = ['var(--flair-active)', 'var(--flair-international)'];
@@ -19,7 +20,7 @@ const principleTops = [150, 40, 130, 10];
 ---
 
 <BaseLayout
-  title="Kindergarten & Montessori, Koh Phangan"
+  title="Kindergarten & Montessori, Ages 2–5, Koh Phangan"
   description="Nursery (2–3) and Casa (3–5) at ISPG: the Montessori approach woven into the Cambridge Curriculum, with real Key Areas of Learning at every stage."
   image="/media/site/pupils.webp"
 >
@@ -94,6 +95,18 @@ const principleTops = [150, 40, 130, 10];
       </a>
     </div>
   </section>
+
+  <ExploreLinks
+    alt
+    eyebrow="Read further"
+    title="Why we teach it <em>this way</em>"
+    items={[
+      { title: 'Why Montessori education works better', body: 'The research behind the method, and what it changes in a classroom.', href: '/why-montessori-education-better/' },
+      { title: 'Montessori on Koh Phangan', body: 'What the approach looks like on this island, in this school.', href: '/montessori-koh-phangan/' },
+      { title: 'Primary, ages 5 to 11', body: 'Where Casa leads next: Key Stage 1 and Key Stage 2.', href: '/academics/primary/' },
+      { title: 'School fees', body: 'Nursery and Reception tuition, and what it includes.', href: '/fees/' },
+    ]}
+  />
 
   <CtaBand
     eyebrow="Kindergarten admissions"

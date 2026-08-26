@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Button from '../components/ui/Button.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import CtaBand from '../components/sections/CtaBand.astro';
+
+/** Astro emits this as 404.html; the static host serves it with a real 404
+ *  status, which is what stops mistyped URLs from being crawled and indexed as
+ *  copies of the homepage. */
+const suggestions = [
+  { label: 'Admissions: how to apply', href: '/admission/', note: 'The six steps to joining ISPG' },
+  { label: 'School fees', href: '/fees/', note: 'Tuition, bus zones and payment terms' },
+  { label: 'Academics', href: '/academics/', note: 'The Cambridge pathway, ages 2 to 11' },
+  { label: 'School calendar', href: '/calendar/', note: 'Term dates and what is coming up' },
+  { label: 'News & blog', href: '/blog/', note: 'Writing from campus and from the research' },
+  { label: 'Contact & visit', href: '/contact/', note: 'Book a tour, or just ask us a question' },
+];
+---
+
+<BaseLayout
+  title="Page Not Found"
+  description="This page does not exist. Find admissions, fees, academics and contact details for the International School of Phangan."
+  noindex
+  crumbName="Page not found"
+>
+  <PageHero
+    eyebrow="404"
+    title="That page has <em>moved on</em>"
+    lead="The link you followed is broken or the page has been retired. Everything below is where families usually want to go next."
+    size="sm"
+    crumbName="Page not found"
+  />
+
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <SectionHeading size="sm" eyebrow="Try one of these" title="Where to go <em>instead</em>" />
+      </div>
+      <ul class="suggest">
+        {suggestions.map((s, i) => (
+          <li data-reveal data-reveal-delay={i * 60}>
+            <a href={s.href}>
+              <span class="suggest__label">{s.label}</span>
+              <span class="suggest__note">{s.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="suggest__foot">
+        <Button href="/" variant="primary" size="md">Back to the homepage</Button>
+      </p>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .suggest {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .suggest a {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
+    padding: var(--sp-6);
+    background: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    text-decoration: none;
+    transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+  }
+  .suggest a:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .suggest__label { font-weight: var(--fw-semibold); color: var(--navy-700); }
+  .suggest__note { font-size: var(--fs-sm); color: var(--text-muted); }
+  .suggest__foot { margin: var(--sp-10) 0 0; }
+
+  @media (max-width: 900px) { .suggest { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .suggest { grid-template-columns: 1fr; } }
+</style>
