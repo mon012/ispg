@@ -20,6 +20,10 @@ import { principalQuote } from '../data/teachers';
 
 const latest = articles.slice(0, 3);
 
+/* Cambridge accreditation banner — hidden while the paperwork is in progress.
+   Flip back to true once the accreditation is confirmed. */
+const SHOW_ACCREDITATION = false;
+
 /* ---------------------------------------------------------------- FLAIR dial
    The five pillars drawn as a 180° fan of donut segments around a central hub.
    Geometry is resolved at build time so the markup ships as plain SVG paths. */
@@ -171,7 +175,7 @@ const stages = [
       <div data-reveal>
         <Eyebrow color="var(--sky-300)" align="center">Welcome to ISPG · Koh Phangan</Eyebrow>
       </div>
-      <h1 class="hero__title" data-reveal data-reveal-delay="90">A Cambridge education that develops the <em>whole child</em></h1>
+      <h1 class="hero__title" data-reveal data-reveal-delay="90">An education that develops the <em>whole child</em></h1>
       <p class="hero__lead" data-reveal data-reveal-delay="180">
         We guide families through every stage of learning, from Montessori
         foundations to the Cambridge Curriculum.
@@ -204,6 +208,7 @@ const stages = [
   </section>
 
   {/* --------------------------------------------------- accreditation */}
+  {SHOW_ACCREDITATION && (
   <section class="section tight accred">
     <div class="container accred__inner" data-reveal>
       <Eyebrow align="center">Trusted Partners</Eyebrow>
@@ -222,6 +227,7 @@ const stages = [
       </div>
     </div>
   </section>
+  )}
 
   {/* ---------------------------------------------------------- pathway */}
   <PupilPathway />
