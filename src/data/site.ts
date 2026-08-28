@@ -93,7 +93,8 @@ export const mainNav: NavItem[] = [
     children: [
       { label: 'How to Apply', href: '/admission/', note: 'Six steps to joining' },
       { label: 'School Fees', href: '/fees/', note: 'Tuition, bus and support' },
-      { label: 'School Calendar', href: '/calendar/', note: 'Term dates and events' },
+      // Hidden until the school approves the calendar publicly — restore this line to show it again.
+      // { label: 'School Calendar', href: '/calendar/', note: 'Term dates and events' },
     ],
   },
 ];
@@ -123,7 +124,8 @@ export const footerNav = [
     links: [
       { label: 'How to Apply', href: '/admission/' },
       { label: 'School Fees', href: '/fees/' },
-      { label: 'School Calendar', href: '/calendar/' },
+      // Hidden until the school approves the calendar publicly — restore this line to show it again.
+      // { label: 'School Calendar', href: '/calendar/' },
       { label: 'Contact', href: '/contact/' },
     ],
   },
