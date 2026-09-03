@@ -1,12 +1,14 @@
 /** Single source of truth for school details, navigation and third-party embeds. */
 
+import { cam } from './accreditation';
+
 export const site = {
   name: 'International School of Phangan',
   shortName: 'ISPG',
   legalName: 'International School Of Pha Ngan',
-  tagline: 'A Cambridge education that develops the whole child',
+  tagline: `${cam('A Cambridge education', 'An international education')} that develops the whole child`,
   description:
-    'ISPG is a Cambridge Curriculum international school on Koh Phangan for children aged 2 to 11 — Montessori foundations, English-medium teaching and a whole-child approach guided by our FLAIR philosophy.',
+    `ISPG is ${cam('a Cambridge Curriculum international school', 'an international curriculum school')} on Koh Phangan for children aged 2 to 11 — Montessori foundations, English-medium teaching and a whole-child approach guided by our FLAIR philosophy.`,
   url: 'https://ispg.ac.th',
 } as const;
 

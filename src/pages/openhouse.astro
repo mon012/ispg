@@ -10,6 +10,7 @@ import DeftForm from '../components/sections/DeftForm.astro';
 import Icon from '../components/site/Icon.astro';
 import { embeds, contact } from '../data/site';
 import { pillars } from '../data/flair';
+import { cam } from '../data/accreditation';
 
 /** Campaign landing page — noindex, and deliberately outside the main nav. */
 const facts = [
@@ -48,7 +49,7 @@ const gallery = [
 
 <BaseLayout
   title="Open House"
-  description="Experience the Cambridge curriculum brought to life — watch your child climb, swim and discover learning that feels like play."
+  description={`Experience ${cam('the Cambridge curriculum', 'our international curriculum')} brought to life — watch your child climb, swim and discover learning that feels like play.`}
   noindex
   image="/media/site/openhouse-climbing.webp"
 >
@@ -69,7 +70,7 @@ const gallery = [
       <Eyebrow color="var(--sky-300)" align="center">Open House · ISPG Koh Phangan</Eyebrow>
       <h1 class="ohero__title">Learning that feels like <em>play</em></h1>
       <p class="ohero__lead">
-        Experience our Cambridge curriculum brought to life. Watch your child climb, swim
+        Experience {cam('our Cambridge curriculum', 'our international curriculum')} brought to life. Watch your child climb, swim
         and discover — while you tour the campus and meet the educators.
       </p>
       <Button variant="primary" size="lg" href="#register">Save your family’s spot</Button>

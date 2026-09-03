@@ -1,5 +1,7 @@
 /** The FLAIR philosophy — the organising idea behind everything at ISPG. */
 
+import { cam } from './accreditation';
+
 export type Pillar = {
   letter: string;
   name: string;
@@ -42,7 +44,7 @@ export const pillars: Pillar[] = [
     name: 'International Mindset',
     short: 'Global awareness and open curiosity.',
     body:
-      'Our families come from across the world, and the Cambridge Curriculum brings them together. Children learn to see more than one point of view. They grow genuinely curious about perspectives that are not their own.',
+      `Our families come from across the world, and ${cam('the Cambridge Curriculum', 'our international curriculum')} brings them together. Children learn to see more than one point of view. They grow genuinely curious about perspectives that are not their own.`,
     accent: 'var(--flair-international)',
     image: '/media/site/pupils-group.webp',
   },

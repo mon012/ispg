@@ -10,6 +10,7 @@ import Button from '../components/ui/Button.astro';
 import Icon from '../components/site/Icon.astro';
 import { embeds } from '../data/site';
 import { pillars } from '../data/flair';
+import { cam } from '../data/accreditation';
 
 const explore = [
   { title: 'Our FLAIR Approach', body: 'The five commitments behind every decision we make.', href: '/flair/' },
@@ -21,13 +22,13 @@ const explore = [
 
 <BaseLayout
   title="About Us: Our Story & Campus on Koh Phangan"
-  description="How a Cambridge Curriculum international school took shape on Koh Phangan — the campus, the people behind it, and what the FLAIR philosophy looks like in an ordinary school day."
+  description={`How ${cam('a Cambridge Curriculum international school', 'an international curriculum school')} took shape on Koh Phangan — the campus, the people behind it, and what the FLAIR philosophy looks like in an ordinary school day.`}
   image="/media/site/pupils-group.webp"
 >
   <PageHero
     eyebrow="About us"
     title="A school built around the <em>whole child</em>"
-    lead="Cambridge rigour, Montessori foundations and an island that teaches as much as any classroom."
+    lead={`${cam('Cambridge rigour', 'Academic rigour')}, Montessori foundations and an island that teaches as much as any classroom.`}
     image="/media/site/pupils-group.webp"
   />
 
@@ -35,9 +36,9 @@ const explore = [
   <section class="section">
     <div class="container narrow" data-reveal>
       <p class="opening">
-        The International School of Phangan is a Cambridge Curriculum school that develops
-        the whole child. We guide families through every stage of learning, from Montessori
-        foundations to the Cambridge Curriculum.
+        The International School of Phangan is {cam('a Cambridge Curriculum school', 'an international curriculum school')} that
+        develops the whole child. We guide families through every stage of learning, from
+        Montessori foundations to {cam('the Cambridge Curriculum', 'our international curriculum')}.
       </p>
     </div>
   </section>

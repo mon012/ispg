@@ -1,6 +1,8 @@
 /** Curriculum content. Copy is drawn from the school's own material — the
  *  Key Areas below previously existed only as text inside PNG diagrams. */
 
+import { cam } from './accreditation';
+
 export type KeyArea = { name: string; detail?: string };
 
 export type Stage = {
@@ -44,7 +46,7 @@ export const kindergarten: Stage[] = [
     intro:
       'Children deepen their learning across five key areas, each progressing at their own pace.',
     body:
-      'Casa builds on our Montessori foundation within the Cambridge Curriculum. We balance structured learning with playful exploration to prepare children for Primary. Literacy, numeracy and communication grow through engaging, meaningful activities — alongside emotional wellbeing and curiosity.',
+      `Casa builds on our Montessori foundation within ${cam('the Cambridge Curriculum', 'our international curriculum')}. We balance structured learning with playful exploration to prepare children for Primary. Literacy, numeracy and communication grow through engaging, meaningful activities — alongside emotional wellbeing and curiosity.`,
     keyAreasLead:
       'Structured play sits alongside early academics, building toward Key Stage 1. Literacy and numeracy grow next to independence and social skills, so children arrive at Primary ready for the classroom and for each other.',
     keyAreas: [

@@ -7,19 +7,20 @@ import Icon from '../../components/site/Icon.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import ExploreLinks from '../../components/sections/ExploreLinks.astro';
 import { primary } from '../../data/curriculum';
+import { cam } from '../../data/accreditation';
 
 const accents = ['var(--flair-future)', 'var(--flair-nature)'];
 ---
 
 <BaseLayout
   title="Primary School (Ages 5–11), Koh Phangan"
-  description="Key Stage 1 (5–8) and Key Stage 2 (8–11) at ISPG — the Cambridge Curriculum with enquiry-led, outdoor learning across eight subject areas."
+  description={`Key Stage 1 (5–8) and Key Stage 2 (8–11) at ISPG — ${cam('the Cambridge Curriculum', 'our international curriculum')} with enquiry-led, outdoor learning across eight subject areas.`}
   image="/media/site/pupils-3.webp"
 >
   <PageHero
     eyebrow="Ages 5–11 · International Primary School"
     title="Primary School in Koh Phangan — <em>learning how to think, not what to remember</em>"
-    lead="Our Primary programme combines the Cambridge Curriculum with nature-based, enquiry-led learning. Children deepen subject knowledge and grow as confident, curious learners."
+    lead={`Our Primary programme combines ${cam('the Cambridge Curriculum', 'our international curriculum')} with nature-based, enquiry-led learning. Children deepen subject knowledge and grow as confident, curious learners.`}
     image="/media/site/pupils-3.webp"
   />
 

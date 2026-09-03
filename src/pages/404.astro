@@ -4,6 +4,7 @@ import PageHero from '../components/sections/PageHero.astro';
 import Button from '../components/ui/Button.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
+import { cam } from '../data/accreditation';
 
 /** Astro emits this as 404.html; the static host serves it with a real 404
  *  status, which is what stops mistyped URLs from being crawled and indexed as
@@ -11,7 +12,7 @@ import CtaBand from '../components/sections/CtaBand.astro';
 const suggestions = [
   { label: 'Admissions: how to apply', href: '/admission/', note: 'The six steps to joining ISPG' },
   { label: 'School fees', href: '/fees/', note: 'Tuition, bus zones and payment terms' },
-  { label: 'Academics', href: '/academics/', note: 'The Cambridge pathway, ages 2 to 11' },
+  { label: 'Academics', href: '/academics/', note: `${cam('The Cambridge pathway', 'Our academic pathway')}, ages 2 to 11` },
   { label: 'School calendar', href: '/calendar/', note: 'Term dates and what is coming up' },
   { label: 'News & blog', href: '/blog/', note: 'Writing from campus and from the research' },
   { label: 'Contact & visit', href: '/contact/', note: 'Book a tour, or just ask us a question' },

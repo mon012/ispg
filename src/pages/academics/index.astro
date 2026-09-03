@@ -10,6 +10,7 @@ import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/site/Icon.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import { kindergarten, primary } from '../../data/curriculum';
+import { cam } from '../../data/accreditation';
 
 const summaries = [
   {
@@ -18,7 +19,7 @@ const summaries = [
     href: '/academics/kindergarten/',
     image: '/media/site/one-to-one.webp',
     body:
-      'We integrate the Montessori approach with the Cambridge Curriculum. Children explore, discover and build literacy, numeracy and communication skills through child-led, play-based learning.',
+      `We integrate the Montessori approach with ${cam('the Cambridge Curriculum', 'our international curriculum')}. Children explore, discover and build literacy, numeracy and communication skills through child-led, play-based learning.`,
     stages: kindergarten,
   },
   {
@@ -27,15 +28,15 @@ const summaries = [
     href: '/academics/primary/',
     image: '/media/site/active.webp',
     body:
-      'Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within the Cambridge Curriculum.',
+      `Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within ${cam('the Cambridge Curriculum', 'our international curriculum')}.`,
     stages: primary,
   },
 ];
 ---
 
 <BaseLayout
-  title="Cambridge Curriculum School, Ages 2 to 11"
-  description="One connected pathway from Nursery to Key Stage 2 on Koh Phangan — Montessori foundations inside the Cambridge Curriculum, taught in English, with class sizes small enough to teach each child."
+  title={cam('Cambridge Curriculum School, Ages 2 to 11', 'International Curriculum School, Ages 2 to 11')}
+  description={`One connected pathway from Nursery to Key Stage 2 on Koh Phangan — Montessori foundations inside ${cam('the Cambridge Curriculum', 'our international curriculum')}, taught in English, with class sizes small enough to teach each child.`}
   image="/media/site/pupils-line.webp"
 >
   <PageHero

@@ -9,6 +9,8 @@
  * change.
  */
 
+import { cam } from './accreditation';
+
 export type Teacher = {
   id: string;
   name: string;
@@ -40,7 +42,7 @@ export const teachers: Teacher[] = [
     department: 'Leadership',
     photo: '/media/teachers/cedric-portrait.webp',
     photoHero: '/media/teachers/cedric-hero.webp',
-    bio: 'Over 25 years of international educational experience in senior leadership, vice principalship and early childhood management across Thailand, China and Europe. Cedric is dedicated to bridging child-centred independence (Montessori) with structured academic rigour (the Cambridge International Curriculum) to empower the whole child, and is building a nature-rooted, progressive school community here on Koh Phangan.',
+    bio: `Over 25 years of international educational experience in senior leadership, vice principalship and early childhood management across Thailand, China and Europe. Cedric is dedicated to bridging child-centred independence (Montessori) with structured academic rigour ${cam('(the Cambridge International Curriculum)', '(an international curriculum)')} to empower the whole child, and is building a nature-rooted, progressive school community here on Koh Phangan.`,
     quote: 'When we nurture a child’s natural curiosity in a safe, nature-infused environment, they develop the confidence, resilience and independence to achieve more than they ever imagined.',
     quoteLabel: 'My philosophy is simple',
     facts: [
@@ -57,7 +59,7 @@ export const teachers: Teacher[] = [
     department: 'Leadership',
     photo: '/media/teachers/ian-foster.webp',
     photoHero: '/media/teachers/ian-foster.webp',
-    bio: 'Born and raised in Birmingham, England, Ian brings over 19 years of teaching and leadership experience across the UK, Asia and the Middle East. Having worked with both the English National Curriculum and Cambridge International programmes, he is passionate about creating schools where children feel safe, challenged and inspired to achieve their very best.',
+    bio: `Born and raised in Birmingham, England, Ian brings over 19 years of teaching and leadership experience across the UK, Asia and the Middle East. Having worked with ${cam('both the English National Curriculum and Cambridge International programmes', 'both the English National Curriculum and international programmes')}, he is passionate about creating schools where children feel safe, challenged and inspired to achieve their very best.`,
     quote: 'Happy staff create happy pupils, and happy pupils create happy parents.',
     quoteLabel: 'Ian’s philosophy',
     facts: [
@@ -122,7 +124,7 @@ export const teachers: Teacher[] = [
     department: 'Specialist',
     photo: '/media/teachers/nargiz-portrait.webp',
     photoHero: '/media/teachers/nargiz-hero.webp',
-    bio: 'Originally from Azerbaijan, Nargiz brings extensive experience in leadership and school development, having worked with the Cambridge International, British National Curriculum and International Baccalaureate programmes. She completed official Read Write Inc. phonics training in England and is currently completing her Master of Education with Liverpool John Moores University — combining strong problem-solving skills with a collaborative approach to inspire curiosity in every learner.',
+    bio: `Originally from Azerbaijan, Nargiz brings extensive experience in leadership and school development, having worked with ${cam('the Cambridge International, British National Curriculum and International Baccalaureate programmes', 'the British National Curriculum and International Baccalaureate programmes')}. She completed official Read Write Inc. phonics training in England and is currently completing her Master of Education with Liverpool John Moores University — combining strong problem-solving skills with a collaborative approach to inspire curiosity in every learner.`,
     quote: 'When children feel happy, supported, and encouraged, they develop the confidence to achieve more than they ever imagined.',
     quoteLabel: 'My philosophy is simple',
     facts: [

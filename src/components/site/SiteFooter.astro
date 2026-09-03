@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { site, contact, social, footerNav, legalNav, staffPortal } from '../../data/site';
 import { img } from '../../lib/images';
+import { cam } from '../../data/accreditation';
 
 const year = new Date().getFullYear();
 ---
@@ -24,7 +25,7 @@ const year = new Date().getFullYear();
           />
         </div>
         <p class="ftr__blurb">
-          A Cambridge Curriculum school on Koh Phangan, developing the whole child
+          {cam('A Cambridge Curriculum school', 'An international curriculum school')} on Koh Phangan, developing the whole child
           through Montessori foundations and our FLAIR philosophy.
         </p>
         <ul class="ftr__social">

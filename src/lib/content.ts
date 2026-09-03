@@ -1,4 +1,5 @@
 import pages from '../data/pages.json';
+import { SHOW_CAMBRIDGE, cam } from '../data/accreditation';
 
 export type ContentRecord = {
   slug: string;
@@ -13,7 +14,15 @@ export type ContentRecord = {
   html: string;
 };
 
-const all = pages as ContentRecord[];
+/* Article copy is data, so it cannot call cam() inline. While the Cambridge
+   name is gated, swap the one mention in it here; with the flag on the records
+   pass through untouched. */
+const swap = (s: string) =>
+  s.replace('the Cambridge Curriculum', cam('the Cambridge Curriculum', 'our international curriculum'));
+
+const all = (pages as ContentRecord[]).map((r) =>
+  SHOW_CAMBRIDGE ? r : { ...r, title: swap(r.title), description: swap(r.description), html: swap(r.html) },
+);
 
 export const allRecords = all;
 

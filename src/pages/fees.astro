@@ -10,6 +10,7 @@ import FaqSection from '../components/sections/FaqSection.astro';
 import ExploreLinks from '../components/sections/ExploreLinks.astro';
 import { contact } from '../data/site';
 import { feesFaq } from '../data/faq';
+import { cam } from '../data/accreditation';
 import { faqSchema } from '../lib/seo';
 import {
   academicYear,
@@ -206,7 +207,7 @@ const thb = (n: number) => n.toLocaleString('en-GB');
     title="What <em>happens next</em>"
     items={[
       { title: 'How to apply', body: 'The six steps from first enquiry to your child’s start date.', href: '/admission/' },
-      { title: 'Academics', body: 'What the fees buy: the Cambridge pathway from age 2 to age 11.', href: '/academics/' },
+      { title: 'Academics', body: `What the fees buy: ${cam('the Cambridge pathway', 'our academic pathway')} from age 2 to age 11.`, href: '/academics/' },
       { title: 'School life', body: 'Meals, the pool and the facilities included in the school day.', href: '/school-life/' },
       { title: 'School calendar', body: 'Term dates, so you can see when payments fall.', href: '/calendar/' },
     ]}

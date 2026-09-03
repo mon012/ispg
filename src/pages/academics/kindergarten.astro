@@ -8,6 +8,7 @@ import Icon from '../../components/site/Icon.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import ExploreLinks from '../../components/sections/ExploreLinks.astro';
 import { kindergarten, montessoriPrinciples } from '../../data/curriculum';
+import { cam } from '../../data/accreditation';
 
 const accents = ['var(--flair-active)', 'var(--flair-international)'];
 
@@ -21,7 +22,7 @@ const principleTops = [150, 40, 130, 10];
 
 <BaseLayout
   title="Kindergarten & Montessori, Ages 2–5, Koh Phangan"
-  description="Nursery (2–3) and Casa (3–5) at ISPG: the Montessori approach woven into the Cambridge Curriculum, with real Key Areas of Learning at every stage."
+  description={`Nursery (2–3) and Casa (3–5) at ISPG: the Montessori approach woven into ${cam('the Cambridge Curriculum', 'our international curriculum')}, with real Key Areas of Learning at every stage.`}
   image="/media/site/pupils.webp"
 >
   <PageHero
@@ -46,7 +47,7 @@ const principleTops = [150, 40, 130, 10];
           <p>
             We believe the most powerful learning happens when a child’s natural curiosity has
             room to grow. That’s why we weave Montessori principles — independence,
-            self-motivation, hands-on discovery — into the Cambridge framework from day one.
+            self-motivation, hands-on discovery — into {cam('the Cambridge framework', 'our curriculum framework')} from day one.
           </p>
           <p>
             Our tropical island setting gives us a genuine classroom without walls. It fits

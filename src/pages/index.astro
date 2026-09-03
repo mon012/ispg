@@ -17,12 +17,9 @@ import { site, embeds } from '../data/site';
 import { pillars } from '../data/flair';
 import { articles } from '../lib/content';
 import { principalQuote } from '../data/teachers';
+import { cam, SHOW_ACCREDITATION } from '../data/accreditation';
 
 const latest = articles.slice(0, 3);
-
-/* Cambridge accreditation banner — hidden while the paperwork is in progress.
-   Flip back to true once the accreditation is confirmed. */
-const SHOW_ACCREDITATION = false;
 
 /* ---------------------------------------------------------------- FLAIR dial
    The five pillars drawn as a 180° fan of donut segments around a central hub.
@@ -129,7 +126,7 @@ const stages = [
     tag: 'Ages 2–5',
     title: 'Kindergarten',
     body:
-      'The Montessori approach woven into the Cambridge Curriculum. Child-led, play-based learning lets children choose their own materials and work at their own pace, building the habits they carry into Primary.',
+      `The Montessori approach woven into ${cam('the Cambridge Curriculum', 'our international curriculum')}. Child-led, play-based learning lets children choose their own materials and work at their own pace, building the habits they carry into Primary.`,
     points: ['Nursery (2–3)', 'Casa (3–5)'],
     href: '/academics/kindergarten/',
   },
@@ -138,7 +135,7 @@ const stages = [
     tag: 'Ages 5–11',
     title: 'Primary',
     body:
-      'Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within the Cambridge Curriculum.',
+      `Depth and structure build year on year as children move from Key Stage 1 into Key Stage 2, taking on more independent, subject-based learning within ${cam('the Cambridge Curriculum', 'our international curriculum')}.`,
     points: ['Key Stage 1 (5–8)', 'Key Stage 2 (8–11)'],
     href: '/academics/primary/',
   },
@@ -178,7 +175,7 @@ const stages = [
       <h1 class="hero__title" data-reveal data-reveal-delay="90">An education that develops the <em>whole child</em></h1>
       <p class="hero__lead" data-reveal data-reveal-delay="180">
         We guide families through every stage of learning, from Montessori
-        foundations to the Cambridge Curriculum.
+        foundations to {cam('the Cambridge Curriculum', 'our international curriculum')}.
       </p>
       <div class="hero__actions" data-reveal data-reveal-delay="270">
         <Button variant="primary" size="lg" href="/contact/">Book a Visit</Button>
@@ -195,8 +192,8 @@ const stages = [
     <div class="container narrow intro" data-reveal>
       <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
       <p class="intro__body">
-        The International School of Phangan is a Cambridge Curriculum school that develops
-        the whole child. Our <strong>FLAIR</strong> philosophy shapes every day at ISPG —
+        The International School of Phangan is {cam('a Cambridge Curriculum school', 'an international curriculum school')}
+        that develops the whole child. Our <strong>FLAIR</strong> philosophy shapes every day at ISPG —
         Future Leadership, Lifelong Learning, Active Living, an International Mindset and
         being Rooted in Nature.
       </p>

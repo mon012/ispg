@@ -6,6 +6,7 @@ import ExploreLinks from '../components/sections/ExploreLinks.astro';
 import { Image } from 'astro:assets';
 import { teachers, departments } from '../data/teachers';
 import { img } from '../lib/images';
+import { cam } from '../data/accreditation';
 
 const grouped = departments
   .map((d) => ({ department: d, people: teachers.filter((t) => t.department === d) }))
@@ -105,7 +106,7 @@ const profiles = teachers.map(({ id, name, role, photoHero, bio, quote, quoteLab
     items={[
       { title: 'Our story & campus', body: 'How ISPG began, and the site it grew on.', href: '/about/' },
       { title: 'Our FLAIR approach', body: 'The five commitments every teacher plans against.', href: '/flair/' },
-      { title: 'Academics', body: 'The Cambridge pathway they deliver, from age 2 to 11.', href: '/academics/' },
+      { title: 'Academics', body: `${cam('The Cambridge pathway', 'The academic pathway')} they deliver, from age 2 to 11.`, href: '/academics/' },
       { title: 'How to apply', body: 'Six steps to joining their classrooms.', href: '/admission/' },
     ]}
   />
