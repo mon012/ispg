@@ -1,4 +1,4 @@
-/** The six-step admissions journey.
+/** The five-step admissions journey.
  *  Previously this existed only inside a single PNG infographic — it is now
  *  real text, so it can be read by screen readers, search and translation. */
 
@@ -26,19 +26,13 @@ export const steps = [
   },
   {
     n: 4,
-    title: 'Trial Day',
-    body:
-      'Your child spends a day with their prospective class. We watch how they settle, and they get to find out whether ISPG feels like the right fit.',
-  },
-  {
-    n: 5,
     title: 'Confirmation',
     body:
       'We confirm the place in writing. The registration fee and security deposit are payable at this point, before your child starts.',
     action: { label: 'Fee schedule', href: '/fees/' },
   },
   {
-    n: 6,
+    n: 5,
     title: 'Join Us',
     body:
       'Uniform, bus route and start date are arranged with the School Secretary. Your child joins their class — and their family joins ours.',

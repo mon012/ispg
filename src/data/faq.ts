@@ -34,7 +34,7 @@ export const feesFaq: FaqItem[] = [
 export const admissionFaq: FaqItem[] = [
   {
     q: 'How do I apply for a place at ISPG?',
-    a: 'There are six steps: enquiry and a personal visit, the online application form, the THB 3,000 application fee, a trial day for your child, written confirmation of the place, and arranging uniform, bus route and start date with the School Secretary.',
+    a: 'There are five steps: enquiry and a personal visit, the online application form, the THB 3,000 application fee, written confirmation of the place, and arranging uniform, bus route and start date with the School Secretary.',
   },
   {
     q: 'What ages does ISPG accept?',
@@ -42,7 +42,7 @@ export const admissionFaq: FaqItem[] = [
   },
   {
     q: 'Does my child have to sit an entrance exam?',
-    a: 'There is no written entrance exam. The application fee covers a student assessment, and your child then spends a trial day with their prospective class so both sides can see whether ISPG is the right fit.',
+    a: 'There is no written entrance exam. The application fee covers a student assessment, so both sides can see whether ISPG is the right fit.',
   },
   {
     q: 'Can we visit the school before we apply?',

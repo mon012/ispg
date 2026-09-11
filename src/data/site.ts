@@ -93,7 +93,7 @@ export const mainNav: NavItem[] = [
     label: 'Admission',
     href: '/admission/',
     children: [
-      { label: 'How to Apply', href: '/admission/', note: 'Six steps to joining' },
+      { label: 'How to Apply', href: '/admission/', note: 'Five steps to joining' },
       { label: 'School Fees', href: '/fees/', note: 'Tuition, bus and support' },
       // Hidden until the school approves the calendar publicly — restore this line to show it again.
       // { label: 'School Calendar', href: '/calendar/', note: 'Term dates and events' },
