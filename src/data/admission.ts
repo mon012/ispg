@@ -1,4 +1,4 @@
-/** The five-step admissions journey.
+/** The six-step admissions journey.
  *  Previously this existed only inside a single PNG infographic — it is now
  *  real text, so it can be read by screen readers, search and translation. */
 
@@ -26,13 +26,19 @@ export const steps = [
   },
   {
     n: 4,
+    title: 'Assessment Day',
+    body:
+      'Your child comes in for a short, relaxed assessment with the teacher whose class they would join. It is not an exam — it simply shows us where they are with language, numbers and confidence, so their teacher knows how to support them from the first day.',
+  },
+  {
+    n: 5,
     title: 'Confirmation',
     body:
       'We confirm the place in writing. The registration fee and security deposit are payable at this point, before your child starts.',
     action: { label: 'Fee schedule', href: '/fees/' },
   },
   {
-    n: 5,
+    n: 6,
     title: 'Join Us',
     body:
       'Uniform, bus route and start date are arranged with the School Secretary. Your child joins their class — and their family joins ours.',
