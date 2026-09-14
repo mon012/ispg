@@ -581,6 +581,12 @@ const stages = [
   }
   .hero__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: var(--sp-3); }
 
+  /* Once the pair stacks, size them to the column rather than to their labels
+     — two buttons of different widths above each other read as a mistake. */
+  @media (max-width: 520px) {
+    .hero__actions { flex-direction: column; align-items: stretch; align-self: stretch; }
+  }
+
   /* Calmer, slower rise than the site-wide reveal — content surfaces rather
      than just fading up, staggered per element via data-reveal-delay above. */
   .hero [data-reveal] {

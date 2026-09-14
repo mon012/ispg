@@ -47,4 +47,9 @@ const {
   @media (max-width: 900px) {
     .cta__inner { grid-template-columns: 1fr; }
   }
+
+  /* Same rule as the homepage hero: stacked buttons match the column width. */
+  @media (max-width: 520px) {
+    .cta__actions { flex-direction: column; align-items: stretch; }
+  }
 </style>

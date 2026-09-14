@@ -264,6 +264,11 @@ import { faqSchema } from '../lib/seo';
   .reassure p { margin: 0; color: var(--text-muted); line-height: var(--lh-body); }
   .reassure__actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; justify-content: center; }
 
+  /* Same rule as the homepage hero: stacked buttons match the column width. */
+  @media (max-width: 520px) {
+    .reassure__actions { flex-direction: column; align-items: stretch; }
+  }
+
   @media (max-width: 1000px) { .next { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) {
     /* Numbers stack above their body copy here, so a rail tuned to the
