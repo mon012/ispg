@@ -570,7 +570,10 @@ const stages = [
   }
   .hero__title {
     margin: 0;
-    max-width: 22ch;
+    /* Measured in ch so it tracks the clamped display size: wide enough that
+       the headline sets on two lines at every desktop width, narrow enough
+       that it still breaks into a column on a phone. */
+    max-width: 26ch;
     font-family: var(--font-display);
     font-weight: var(--fw-medium);
     font-size: var(--fs-display-1);
