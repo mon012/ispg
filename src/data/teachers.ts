@@ -102,22 +102,6 @@ export const teachers: Teacher[] = [
     ],
   },
   {
-    id: 'monica-leonardo',
-    name: 'J.D. Monica Leonardo',
-    role: 'Physical Education Teacher',
-    department: 'Specialist',
-    photo: '/media/teachers/monica-portrait.webp',
-    photoHero: '/media/teachers/monica-hero.webp',
-    bio: 'Originally from the Philippines, Monica is a licensed physical education teacher who has been teaching in Thailand for four years. She is passionate about helping children stay active, build confidence and experience the joy of being part of a team — and believes children learn best when they feel supported and are having fun.',
-    quote: 'I hope to create a fun, positive and encouraging environment where every child enjoys being active and feels confident to try their best.',
-    quoteLabel: 'A message to our community',
-    facts: [
-      { label: 'Favourite book', value: 'You Can Be Your Best Starting Today by John Mason' },
-      { label: 'Favourite hobbies', value: 'Running, dancing, reading, yoga and exploring new places' },
-      { label: 'Fun fact', value: 'Loves collecting memories more than souvenirs' },
-    ],
-  },
-  {
     id: 'nargiz-rzayeva',
     name: 'Nargiz Rzayeva',
     role: 'Primary ESL Coordinator',
