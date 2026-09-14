@@ -79,7 +79,7 @@ export const policyNotes: { title: string; points: string[] }[] = [
     title: 'Sibling Discounts',
     points: [
       'Discounts apply to larger families within the same academic year: 5% for a 2nd child, 10% for a 3rd and subsequent children.',
-      'The tuition fee discount is applied to the siblings only, and is billed termly.',
+      'The tuition fee discount applies to siblings only and is billed termly.',
     ],
   },
   {

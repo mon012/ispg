@@ -48,7 +48,7 @@ export const kindergarten: Stage[] = [
     body:
       `Casa builds on our Montessori foundation within ${cam('the Cambridge Curriculum', 'our international curriculum')}. We balance structured learning with playful exploration to prepare children for Primary. Literacy, numeracy and communication grow through engaging, meaningful activities — alongside emotional wellbeing and curiosity.`,
     keyAreasLead:
-      'Structured play sits alongside early academics, building toward Key Stage 1. Literacy and numeracy grow next to independence and social skills, so children arrive at Primary ready for the classroom and for each other.',
+      'Structured play sits alongside early academics, building towards Key Stage 1. Literacy and numeracy grow next to independence and social skills, so children arrive at Primary ready for the classroom and for each other.',
     keyAreas: [
       { name: 'Literacy', detail: 'Early reading and writing' },
       { name: 'Numeracy', detail: 'Early maths concepts' },
@@ -68,7 +68,7 @@ export const primary: Stage[] = [
     ageRange: [5, 8],
     intro: 'Building independence, curiosity and core skills.',
     body:
-      'In Key Stage 1, children move into more structured learning without losing the fun. Lessons are interactive and inquiry-based, connecting knowledge across subjects. Children build strong foundations and take real ownership of their learning.',
+      'In Key Stage 1, children move into more structured learning without losing the fun. Lessons are interactive and enquiry-based, connecting knowledge across subjects. Children build strong foundations and take real ownership of their learning.',
     keyAreasLead:
       'Eight subjects, one hands-on approach — English and Mathematics sit alongside Science, Humanities, Creativity, Vitality, Wellbeing and Innovation, each taught through activities children can touch and test, not just read about.',
     keyAreas: [
@@ -96,7 +96,7 @@ export const primary: Stage[] = [
     keyAreas: [
       { name: 'English', detail: 'Advanced Reading, Writing, Speaking & Listening' },
       { name: 'Mathematics', detail: 'Problem-solving, Mental Maths, Data Handling' },
-      { name: 'Science', detail: 'Scientific Method, Inquiry-Based Investigations' },
+      { name: 'Science', detail: 'Scientific Method, Enquiry-Based Investigations' },
       { name: 'Humanities', detail: 'History, Geography, Global Understanding' },
       { name: 'Creativity', detail: 'Expressive Arts, Music, Drama' },
       { name: 'Vitality', detail: 'Physical Education & Sport' },

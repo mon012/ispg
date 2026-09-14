@@ -124,7 +124,7 @@ export const teachers: Teacher[] = [
     department: 'Specialist',
     photo: '/media/teachers/nargiz-portrait.webp',
     photoHero: '/media/teachers/nargiz-hero.webp',
-    bio: `Originally from Azerbaijan, Nargiz brings extensive experience in leadership and school development, having worked with ${cam('the Cambridge International, British National Curriculum and International Baccalaureate programmes', 'the British National Curriculum and International Baccalaureate programmes')}. She completed official Read Write Inc. phonics training in England and is currently completing her Master of Education with Liverpool John Moores University — combining strong problem-solving skills with a collaborative approach to inspire curiosity in every learner.`,
+    bio: `Originally from Azerbaijan, Nargiz brings extensive experience in leadership and school development, having worked with ${cam('Cambridge International, the British National Curriculum and the International Baccalaureate', 'the British National Curriculum and the International Baccalaureate')}. She completed official Read Write Inc. phonics training in England and is currently completing her Master of Education with Liverpool John Moores University — combining strong problem-solving skills with a collaborative approach to inspire curiosity in every learner.`,
     quote: 'When children feel happy, supported, and encouraged, they develop the confidence to achieve more than they ever imagined.',
     quoteLabel: 'My philosophy is simple',
     facts: [
