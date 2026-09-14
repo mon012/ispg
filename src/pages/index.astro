@@ -621,7 +621,8 @@ const stages = [
     align-items: center;
     gap: var(--sp-5);
     padding-block: var(--sp-12);
-    border-top: 1px solid var(--border-hairline);
+    /* No rule above: the hero's wave already closes the section off, and a
+       hairline a few pixels under it reads as a stray line. */
     border-bottom: 1px solid var(--border-hairline);
     text-align: center;
   }
