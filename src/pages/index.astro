@@ -187,23 +187,6 @@ const stages = [
     </div>
   </section>
 
-  {/* ------------------------------------------------------------ intro */}
-  <section class="section">
-    <div class="container narrow intro" data-reveal>
-      <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
-      <p class="intro__body">
-        The International School of Phangan is {cam('a Cambridge Curriculum school', 'an international curriculum school')}
-        that develops the whole child. Our <strong>FLAIR</strong> philosophy shapes every day at ISPG —
-        Future Leadership, Lifelong Learning, Active Living, an International Mindset and
-        being Rooted in Nature.
-      </p>
-      <Button variant="secondary" href="/flair/">
-        Discover our approach
-        <Icon name="arrow-right" size={15} slot="icon-right" />
-      </Button>
-    </div>
-  </section>
-
   {/* --------------------------------------------------- accreditation */}
   {SHOW_ACCREDITATION && (
   <section class="section tight accred">
@@ -225,6 +208,23 @@ const stages = [
     </div>
   </section>
   )}
+
+  {/* ------------------------------------------------------------ intro */}
+  <section class="section">
+    <div class="container narrow intro" data-reveal>
+      <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
+      <p class="intro__body">
+        The International School of Phangan is {cam('a Cambridge Curriculum school', 'an international curriculum school')}
+        that develops the whole child. Our <strong>FLAIR</strong> philosophy shapes every day at ISPG —
+        Future Leadership, Lifelong Learning, Active Living, an International Mindset and
+        being Rooted in Nature.
+      </p>
+      <Button variant="secondary" href="/flair/">
+        Discover our approach
+        <Icon name="arrow-right" size={15} slot="icon-right" />
+      </Button>
+    </div>
+  </section>
 
   {/* ---------------------------------------------------------- pathway */}
   <PupilPathway />
@@ -614,7 +614,7 @@ const stages = [
   .intro__body strong { color: var(--navy-700); }
 
   /* ---------------------------------------------------- accreditation */
-  .accred { padding-top: 0; }
+  .accred { padding-bottom: 0; }
   .accred__inner {
     display: flex;
     flex-direction: column;
