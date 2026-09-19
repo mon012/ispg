@@ -46,7 +46,7 @@ export const teachers: Teacher[] = [
     role: 'Principal',
     department: 'Leadership',
     photo: '/media/teachers/cedric-portrait.webp',
-    photoHero: '/media/teachers/cedric-hero.webp',
+    photoHero: '/media/teachers/cedric-portrait.webp',
     bio: `Over 25 years of international educational experience in senior leadership, vice principalship and early childhood management across Thailand, China and Europe. Cedric is dedicated to bridging child-centred independence (Montessori) with structured academic rigour ${cam('(the Cambridge International Curriculum)', '(an international curriculum)')} to empower the whole child, and is building a nature-rooted, progressive school community here on Koh Phangan.`,
     quote: 'When we nurture a child’s natural curiosity in a safe, nature-infused environment, they develop the confidence, resilience and independence to achieve more than they ever imagined.',
     quoteLabel: 'My philosophy is simple',
