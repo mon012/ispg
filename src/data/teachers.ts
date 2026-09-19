@@ -2,11 +2,14 @@
  * Staff directory — the ISPG founding team, sourced from
  * https://teachers.ispg.ac.th/ (the school's own staff microsite).
  *
- * Photos are downloaded locally to `public/media/teachers/`: `*-portrait.webp`
- * for the grid thumbnail, `*-hero.webp` (or the single portrait, where the
- * source site only supplied one) for the modal. More staff will join before
- * opening — add entries here in the same shape and the page needs no other
- * change.
+ * Photos live in `src/assets/media/teachers/`: `*-portrait.webp` for the grid
+ * thumbnail, `*-hero.webp` (or the single portrait, where only one was
+ * supplied) for the modal.
+ *
+ * An entry with a `bio` opens a modal; one without renders as a plain card
+ * with just the photo, name and role — that's how newly joined staff appear
+ * until their profile is written. Add entries here in the same shape and the
+ * page needs no other change.
  */
 
 import { cam } from './accreditation';
@@ -17,8 +20,10 @@ export type Teacher = {
   role: string;
   department: Department;
   photo: string;
-  photoHero: string;
-  bio: string;
+  /** Profile fields are optional: staff whose full profile hasn't been
+      written yet render as a plain, unclickable card in the grid. */
+  photoHero?: string;
+  bio?: string;
   quote?: string;
   quoteLabel?: string;
   facts?: { label: string; value: string }[];
@@ -55,7 +60,7 @@ export const teachers: Teacher[] = [
   {
     id: 'ian-foster',
     name: 'Ian Foster',
-    role: 'Founding Primary Headteacher',
+    role: 'Head Teacher',
     department: 'Leadership',
     photo: '/media/teachers/ian-foster.webp',
     photoHero: '/media/teachers/ian-foster.webp',
@@ -70,9 +75,16 @@ export const teachers: Teacher[] = [
     ],
   },
   {
+    id: 'gwennaelle',
+    name: 'Gwennaelle Marchand',
+    role: 'Casa Teacher',
+    department: 'Primary',
+    photo: '/media/teachers/gwennaelle-portrait.webp',
+  },
+  {
     id: 'christine-prinsloo',
     name: 'Christine Prinsloo',
-    role: 'Primary Teacher',
+    role: 'Homeroom Teacher, Year 1',
     department: 'Primary',
     photo: '/media/teachers/christine-portrait.webp',
     photoHero: '/media/teachers/christine-hero.webp',
@@ -86,9 +98,16 @@ export const teachers: Teacher[] = [
     ],
   },
   {
+    id: 'laura',
+    name: 'Laura Evans',
+    role: 'Homeroom Teacher, Year 2',
+    department: 'Primary',
+    photo: '/media/teachers/laura-portrait.webp',
+  },
+  {
     id: 'nonku-mdlalose',
     name: 'Nonku Thandi Mdlalose',
-    role: 'Primary Teacher',
+    role: 'Homeroom Teacher, Year 3',
     department: 'Primary',
     photo: '/media/teachers/nonku-portrait.webp',
     photoHero: '/media/teachers/nonku-hero.webp',
@@ -102,9 +121,30 @@ export const teachers: Teacher[] = [
     ],
   },
   {
+    id: 'chloe',
+    name: 'Chloe Todd',
+    role: 'Homeroom Teacher, Year 4',
+    department: 'Primary',
+    photo: '/media/teachers/chloe-portrait.webp',
+  },
+  {
+    id: 'jack',
+    name: 'Jack Mc Namara',
+    role: 'Homeroom Teacher, Year 5',
+    department: 'Primary',
+    photo: '/media/teachers/jack-portrait.webp',
+  },
+  {
+    id: 'nicholas',
+    name: 'Nicholas Hutchinson',
+    role: 'Homeroom Teacher, Year 6',
+    department: 'Primary',
+    photo: '/media/teachers/nicholas-portrait.webp',
+  },
+  {
     id: 'nargiz-rzayeva',
     name: 'Nargiz Rzayeva',
-    role: 'Primary ESL Coordinator',
+    role: 'EAL Support',
     department: 'Specialist',
     photo: '/media/teachers/nargiz-portrait.webp',
     photoHero: '/media/teachers/nargiz-hero.webp',
@@ -117,5 +157,40 @@ export const teachers: Teacher[] = [
       { label: 'Fun fact', value: 'Loves horse riding' },
       { label: 'Also enjoys', value: 'Singing, watching movies and reading widely' },
     ],
+  },
+  {
+    id: 'jan-chris',
+    name: 'Jan Chris Burgos',
+    role: 'Music Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/jan-chris-portrait.webp',
+  },
+  {
+    id: 'kittipong',
+    name: 'Kittipong Ho',
+    role: 'PE Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/kittipong-portrait.webp',
+  },
+  {
+    id: 'suphattaraphong',
+    name: 'Suphattaraphong Nekamatcha',
+    role: 'Swimming Head Coach',
+    department: 'Specialist',
+    photo: '/media/teachers/suphattaraphong-portrait.webp',
+  },
+  {
+    id: 'knatcha',
+    name: 'Knatcha Jitwattanasilp',
+    role: 'Art Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/knatcha-portrait.webp',
+  },
+  {
+    id: 'piyaporn',
+    name: 'Piyaporn Khunthongkaew',
+    role: 'Thai Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/piyaporn-portrait.webp',
   },
 ];
