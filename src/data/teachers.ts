@@ -82,6 +82,13 @@ export const teachers: Teacher[] = [
     photo: '/media/teachers/gwennaelle-portrait.webp',
   },
   {
+    id: 'seema',
+    name: 'Seema Amjad',
+    role: 'Kindergarten Teacher',
+    department: 'Primary',
+    photo: '/media/teachers/seema-portrait.webp',
+  },
+  {
     id: 'christine-prinsloo',
     name: 'Christine Prinsloo',
     role: 'Homeroom Teacher, Year 1',
@@ -159,6 +166,13 @@ export const teachers: Teacher[] = [
     ],
   },
   {
+    id: 'abegail',
+    name: 'Abegail Pagador',
+    role: 'IT Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/abegail-portrait.webp',
+  },
+  {
     id: 'jan-chris',
     name: 'Jan Chris Burgos',
     role: 'Music Teacher',
@@ -192,5 +206,12 @@ export const teachers: Teacher[] = [
     role: 'Thai Teacher',
     department: 'Specialist',
     photo: '/media/teachers/piyaporn-portrait.webp',
+  },
+  {
+    id: 'ratchakorn',
+    name: 'Ratchakorn Meekaew',
+    role: 'Thai Teacher',
+    department: 'Specialist',
+    photo: '/media/teachers/ratchakorn-portrait.webp',
   },
 ];
