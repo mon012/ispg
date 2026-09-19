@@ -84,7 +84,7 @@ export const teachers: Teacher[] = [
   {
     id: 'gwennaelle',
     name: 'Gwennaelle Marchand',
-    role: 'Casa Teacher',
+    role: 'Kindergarten Teacher',
     department: 'Primary',
     photo: '/media/teachers/gwennaelle-portrait.webp',
   },
@@ -119,9 +119,16 @@ export const teachers: Teacher[] = [
     photo: '/media/teachers/laura-portrait.webp',
   },
   {
+    id: 'chloe',
+    name: 'Chloe Todd',
+    role: 'Homeroom Teacher, Year 3',
+    department: 'Primary',
+    photo: '/media/teachers/chloe-portrait.webp',
+  },
+  {
     id: 'nonku-mdlalose',
     name: 'Nonku Thandi Mdlalose',
-    role: 'Homeroom Teacher, Year 3',
+    role: 'Homeroom Teacher, Year 4',
     department: 'Primary',
     photo: '/media/teachers/nonku-portrait.webp',
     photoHero: '/media/teachers/nonku-hero.webp',
@@ -133,13 +140,6 @@ export const teachers: Teacher[] = [
       { label: 'Favourite hobbies', value: 'Travelling, cooking, reading, movies, nature and exploring new places' },
       { label: 'Fun fact', value: 'Speaks four languages, and hopes Thai will become number five' },
     ],
-  },
-  {
-    id: 'chloe',
-    name: 'Chloe Todd',
-    role: 'Homeroom Teacher, Year 4',
-    department: 'Primary',
-    photo: '/media/teachers/chloe-portrait.webp',
   },
   {
     id: 'jack',
@@ -158,7 +158,7 @@ export const teachers: Teacher[] = [
   {
     id: 'nargiz-rzayeva',
     name: 'Nargiz Rzayeva',
-    role: 'EAL Support',
+    role: 'ESL Support',
     department: 'Specialist',
     photo: '/media/teachers/nargiz-portrait.webp',
     photoHero: '/media/teachers/nargiz-hero.webp',
