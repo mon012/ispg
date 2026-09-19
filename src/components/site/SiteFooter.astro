@@ -1,11 +1,15 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { site, contact, social, footerNav, legalNav, staffPortal } from '../../data/site';
+import { site, contact, social, footerNav, legalNav, staffPortal, parentPortal } from '../../data/site';
 import { img } from '../../lib/images';
-import { cam } from '../../data/accreditation';
 
 const year = new Date().getFullYear();
+
+/** The two Google Sites workspaces. A portal whose URL is still a placeholder
+ *  renders as plain text — a link to "#" would reload the page and look
+ *  broken. Dropping the real URL into site.ts turns it into a link. */
+const portals = [staffPortal, parentPortal].map((p) => ({ ...p, ready: p.href.startsWith('http') }));
 ---
 
 <footer class="ftr">
@@ -24,10 +28,13 @@ const year = new Date().getFullYear();
             decoding="async"
           />
         </div>
-        <p class="ftr__blurb">
-          {cam('A Cambridge Curriculum school', 'An international curriculum school')} on Koh Phangan, developing the whole child
-          through Montessori foundations and our FLAIR philosophy.
-        </p>
+        <ul class="ftr__contact">
+          <li>
+            <Icon name="map-pin" size={15} />
+            <a href={contact.mapLink} rel="noopener noreferrer" target="_blank">{contact.address.full}</a>
+          </li>
+          <li><Icon name="phone" size={15} /><a href={contact.phoneHref}>{contact.phoneDisplay}</a></li>
+        </ul>
         <ul class="ftr__social">
           {social.map((s) => (
             <li>
@@ -48,28 +55,29 @@ const year = new Date().getFullYear();
         </nav>
       ))}
 
-      <div class="ftr__col">
-        <h2 class="ftr__heading">Get in touch</h2>
-        <ul class="ftr__contact">
-          <li>
-            <Icon name="map-pin" size={15} />
-            <a href={contact.mapLink} rel="noopener noreferrer" target="_blank">{contact.address.full}</a>
-          </li>
-          <li><Icon name="phone" size={15} /><a href={contact.phoneHref}>{contact.phoneDisplay}</a></li>
+      <nav class="ftr__col" aria-label="Legal">
+        <h2 class="ftr__heading">Legal</h2>
+        <ul class="ftr__links">
+          {legalNav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
-      </div>
+      </nav>
     </div>
 
     <div class="ftr__base">
       <p>© {year} {site.legalName}. All rights reserved.</p>
-      <ul class="ftr__legal">
-        <li>
-          <a class="ftr__portal" href={staffPortal.href} target="_blank" rel="noopener noreferrer">
-            {staffPortal.label}
-            <Icon name="external-link" size={13} />
-          </a>
-        </li>
-        {legalNav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      <ul class="ftr__utility">
+        {portals.map((p) => (
+          <li>
+            {p.ready ? (
+              <a class="ftr__portal" href={p.href} target="_blank" rel="noopener noreferrer">
+                {p.label}
+                <Icon name="external-link" size={13} />
+              </a>
+            ) : (
+              <span class="ftr__portal ftr__portal--soon">{p.label}</span>
+            )}
+          </li>
+        ))}
       </ul>
     </div>
   </div>
@@ -91,10 +99,9 @@ const year = new Date().getFullYear();
     align-items: start;
   }
 
-  .ftr__brand { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .ftr__brand { display: flex; flex-direction: column; gap: var(--sp-5); align-items: flex-start; }
   .ftr__mark { display: flex; align-items: center; }
   .ftr__mark img { height: 64px; width: auto; }
-  .ftr__blurb { margin: 0; color: var(--text-on-navy-muted); font-size: 14px; max-width: 300px; line-height: 1.6; }
 
   .ftr__social { display: flex; gap: 10px; list-style: none; margin: var(--sp-2) 0 0; padding: 0; }
   .ftr__social a {
@@ -144,12 +151,14 @@ const year = new Date().getFullYear();
     color: var(--text-on-navy-muted);
   }
   .ftr__base p { margin: 0; max-width: 62ch; }
-  .ftr__legal { display: flex; flex-wrap: wrap; gap: 20px; list-style: none; margin: 0; padding: 0; }
-  .ftr__legal a { color: var(--text-on-navy-muted); text-decoration: none; }
-  .ftr__legal a:hover { color: var(--sky-300); }
+  .ftr__utility { display: flex; flex-wrap: wrap; gap: 20px; list-style: none; margin: 0; padding: 0; }
+  .ftr__utility a { color: var(--text-on-navy-muted); text-decoration: none; }
+  .ftr__utility a:hover { color: var(--sky-300); }
   /* Staff link — same weight as the legal links, with the usual "leaves the
      site" marker so nobody expects it to be a page of ours. */
   .ftr__portal { display: inline-flex; align-items: center; gap: 6px; }
+  /* A portal without a URL yet: same place in the row, visibly not clickable. */
+  .ftr__portal--soon { opacity: 0.55; }
 
   @media (max-width: 1080px) {
     .ftr__grid { grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-10); }
@@ -158,7 +167,6 @@ const year = new Date().getFullYear();
   @media (max-width: 640px) {
     .ftr__grid { grid-template-columns: 1fr 1fr; }
     .ftr__brand { grid-column: 1 / -1; }
-    .ftr__blurb { max-width: none; }
   }
   @media (max-width: 420px) {
     .ftr__grid { grid-template-columns: 1fr; }

@@ -1,0 +1,127 @@
+---
+import ContentPage from '../layouts/ContentPage.astro';
+
+/** PDPA notice for enrolled families. The site is English-medium and its
+ *  families are overwhelmingly international, so the notice is English
+ *  throughout; the Thai source text is kept off-site for filings and for the
+ *  enrolment pack. Rendered through the same ContentPage chrome as
+ *  /privacy-policy/ and /terms/. */
+const html = `
+<div>
+<p>Last updated: September 19, 2026 · Issued under Thailand’s Personal Data Protection Act B.E. 2562 (PDPA)</p>
+
+<h2>1. What this notice covers</h2>
+<p>International School of Pha Ngan (“the School”, “we”) collects and uses personal data about students and their families in order to provide education and keep children safe. This notice explains what we collect, why, who we share it with, how long we keep it, and what rights you have under Thailand’s Personal Data Protection Act (PDPA).</p>
+<p>It applies to students, parents and guardians, and emergency contacts. General website visitors are covered by our separate <a href="/privacy-policy/">website privacy policy</a>.</p>
+
+<h2>2. Who is responsible, and how to reach us</h2>
+<div class="pdpa-contact">
+  <p><strong>Data controller</strong> — International School of Pha Ngan</p>
+  <p>53/14 Moo 1, Ban Tai, Koh Phangan, Surat Thani 84280, Thailand</p>
+  <p><strong>Data protection contact</strong> — <a href="mailto:privacy@ispg.ac.th">privacy@ispg.ac.th</a></p>
+  <p>Tel +66 84-281-8555</p>
+  <p class="pdpa-note">For any question or request about your personal data, write to <a href="mailto:privacy@ispg.ac.th">privacy@ispg.ac.th</a>.</p>
+</div>
+
+<h2>3. What we collect</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="What we collect">
+<table>
+  <tr><th style="width:34%">Category</th><th>Details</th></tr>
+  <tr><td>Student identity</td><td>Full name, date of birth, gender, nationality, passport or national ID number, identification photograph</td></tr>
+  <tr><td>Parent and guardian details</td><td>Full name, relationship to the child, current address, email, telephone number, emergency contacts</td></tr>
+  <tr><td>Academic records</td><td>Assessment results, progress reports, attendance records, student work, behaviour and support records</td></tr>
+  <tr><td>Health information <em>(sensitive data)</em></td><td>Allergies, medical conditions, medication, dietary or activity restrictions, first-aid records</td></tr>
+  <tr><td>Photographs and video</td><td>Images from lessons and school activities</td></tr>
+  <tr><td>Financial records</td><td>Fee invoices, payment history, payer details</td></tr>
+  <tr><td>Account data</td><td>Student and teacher Google Workspace for Education accounts and the related usage records</td></tr>
+</table>
+</div>
+
+<h2>4. Why we use it, and on what legal basis</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Purposes and legal bases">
+<table>
+  <tr><th style="width:44%">Purpose</th><th>Legal basis under the PDPA</th></tr>
+  <tr><td>Admissions, enrolment and delivering teaching</td><td>Contract (section 24(3))</td></tr>
+  <tr><td>Student safety and welfare</td><td>Vital interest (section 24(2)) and legal obligation</td></tr>
+  <tr><td>Reporting to the Ministry of Education and government agencies</td><td>Legal obligation (section 24(6))</td></tr>
+  <tr><td>Billing tuition fees and keeping accounts</td><td>Contract, and legal obligation under tax law</td></tr>
+  <tr><td>Holding and using health information</td><td><strong>Explicit consent</strong> (section 26)</td></tr>
+  <tr><td>Publishing student photographs on our website and social media</td><td><strong>Consent</strong> (section 19) — requested separately, withdrawable at any time</td></tr>
+  <tr><td>Sending parents news and information about school activities</td><td>Legitimate interest (section 24(5))</td></tr>
+</table>
+</div>
+<p>We do not sell personal data, do not use student data for advertising, and do not pass it to commercial partners.</p>
+
+<h2>5. Who we share it with</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Recipients of data">
+<table>
+  <tr><th style="width:34%">Recipient</th><th>Reason and scope</th></tr>
+  <tr><td>Google (Google Workspace for Education)</td><td>The school’s email, documents and storage. Google acts as a data processor under the Cloud Data Processing Addendum and the Workspace for Education Service Data Addendum, both signed by the School.</td></tr>
+  <tr><td>Payment systems</td><td>Issuing invoices and recording tuition payments</td></tr>
+  <tr><td>Government agencies</td><td>Where we are under a legal obligation, such as reporting to the Ministry of Education</td></tr>
+  <tr><td>Medical services</td><td>In emergencies only, for the safety of the student</td></tr>
+  <tr><td>Schools a student transfers to</td><td>Passing on academic records at a parent’s request</td></tr>
+</table>
+</div>
+<p>Some data is held on cloud services that may be located outside Thailand. We use providers that offer internationally recognised safeguards and are bound by data processing agreements.</p>
+
+<h2>6. How long we keep it</h2>
+<ul>
+  <li>Academic records and graduation documents — kept for the period required by education law</li>
+  <li>Health information — kept for as long as the student is enrolled with the School, and deleted within 12 months of their leaving</li>
+  <li>Financial records — kept for at least 5 years as required by tax law</li>
+  <li>Google Workspace accounts and their contents — suspended when a student or teacher leaves the School, and deleted within 12 months</li>
+  <li>Published photographs — removed on receipt of a request to withdraw consent</li>
+</ul>
+
+<h2>7. Your rights</h2>
+<p>Under the PDPA, you and your child have the right to:</p>
+<ul>
+  <li>Request access to the data and a copy of it</li>
+  <li>Request correction of data that is inaccurate or out of date</li>
+  <li>Request erasure or destruction of the data where there is no longer a reason to keep it</li>
+  <li>Request that use of the data be temporarily suspended</li>
+  <li>Object to certain kinds of processing</li>
+  <li>Request that the data be transferred to another data controller</li>
+  <li><strong>Withdraw consent</strong> for photographs or health data at any time, without affecting your child’s right to their education at the School</li>
+  <li>Lodge a complaint with the Office of the Personal Data Protection Committee</li>
+</ul>
+<p>To exercise these rights, send your request to <a href="mailto:privacy@ispg.ac.th">privacy@ispg.ac.th</a>. We reply within 30 days.</p>
+
+<h2>8. How we protect it</h2>
+<p>We limit access to student data to the teachers and staff who need it, set access rights by department within Google Workspace, require two-step verification on administrator accounts, and review our security settings regularly.</p>
+
+<h2>9. Changes to this notice</h2>
+<p>If we make a material change, we will notify parents by email and update the date at the top of this document.</p>
+
+<p>International School of Pha Ngan · 53/14 Moo 1, Ban Tai, Koh Phangan, Surat Thani 84280 · <a href="mailto:privacy@ispg.ac.th">privacy@ispg.ac.th</a></p>
+</div>
+`;
+---
+
+<ContentPage
+  title="Student & Family Privacy Notice"
+  slug="student-privacy"
+  description="How ISPG collects, uses and protects student and family data under Thailand's PDPA."
+  html={html}
+  kind="page"
+  eyebrow="Legal"
+/>
+
+<style is:global>
+  /* The controller's details are the one block readers come back to look up,
+     so they sit in a card rather than in the run of the text. */
+  .legacy-content .pdpa-contact {
+    background: var(--paper-2);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--r-lg);
+    padding: var(--sp-6) var(--sp-8);
+    margin-block: 1.5em;
+  }
+  .legacy-content .pdpa-contact p { margin: 0.25em 0; }
+  .legacy-content .pdpa-contact .pdpa-note {
+    margin-top: 0.9em;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+</style>

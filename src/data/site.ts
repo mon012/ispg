@@ -135,14 +135,24 @@ export const footerNav = [
 
 export const legalNav = [
   { label: 'Privacy Policy', href: '/privacy-policy/' },
+  { label: 'Student & Family Privacy', href: '/student-privacy/' },
   { label: 'Terms & Conditions', href: '/terms/' },
 ];
 
-/** Staff-only Google Sites workspace. It is not part of the parent-facing
- *  navigation, so it sits with the utility links at the very bottom of the
- *  footer — findable by the people who need it, out of the way of everyone
- *  else. Opens in its own tab because it is a separate application. */
+/** The two Google Sites workspaces. They are not part of the main navigation,
+ *  so they sit with the utility links at the very bottom of the footer —
+ *  findable by the people who need them, out of the way of everyone else.
+ *  Both URLs are placeholders while the workspaces are being rebuilt; until a
+ *  real URL lands here the footer renders the label as plain text rather than
+ *  a link that goes nowhere. A real URL turns it back into a link that opens
+ *  in its own tab, because a portal is a separate application.
+ *  Previous staff URL: https://sites.google.com/ispg.ac.th/teachers/home */
 export const staffPortal = {
   label: 'Teachers Portal',
-  href: 'https://sites.google.com/ispg.ac.th/teachers/home',
+  href: '#',
+};
+
+export const parentPortal = {
+  label: 'Parents Portal',
+  href: '#',
 };
