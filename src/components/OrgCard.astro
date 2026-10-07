@@ -83,12 +83,19 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
   .org-card--lg .org-card__name { font-size: 1.6rem; }
   .org-card__role { font-size: var(--fs-xs); letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
   .org-card--lg .org-card__role { font-size: var(--fs-sm); }
+  /* Hidden until hover/focus — the breathing ring already marks the card
+     as clickable, so the label only confirms it. */
   .org-card__more {
-    margin-top: 4px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     color: var(--sky-400, #8cc8f0);
+    transition: max-height var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard), margin var(--dur-fast) var(--ease-standard);
   }
+  .org-card--link:hover .org-card__more,
+  .org-card--link:focus-visible .org-card__more { max-height: 1.5em; opacity: 1; margin-top: 4px; }
 
   .org-card--link { cursor: pointer; transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard); }
   .org-card--link:hover, .org-card--link:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow-md), 0 0 0 3px var(--sky-400, #8cc8f0); }
