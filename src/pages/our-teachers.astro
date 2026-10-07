@@ -228,18 +228,21 @@ const hasProfile = new Set(profiles.map((p) => p.id));
      chart gets .is-in; --d staggers each piece so the tree "grows" from
      the principal down. */
   /* The chart needs more room than the standard container gives. */
-  .container.org-wrap { max-width: 1360px; }
-  .org { --line: var(--sky-400, #8cc8f0); --gap: 36px; display: flex; flex-direction: column; align-items: center; }
-  /* The principal sits on the same grid as the row below, centred over
-     the middle (HR) column so the chart reads as one clean vertical. */
-  .org__root {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 630fr 283fr 283fr;
-    column-gap: var(--sp-6);
-    justify-items: center;
+  .container.org-wrap { max-width: 1440px; container-type: inline-size; }
+  /* Desktop is a symmetric five-column grid: Ian's two lists | HR |
+     Chanya's two reports, with the principal dead centre. --card is one
+     column less the rail indent, capped at 243px, so every card matches. */
+  .org {
+    --line: var(--sky-400, #8cc8f0);
+    --gap: 36px;
+    --col-gap: 16px;
+    --rail: 12px;
+    --card: min(243px, calc((100cqw - 4 * var(--col-gap)) / 5 - 2 * var(--rail) + var(--col-gap) / 2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .org__root > :global(*) { grid-column: 2; }
+  .org__root { display: flex; flex-direction: column; align-items: center; }
 
   .org__stem, .org__drop, .org__bar { display: block; background: var(--line); border-radius: 2px; }
   .org__stem, .org__drop { width: 3px; height: var(--gap); margin: 0 auto; transform-origin: top; }
@@ -248,13 +251,16 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__branches {
     width: 100%;
     display: grid;
-    grid-template-columns: 630fr 283fr 283fr;
-    gap: 0 var(--sp-6);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0 var(--col-gap);
   }
+  .org__branch:nth-child(1) { grid-column: 1 / 3; }
+  .org__branch:nth-child(2) { grid-column: 3; }
+  .org__branch:nth-child(3) { grid-column: 4 / 6; }
   .org__branch { position: relative; display: flex; flex-direction: column; align-items: center; }
   
   /* Bar across the top of the row: from each lead's centre to the gutter. */
-  .org__branch > .org__bar { left: calc(var(--sp-6) / -2); right: calc(var(--sp-6) / -2); }
+  .org__branch > .org__bar { left: calc(var(--col-gap) / -2); right: calc(var(--col-gap) / -2); }
   .org__branch:first-child > .org__bar { left: 50%; }
   .org__branch:last-child > .org__bar { right: 50%; }
 
@@ -268,7 +274,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__groups--split { gap: 0; }
   .org__groups--split .org__group:last-child { margin-left: -1.5px; }
   /* Keeps the first column's cards clear of the Specialists rail. */
-  .org__groups--split .org__group:first-child { padding-right: 16px; }
+  .org__groups--split .org__group:first-child { padding-right: var(--rail); }
   .org__groups--split .org__group > .org__bar { left: 0; right: 0; }
   .org__groups--split .org__group:last-child > .org__bar { right: calc(100% - 3px); }
   /* Short drop from the split bar into each column. */
@@ -283,20 +289,17 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     transform-origin: top;
   }
 
-  /* A lead with several reports on one level: the row is two cards wide
-     and reaches back over the empty space under the neighbouring lead, so
-     the lead's stem lands on the right-hand card's centre. */
+  /* A lead with several reports on one level, side by side across the
+     two columns the branch spans. */
   .org__groups--row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0 var(--sp-6);
-    width: calc(200% + var(--sp-6));
-    margin-left: calc(-100% - var(--sp-6));
+    gap: 0 var(--col-gap);
   }
   /* Drops run long so these cards sit level with the first row of the
      Head Teacher's lists (which have a 60px label above them). */
   .org__groups--row .org__group { padding-top: calc(var(--gap) + 60px); }
-  .org__groups--row .org__group > .org__bar { left: 50%; right: calc(var(--sp-6) / -2); }
-  .org__groups--row .org__group:last-child > .org__bar { left: calc(var(--sp-6) / -2); right: 50%; }
+  .org__groups--row .org__group > .org__bar { left: 50%; right: calc(var(--col-gap) / -2); }
+  .org__groups--row .org__group:last-child > .org__bar { left: calc(var(--col-gap) / -2); right: 50%; }
   .org__groups--row .org__group::before {
     content: '';
     position: absolute;
@@ -312,14 +315,14 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__label {
     position: relative;
     margin: 0;
-    padding: var(--sp-3) 0 var(--sp-3) 16px;
+    padding: var(--sp-3) 0 var(--sp-3) var(--rail);
     height: 60px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    /* Centred over the cards below (rail indent + one 236px card). */
+    /* Centred over the cards below (rail indent + one card). */
     justify-content: center;
-    max-width: calc(16px + 283px);
+    max-width: calc(var(--rail) + var(--card));
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     letter-spacing: var(--ls-caps);
@@ -333,7 +336,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__list {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 16px;
+    padding: 0 0 0 var(--rail);
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
@@ -343,10 +346,10 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__list li::before, .org__list li::after {
     content: '';
     position: absolute;
-    left: -16px;
+    left: calc(-1 * var(--rail));
     background: var(--line);
   }
-  .org__list li::before { top: calc(50% - 1.5px); width: 16px; height: 3px; }
+  .org__list li::before { top: calc(50% - 1.5px); width: var(--rail); height: 3px; }
   .org__list li::after { top: calc(-1 * var(--sp-3)); bottom: 0; width: 3px; }
   .org__list li:last-child::after { bottom: calc(50% - 1.5px); }
   /* First rail piece reaches up into the label/drop above it. */
@@ -395,10 +398,11 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   }
 
   /* Narrow screens: one column, every branch stacked under the principal. */
-  @media (max-width: 1240px) {
+  @media (max-width: 1400px) {
+    .org { --rail: 16px; }
     .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 560px; }
-    .org__root { grid-template-columns: 1fr; max-width: 560px; }
-    .org__root > :global(*) { grid-column: 1; }
+    .org__branch:nth-child(n) { grid-column: 1; }
+    .org__root { width: 100%; max-width: 560px; }
     .org__branch > .org__bar { display: none; }
     .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
     .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list { align-items: stretch; }
@@ -408,7 +412,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     .org__branch:first-child { order: 1; }
     .org__label { max-width: none; font-size: calc(var(--fs-xs) * 1.3); }
     /* Stacked, the row turns into a column joined card to card. */
-    .org__groups--row { grid-template-columns: 1fr; width: 100%; margin-left: 0; }
+    .org__groups--row { grid-template-columns: 1fr; }
     .org__groups--row .org__group { padding-top: var(--sp-3); }
     .org__groups--row .org__group:first-child { padding-top: 0; }
     .org__groups--row .org__group:first-child::before { display: none; }

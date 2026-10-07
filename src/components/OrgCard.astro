@@ -50,9 +50,9 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     z-index: 1;
     display: flex;
     align-items: center;
-    gap: 19px;
+    gap: 14px;
     width: 100%;
-    padding: 12px 19px 12px 12px;
+    padding: 12px 12px 12px 12px;
     text-align: left;
     font: inherit;
     color: #fff;
@@ -62,12 +62,12 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     box-shadow: var(--shadow-sm);
   }
   /* One card size for everyone on the chart, however long the name. */
-  .org-card { width: 283px; max-width: 100%; height: 110px; }
+  .org-card { width: var(--card, 283px); max-width: 100%; height: 110px; }
 
   .org-card__photo {
     flex: none;
-    width: 82px;
-    height: 82px;
+    width: 76px;
+    height: 76px;
     border-radius: 10px;
     overflow: hidden;
     background: var(--sky-100);
@@ -83,7 +83,7 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
-  .org-card__role { font-size: 0.9rem; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
+  .org-card__role { font-size: 0.9rem; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
   /* Hidden until hover/focus — the breathing ring already marks the card
      as clickable, so the label only confirms it. */
   .org-card__more {
