@@ -45,7 +45,7 @@ export const principalQuote = {
 export const teachers: Teacher[] = [
   {
     id: 'cedric',
-    name: 'Mr. Cedric',
+    name: 'Cedric Grondin',
     role: 'Principal',
     department: 'Leadership',
     photo: '/media/teachers/cedric-portrait.webp',
