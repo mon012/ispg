@@ -248,6 +248,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
      and the bar meets it at a clean corner. */
   .org__groups--split { gap: 0; }
   .org__groups--split .org__group:last-child { margin-left: -1.5px; }
+  /* Keeps the first column's cards clear of the Specialists rail. */
+  .org__groups--split .org__group:first-child { padding-right: 16px; }
   .org__groups--split .org__group > .org__bar { left: 0; right: 0; }
   .org__groups--split .org__group:last-child > .org__bar { right: calc(100% - 3px); }
   /* Short drop from the split bar into each column. */
@@ -265,14 +267,14 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__label {
     position: relative;
     margin: 0;
-    padding: var(--sp-3) 0 var(--sp-3) 22px;
+    padding: var(--sp-3) 0 var(--sp-3) 16px;
     height: 60px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     /* Centred over the cards below (rail indent + one 236px card). */
     justify-content: center;
-    max-width: calc(22px + 236px);
+    max-width: calc(16px + 236px);
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     letter-spacing: var(--ls-caps);
@@ -286,7 +288,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__list {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 22px;
+    padding: 0 0 0 16px;
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
@@ -296,10 +298,10 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__list li::before, .org__list li::after {
     content: '';
     position: absolute;
-    left: -22px;
+    left: -16px;
     background: var(--line);
   }
-  .org__list li::before { top: calc(50% - 1.5px); width: 22px; height: 3px; }
+  .org__list li::before { top: calc(50% - 1.5px); width: 16px; height: 3px; }
   .org__list li::after { top: calc(-1 * var(--sp-3)); bottom: 0; width: 3px; }
   .org__list li:last-child::after { bottom: calc(50% - 1.5px); }
   /* First rail piece reaches up into the label/drop above it. */
@@ -349,6 +351,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     .org__branch:not(:first-child) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
     .org__groups--split .org__group:last-child { margin-left: 0; }
+    .org__groups--split .org__group:first-child { padding-right: 0; }
     .org__groups--split .org__group > .org__bar,
     .org__groups--split .org__group::before { display: none; }
     .org__groups--split .org__group { padding-top: 0; }
