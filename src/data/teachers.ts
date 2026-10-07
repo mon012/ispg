@@ -242,7 +242,7 @@ export const teachers: Teacher[] = [
   {
     id: 'wassana',
     name: 'Wassana Khunthon',
-    role: 'Finance',
+    role: 'Administration & Finance',
     department: 'Operations',
     reportsTo: 'chanya',
     photo: '/media/teachers/wassana-portrait.webp',
