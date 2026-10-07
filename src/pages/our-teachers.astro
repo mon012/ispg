@@ -240,11 +240,15 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__branch:last-child > .org__bar { right: 50%; }
 
   .org__groups { width: 100%; display: grid; gap: 0 var(--sp-5); }
-  .org__groups--split { grid-template-columns: 1fr 1fr; }
+  .org__groups--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .org__group { position: relative; padding-top: var(--gap); }
   .org__groups:not(.org__groups--split) .org__group { padding-top: 0; }
-  .org__groups--split .org__group > .org__bar { left: calc(var(--sp-5) / -2); right: calc(var(--sp-5) / -2); }
-  .org__groups--split .org__group:first-child > .org__bar { left: 0; }
+  /* No grid gap: the second column starts exactly under the Head
+     Teacher's stem, so the stem turns straight into the Specialists rail
+     and the bar meets it at a clean corner. */
+  .org__groups--split { gap: 0; }
+  .org__groups--split .org__group:last-child { margin-left: -1.5px; }
+  .org__groups--split .org__group > .org__bar { left: 0; right: 0; }
   .org__groups--split .org__group:last-child > .org__bar { right: calc(100% - 3px); }
   /* Short drop from the split bar into each column. */
   .org__groups--split .org__group::before {
@@ -341,6 +345,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }
     .org__branch:not(:first-child) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
+    .org__groups--split .org__group:last-child { margin-left: 0; }
     .org__groups--split .org__group > .org__bar,
     .org__groups--split .org__group::before { display: none; }
     .org__groups--split .org__group { padding-top: 0; }
