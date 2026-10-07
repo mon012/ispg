@@ -350,7 +350,11 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     .org__branch > .org__bar { display: none; }
     .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
     .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }
-    .org__branch:not(:first-child) > .org__drop { display: none; }
+    /* Stacked, the small HR and Admissions branches come first and the
+       long Head Teacher branch closes the chart. Only the first stacked
+       branch (Kwanchanok) keeps its drop up to the principal. */
+    .org__branch:first-child { order: 1; }
+    .org__branch:not(:nth-child(2)) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
     .org__groups--split .org__group:last-child { margin-left: 0; }
     .org__groups--split .org__group:first-child { padding-right: 0; }
