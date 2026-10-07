@@ -63,7 +63,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
 
   {/* ------------------------------------------------------- org chart */}
   <section class="section">
-    <div class="container">
+    <div class="container org-wrap">
       <div class="org" data-org>
         <div class="org__root">
           <OrgCard person={principal} clickable={hasProfile.has(principal.id)} size="lg" eager />
@@ -219,6 +219,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
      Connectors are plain spans that scale in from their origin once the
      chart gets .is-in; --d staggers each piece so the tree "grows" from
      the principal down. */
+  /* The chart needs more room than the standard container gives. */
+  .container.org-wrap { max-width: 1360px; }
   .org { --line: var(--sky-400, #8cc8f0); --gap: 36px; display: flex; flex-direction: column; align-items: center; }
   .org__root { display: flex; justify-content: center; }
 
@@ -229,7 +231,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__branches {
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 630fr 283fr 283fr;
     gap: 0 var(--sp-6);
   }
   .org__branch { position: relative; display: flex; flex-direction: column; align-items: center; }
@@ -274,7 +276,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     align-items: center;
     /* Centred over the cards below (rail indent + one 236px card). */
     justify-content: center;
-    max-width: calc(16px + 236px);
+    max-width: calc(16px + 283px);
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     letter-spacing: var(--ls-caps);
@@ -343,8 +345,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   }
 
   /* Narrow screens: one column, every branch stacked under the principal. */
-  @media (max-width: 960px) {
-    .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 520px; }
+  @media (max-width: 1240px) {
+    .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 560px; }
     .org__branch > .org__bar { display: none; }
     .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
     .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }

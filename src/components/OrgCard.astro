@@ -50,9 +50,9 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     z-index: 1;
     display: flex;
     align-items: center;
-    gap: var(--sp-4);
+    gap: 19px;
     width: 100%;
-    padding: 10px var(--sp-4) 10px 10px;
+    padding: 12px 19px 12px 12px;
     text-align: left;
     font: inherit;
     color: #fff;
@@ -62,12 +62,12 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     box-shadow: var(--shadow-sm);
   }
   /* One card size for everyone on the chart, however long the name. */
-  .org-card { width: 236px; max-width: 100%; height: 92px; }
+  .org-card { width: 283px; max-width: 100%; height: 110px; }
 
   .org-card__photo {
     flex: none;
-    width: 68px;
-    height: 68px;
+    width: 82px;
+    height: 82px;
     border-radius: 10px;
     overflow: hidden;
     background: var(--sky-100);
@@ -76,21 +76,21 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
   .org-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 
   .org-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .org-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.02rem; line-height: 1.2; }
+  .org-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.22rem; line-height: 1.2; }
   .org-card__name, .org-card__role {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
-  .org-card__role { font-size: var(--fs-xs); letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
+  .org-card__role { font-size: 0.9rem; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
   /* Hidden until hover/focus — the breathing ring already marks the card
      as clickable, so the label only confirms it. */
   .org-card__more {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    font-size: var(--fs-xs);
+    font-size: 0.9rem;
     font-weight: var(--fw-bold);
     color: var(--sky-400, #8cc8f0);
     transition: max-height var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard), margin var(--dur-fast) var(--ease-standard);
