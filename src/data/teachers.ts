@@ -19,6 +19,9 @@ export type Teacher = {
   name: string;
   role: string;
   department: Department;
+  /** Who this person sits under on the org chart. Leadership reports to the
+      principal; teachers default to the Head Teacher. */
+  reportsTo?: string;
   photo: string;
   /** Profile fields are optional: staff whose full profile hasn't been
       written yet render as a plain, unclickable card in the grid. */
@@ -29,9 +32,9 @@ export type Teacher = {
   facts?: { label: string; value: string }[];
 };
 
-export type Department = 'Leadership' | 'Primary' | 'Specialist';
+export type Department = 'Leadership' | 'Primary' | 'Specialist' | 'Operations';
 
-export const departments: Department[] = ['Leadership', 'Primary', 'Specialist'];
+export const departments: Department[] = ['Leadership', 'Primary', 'Specialist', 'Operations'];
 
 export const principalQuote = {
   text: 'When we nurture a child’s natural curiosity in a safe, nature-infused environment, they develop the confidence, resilience and independence to achieve more than they ever imagined.',
@@ -76,10 +79,17 @@ export const teachers: Teacher[] = [
   },
   {
     id: 'chanya',
-    name: 'Ms. Chanya',
+    name: 'Ms. Chanya Klinkanchan',
     role: 'Head of Admissions',
     department: 'Leadership',
     photo: '/media/teachers/chanya-portrait.webp',
+  },
+  {
+    id: 'kwanchanok',
+    name: 'Ms. Kwanchanok Mongkolsap',
+    role: 'Human Resources',
+    department: 'Leadership',
+    photo: '/media/teachers/kwanchanok-portrait.webp',
   },
   {
     id: 'gwennaelle',
@@ -151,7 +161,7 @@ export const teachers: Teacher[] = [
   {
     id: 'nicholas',
     name: 'Nicholas Hutchinson',
-    role: 'Homeroom Teacher, Year 6',
+    role: 'Homeroom Teacher, Year 6, 7',
     department: 'Primary',
     photo: '/media/teachers/nicholas-portrait.webp',
   },
@@ -220,5 +230,21 @@ export const teachers: Teacher[] = [
     role: 'Thai Teacher',
     department: 'Specialist',
     photo: '/media/teachers/ratchakorn-portrait.webp',
+  },
+  {
+    id: 'thanwarat',
+    name: 'Thanwarat Phatthong',
+    role: 'Reception',
+    department: 'Operations',
+    reportsTo: 'kwanchanok',
+    photo: '/media/teachers/thanwarat-portrait.webp',
+  },
+  {
+    id: 'wassana',
+    name: 'Wassana Khunthon',
+    role: 'Finance',
+    department: 'Operations',
+    reportsTo: 'chanya',
+    photo: '/media/teachers/wassana-portrait.webp',
   },
 ];

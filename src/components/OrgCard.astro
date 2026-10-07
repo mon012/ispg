@@ -1,0 +1,130 @@
+---
+/**
+ * One person on the /our-teachers/ org chart. Staff with a written profile
+ * render as a button that opens the page's modal; everyone else is a static
+ * card. `size` scales the card for the principal and the leadership row.
+ */
+import { Image } from 'astro:assets';
+import type { Teacher } from '../data/teachers';
+import { img } from '../lib/images';
+
+interface Props {
+  person: Teacher;
+  clickable: boolean;
+  size?: 'lg' | 'md' | 'sm';
+  eager?: boolean;
+  /** Animation delay (ms) once the chart scrolls into view. */
+  delay?: number;
+}
+
+const { person: t, clickable, size = 'sm', eager = false, delay = 0 } = Astro.props;
+const Tag = clickable ? 'button' : 'div';
+const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
+---
+
+<Tag
+  class:list={['org-card', `org-card--${size}`, clickable && 'org-card--link']}
+  style={`--d:${delay}ms`}
+  {...(clickable ? { type: 'button', 'data-person': t.id, 'aria-haspopup': 'dialog' } : {})}
+>
+  <span class="org-card__photo">
+    <Image
+      src={img(t.photo)!}
+      alt={`${t.name}, ${t.role} at ISPG`}
+      widths={[px, px * 2]}
+      sizes={`${px}px`}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </span>
+  <span class="org-card__text">
+    <span class="org-card__name">{t.name}</span>
+    <span class="org-card__role">{t.role}</span>
+    {clickable && <span class="org-card__more">View profile →</span>}
+  </span>
+</Tag>
+
+<style>
+  .org-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    width: 100%;
+    padding: 10px var(--sp-4) 10px 10px;
+    text-align: left;
+    font: inherit;
+    color: #fff;
+    background: linear-gradient(135deg, var(--navy-700), #1f4f86);
+    border: 0;
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+  }
+  .org-card--md { padding-right: var(--sp-6); }
+  .org-card--lg { padding: 12px var(--sp-8) 12px 12px; width: auto; }
+
+  .org-card__photo {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--sky-100);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+  }
+  .org-card--md .org-card__photo { width: 88px; height: 88px; }
+  .org-card--lg .org-card__photo { width: 120px; height: 120px; box-shadow: 0 0 0 4px #fff; }
+  .org-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+
+  .org-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .org-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.02rem; line-height: 1.2; }
+  .org-card--md .org-card__name { font-size: 1.2rem; }
+  .org-card--lg .org-card__name { font-size: 1.6rem; }
+  .org-card__role { font-size: var(--fs-xs); letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
+  .org-card--lg .org-card__role { font-size: var(--fs-sm); }
+  .org-card__more {
+    margin-top: 4px;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--sky-400, #8cc8f0);
+  }
+
+  .org-card--link { cursor: pointer; transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard); }
+  .org-card--link:hover, .org-card--link:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow-md), 0 0 0 3px var(--sky-400, #8cc8f0); }
+  .org-card--link::after {
+    /* A soft ring that breathes, so clickable profiles stand out at a glance. */
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    border: 2px solid var(--sky-400, #8cc8f0);
+    opacity: 0;
+    pointer-events: none;
+  }
+  :global(.org.is-in) .org-card--link::after { animation: org-ring 3.2s ease-in-out calc(var(--d) + 900ms) infinite; }
+  @keyframes org-ring {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(1.025); }
+  }
+
+  /* Entrance — the chart adds .is-in when scrolled into view. */
+  :global(.js .org) .org-card { opacity: 0; transform: translateY(14px) scale(0.96); }
+  :global(.js .org.is-in) .org-card {
+    opacity: 1;
+    transform: none;
+    transition: opacity 500ms var(--ease-out) var(--d), transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1) var(--d);
+  }
+  :global(.js .org.is-in) .org-card--link:hover { transform: translateY(-3px); transition-delay: 0ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js .org) .org-card { opacity: 1; transform: none; }
+    :global(.org.is-in) .org-card--link::after { animation: none; }
+  }
+
+  @media (max-width: 620px) {
+    .org-card--lg { width: 100%; padding-right: var(--sp-5); }
+    .org-card--lg .org-card__photo { width: 88px; height: 88px; }
+    .org-card--lg .org-card__name { font-size: 1.3rem; }
+  }
+</style>

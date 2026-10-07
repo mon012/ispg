@@ -3,14 +3,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
 import ExploreLinks from '../components/sections/ExploreLinks.astro';
-import { Image } from 'astro:assets';
-import { teachers, departments } from '../data/teachers';
+import OrgCard from '../components/OrgCard.astro';
+import { teachers, type Teacher } from '../data/teachers';
 import { img } from '../lib/images';
 import { cam } from '../data/accreditation';
 
-const grouped = departments
-  .map((d) => ({ department: d, people: teachers.filter((t) => t.department === d) }))
-  .filter((g) => g.people.length > 0);
+const byId = (id: string) => teachers.find((t) => t.id === id)!;
+const principal = byId('cedric');
+const head = byId('ian-foster');
+
+/** Second row of the chart, left to right. The Head Teacher's branch splits
+    into class teachers and specialists; the other two leads carry whoever
+    reports to them via `reportsTo`. */
+type Branch = { lead: Teacher; groups: { label?: string; people: Teacher[] }[] };
+const branches: Branch[] = [
+  {
+    lead: head,
+    groups: [
+      { label: 'Early Years & Homeroom', people: teachers.filter((t) => t.department === 'Primary') },
+      { label: 'Specialists', people: teachers.filter((t) => t.department === 'Specialist') },
+    ],
+  },
+  ...['kwanchanok', 'chanya'].map((id) => {
+    const reports = teachers.filter((t) => t.reportsTo === id);
+    return { lead: byId(id), groups: reports.length ? [{ people: reports }] : [] };
+  }),
+];
 
 /** Only what the modal reads — the grid renders the rest from the server.
     Staff without a written bio have no profile to open, so they're left out
@@ -39,67 +57,52 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   <PageHero
     eyebrow="Our founding team"
     title="The people your child will <em>spend their days with</em>"
-    lead="Small classes mean every teacher knows every child — not as a name on a register, but as a person with a particular way of getting stuck and a particular way of getting unstuck. Where a full profile is written, click the photo to read it."
+    lead="Small classes mean every teacher knows every child — not as a name on a register, but as a person with a particular way of getting stuck and a particular way of getting unstuck. Where a full profile is written, click the card to read it."
     image="/media/teachers/team-hero.webp"
   />
 
-  {/* ----------------------------------------------------------- staff */}
-  {grouped.map((group, gi) => (
-    <section class:list={['section', 'dept', gi % 2 === 1 && 'alt']}>
-      <div class="container">
-        <div class="dept__head" data-reveal>
-          <h2 class="dept__title">{group.department}</h2>
-          <span class="dept__count">{group.people.length} {group.people.length === 1 ? 'person' : 'people'}</span>
+  {/* ------------------------------------------------------- org chart */}
+  <section class="section">
+    <div class="container">
+      <div class="org" data-org>
+        <div class="org__root">
+          <OrgCard person={principal} clickable={hasProfile.has(principal.id)} size="lg" eager />
         </div>
+        <span class="org__stem org__stem--root" style="--d:250ms" aria-hidden="true"></span>
 
-        <ul class="people">
-          {group.people.map((t, i) => (
-            <li data-reveal data-reveal-delay={i * 60}>
-              {/* A card only becomes a button once there's a profile behind
-                  it — otherwise it's a static portrait with name and role. */}
-              <Fragment>
-                {hasProfile.has(t.id) ? (
-                  <button class="person" type="button" data-person={t.id} aria-haspopup="dialog">
-                    <span class="person__photo">
-                      {/* The opening row of the first department sits above the
-                          fold — lazy-loading it delays the LCP instead of saving
-                          anything. Everything further down stays lazy. */}
-                      <Image
-                        src={img(t.photo)!}
-                        alt={`${t.name}, ${t.role} at ISPG`}
-                        widths={[140, 280]}
-                        sizes="140px"
-                        loading={gi === 0 && i < 2 ? 'eager' : 'lazy'}
-                        decoding="async"
-                      />
-                    </span>
-                    <span class="person__name">{t.name}</span>
-                    <span class="person__role">{t.role}</span>
-                    <span class="person__more">View profile</span>
-                  </button>
-                ) : (
-                  <div class="person person--static">
-                    <span class="person__photo">
-                      <Image
-                        src={img(t.photo)!}
-                        alt={`${t.name}, ${t.role} at ISPG`}
-                        widths={[140, 280]}
-                        sizes="140px"
-                        loading={gi === 0 && i < 2 ? 'eager' : 'lazy'}
-                        decoding="async"
-                      />
-                    </span>
-                    <span class="person__name">{t.name}</span>
-                    <span class="person__role">{t.role}</span>
+        <div class="org__branches">
+          {branches.map((b, bi) => (
+            <div class:list={['org__branch', `org__branch--${b.lead.id}`]}>
+              <span class="org__bar" style="--d:450ms" aria-hidden="true"></span>
+              <span class="org__drop" style="--d:650ms" aria-hidden="true"></span>
+              <OrgCard person={b.lead} clickable={hasProfile.has(b.lead.id)} size="md" eager delay={750 + bi * 140} />
+
+              {b.groups.length > 0 && (
+                <>
+                  <span class="org__stem" style={`--d:${1100 + bi * 140}ms`} aria-hidden="true"></span>
+                  <div class:list={['org__groups', b.groups.length > 1 && 'org__groups--split']}>
+                    {b.groups.map((g, gi) => (
+                      <div class="org__group">
+                        {b.groups.length > 1 && <span class="org__bar" style={`--d:${1250 + bi * 140}ms`} aria-hidden="true"></span>}
+                        {g.label && <p class="org__label" style={`--d:${1350 + gi * 100}ms`}>{g.label}</p>}
+                        <ul class="org__list" style={`--d:${1350 + bi * 140}ms`}>
+                          {g.people.map((t, i) => (
+                            <li>
+                              <OrgCard person={t} clickable={hasProfile.has(t.id)} delay={1450 + bi * 140 + gi * 90 + i * 70} />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </Fragment>
-            </li>
+                </>
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
-    </section>
-  ))}
+    </div>
+  </section>
 
   {/* Modal shell — populated from the button that opened it. */}
   <dialog class="modal" data-modal aria-labelledby="modal-name">
@@ -146,6 +149,21 @@ const hasProfile = new Set(profiles.map((p) => p.id));
 </BaseLayout>
 
 <script define:vars={{ profiles }}>
+  // Draw the chart once it scrolls into view (lines first, then people).
+  const org = document.querySelector('[data-org]');
+  if (org) {
+    if (!('IntersectionObserver' in window)) org.classList.add('is-in');
+    else {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          org.classList.add('is-in');
+          io.disconnect();
+        }
+      }, { threshold: 0.08 });
+      io.observe(org);
+    }
+  }
+
   const modal = document.querySelector('[data-modal]');
   const byId = Object.fromEntries(profiles.map((t) => [t.id, t]));
   let lastFocused = null;
@@ -197,71 +215,135 @@ const hasProfile = new Set(profiles.map((p) => p.id));
 </script>
 
 <style>
-  .dept__head { display: flex; align-items: baseline; gap: var(--sp-4); margin-bottom: var(--sp-8); }
-  .dept__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: var(--fw-medium);
-    font-size: var(--fs-display-3);
-    color: var(--navy-700);
-  }
-  .dept__count { font-size: var(--fs-sm); color: var(--text-caption); }
+  /* ------------------------------------------------------- org chart
+     Connectors are plain spans that scale in from their origin once the
+     chart gets .is-in; --d staggers each piece so the tree "grows" from
+     the principal down. */
+  .org { --line: var(--sky-400, #8cc8f0); --gap: 36px; display: flex; flex-direction: column; align-items: center; }
+  .org__root { display: flex; justify-content: center; }
 
-  .people {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: var(--sp-8) var(--sp-6);
-  }
-  .person {
+  .org__stem, .org__drop, .org__bar { display: block; background: var(--line); border-radius: 2px; }
+  .org__stem, .org__drop { width: 3px; height: var(--gap); margin: 0 auto; transform-origin: top; }
+  .org__bar { position: absolute; top: 0; height: 3px; transform-origin: center; }
+
+  .org__branches {
     width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 0 var(--sp-6);
+  }
+  .org__branch { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .org__branch > :global(.org-card) { width: auto; max-width: 100%; }
+
+  /* Bar across the top of the row: from each lead's centre to the gutter. */
+  .org__branch > .org__bar { left: calc(var(--sp-6) / -2); right: calc(var(--sp-6) / -2); }
+  .org__branch:first-child > .org__bar { left: 50%; }
+  .org__branch:last-child > .org__bar { right: 50%; }
+
+  .org__groups { width: 100%; display: grid; gap: 0 var(--sp-5); }
+  .org__groups--split { grid-template-columns: 1fr 1fr; }
+  .org__group { position: relative; padding-top: var(--gap); }
+  .org__groups:not(.org__groups--split) .org__group { padding-top: 0; }
+  .org__groups--split .org__group > .org__bar { left: calc(var(--sp-5) / -2); right: calc(var(--sp-5) / -2); }
+  .org__groups--split .org__group:first-child > .org__bar { left: 0; }
+  .org__groups--split .org__group:last-child > .org__bar { right: calc(100% - 3px); }
+  /* Short drop from the split bar into each column. */
+  .org__groups--split .org__group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: var(--gap);
+    background: var(--line);
+    transform-origin: top;
+  }
+
+  .org__label {
+    position: relative;
+    margin: 0;
+    padding: var(--sp-3) 0 var(--sp-3) 22px;
+    height: 60px;
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 4px;
-    text-align: center;
-    background: none;
-    border: 0;
-    padding: var(--sp-4) var(--sp-3);
-    border-radius: var(--r-lg);
-    cursor: pointer;
-    font: inherit;
-    transition: background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
-  }
-  .person:hover { background: var(--sky-100); transform: translateY(-2px); }
-  /* No profile to open, so nothing should suggest one is there. */
-  .person--static { cursor: default; }
-  .person--static:hover { background: none; transform: none; }
-  .person--static:hover .person__photo { box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--line-300), var(--shadow-sm); }
-
-  .person__photo {
-    width: 128px;
-    height: 128px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 14px;
-    box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--line-300), var(--shadow-sm);
-    transition: box-shadow var(--dur-base) var(--ease-standard);
-  }
-  .person:hover .person__photo { box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--sky-400), var(--shadow-md); }
-  .person__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .person__name { font-family: var(--font-display); font-size: 1.2rem; font-weight: var(--fw-semibold); color: var(--navy-700); line-height: 1.25; }
-  .person__role { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.4; }
-  .person__more {
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
-    color: var(--accent-primary);
-    margin-top: 8px;
-    opacity: 0;
-    transform: translateY(-2px);
-    transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+    color: var(--sky-600);
   }
-  .person:hover .person__more, .person:focus-visible .person__more { opacity: 1; transform: none; }
+
+  /* A rail runs down the list and every card hangs off it. Each <li>
+     draws its own piece of rail (to its centre on the last card) so the
+     line always ends exactly where the last tick does. */
+  .org__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 22px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .org__list li { position: relative; }
+  .org__list li::before, .org__list li::after {
+    content: '';
+    position: absolute;
+    left: -22px;
+    background: var(--line);
+  }
+  .org__list li::before { top: calc(50% - 1.5px); width: 22px; height: 3px; }
+  .org__list li::after { top: calc(-1 * var(--sp-3)); bottom: 0; width: 3px; }
+  .org__list li:last-child::after { bottom: calc(50% - 1.5px); }
+  /* First rail piece reaches up into the label/drop above it. */
+  .org__list li:first-child::after { top: -60px; }
+  .org__groups:not(.org__groups--split) .org__list li:first-child::after { top: 0; }
+
+  /* A lone report sits straight under its lead — no rail needed. */
+  .org__groups:not(.org__groups--split) .org__list { padding-left: 0; }
+  .org__groups:not(.org__groups--split) .org__list li::before,
+  .org__groups:not(.org__groups--split) .org__list li::after { display: none; }
+
+  /* Entrance animation. A light pulse keeps running along the lines after. */
+  :global(.js) .org__stem, :global(.js) .org__drop { transform: scaleY(0); }
+  :global(.js) .org__bar { transform: scaleX(0); }
+  :global(.js) .org__groups--split .org__group::before { transform: scaleY(0); }
+  :global(.js) .org__list li::before, :global(.js) .org__list li::after { opacity: 0; }
+  :global(.js) .org__label { opacity: 0; }
+  .org.is-in .org__stem, .org.is-in .org__drop, .org.is-in .org__bar,
+  .org.is-in .org__label {
+    transform: none;
+    opacity: 1;
+    transition: transform 450ms var(--ease-out) var(--d), opacity 400ms var(--ease-out) var(--d);
+  }
+  .org.is-in .org__list li::before, .org.is-in .org__list li::after { opacity: 1; transition: opacity 500ms var(--ease-out) var(--d); }
+  .org.is-in .org__groups--split .org__group::before { transform: none; transition: transform 300ms var(--ease-out) 1300ms; }
+
+  .org.is-in .org__stem, .org.is-in .org__drop {
+    background: linear-gradient(180deg, var(--line) 0%, var(--line) 40%, #fff 50%, var(--line) 60%, var(--line) 100%) 0 0 / 100% 300%;
+    animation: org-flow 3.5s linear 2.4s infinite;
+  }
+  @keyframes org-flow { from { background-position: 0 100%; } to { background-position: 0 -200%; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .org__stem, :global(.js) .org__drop, :global(.js) .org__bar,
+    :global(.js) .org__groups--split .org__group::before { transform: none; }
+    :global(.js) .org__list li::before, :global(.js) .org__list li::after { opacity: 1; }
+    :global(.js) .org__label { opacity: 1; }
+    .org.is-in .org__stem, .org.is-in .org__drop { animation: none; }
+  }
+
+  /* Narrow screens: one column, every branch stacked under the principal. */
+  @media (max-width: 960px) {
+    .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 520px; }
+    .org__branch > .org__bar { display: none; }
+    .org__branch > :global(.org-card) { width: 100%; }
+    .org__branch:not(:first-child) > .org__drop { display: none; }
+    .org__groups--split { grid-template-columns: 1fr; }
+    .org__groups--split .org__group > .org__bar,
+    .org__groups--split .org__group::before { display: none; }
+    .org__groups--split .org__group { padding-top: 0; }
+  }
 
   /* ------------------------------------------------------------ modal */
   .modal {
@@ -379,8 +461,6 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   :global(.modal__facts dd) { margin: 0; font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--navy-700); line-height: 1.4; }
 
   @media (max-width: 620px) {
-    .people { grid-template-columns: repeat(2, 1fr); }
-    .person__photo { width: 104px; height: 104px; }
     .modal__facts { grid-template-columns: 1fr; }
   }
 </style>
