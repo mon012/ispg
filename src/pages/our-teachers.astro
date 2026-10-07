@@ -270,6 +270,9 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    /* Centred over the cards below (rail indent + one 236px card). */
+    justify-content: center;
+    max-width: calc(22px + 236px);
     font-size: var(--fs-xs);
     font-weight: var(--fw-bold);
     letter-spacing: var(--ls-caps);
