@@ -14,11 +14,17 @@ const head = byId('ian-foster');
 
 /** Second row of the chart, left to right. The Head Teacher's branch splits
     into class teachers and specialists; the other two leads carry whoever
-    reports to them via `reportsTo`. */
-type Branch = { lead: Teacher; groups: { label?: string; people: Teacher[] }[] };
+    reports to them via `reportsTo` — side by side on one level when
+    there's more than one. */
+type Branch = {
+  lead: Teacher;
+  layout: 'split' | 'row' | 'single';
+  groups: { label?: string; people: Teacher[] }[];
+};
 const branches: Branch[] = [
   {
     lead: head,
+    layout: 'split',
     groups: [
       { label: 'Early Years & Homeroom', people: teachers.filter((t) => t.department === 'Primary') },
       { label: 'Specialists', people: teachers.filter((t) => t.department === 'Specialist') },
@@ -26,7 +32,9 @@ const branches: Branch[] = [
   },
   ...['kwanchanok', 'chanya'].map((id) => {
     const reports = teachers.filter((t) => t.reportsTo === id);
-    return { lead: byId(id), groups: reports.length ? [{ people: reports }] : [] };
+    return reports.length > 1
+      ? { lead: byId(id), layout: 'row' as const, groups: reports.map((t) => ({ people: [t] })) }
+      : { lead: byId(id), layout: 'single' as const, groups: reports.length ? [{ people: reports }] : [] };
   }),
 ];
 
@@ -80,7 +88,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
               {b.groups.length > 0 && (
                 <>
                   <span class="org__stem" style={`--d:${1100 + bi * 140}ms`} aria-hidden="true"></span>
-                  <div class:list={['org__groups', b.groups.length > 1 && 'org__groups--split']}>
+                  <div class:list={['org__groups', b.layout !== 'single' && `org__groups--${b.layout}`]}>
                     {b.groups.map((g, gi) => (
                       <div class="org__group">
                         {b.groups.length > 1 && <span class="org__bar" style={`--d:${1250 + bi * 140}ms`} aria-hidden="true"></span>}
@@ -244,7 +252,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__groups { width: 100%; display: grid; gap: 0 var(--sp-5); }
   .org__groups--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .org__group { position: relative; padding-top: var(--gap); }
-  .org__groups:not(.org__groups--split) .org__group { padding-top: 0; }
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__group { padding-top: 0; }
   /* No grid gap: the second column starts exactly under the Head
      Teacher's stem, so the stem turns straight into the Specialists rail
      and the bar meets it at a clean corner. */
@@ -265,6 +273,30 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     background: var(--line);
     transform-origin: top;
   }
+
+  /* A lead with several reports on one level: the row is two cards wide
+     and reaches back over the empty space under the neighbouring lead, so
+     the lead's stem lands on the right-hand card's centre. */
+  .org__groups--row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 var(--sp-6);
+    width: calc(200% + var(--sp-6));
+    margin-left: calc(-100% - var(--sp-6));
+  }
+  .org__groups--row .org__group { padding-top: var(--gap); }
+  .org__groups--row .org__group > .org__bar { left: 50%; right: calc(var(--sp-6) / -2); }
+  .org__groups--row .org__group:last-child > .org__bar { left: calc(var(--sp-6) / -2); right: 50%; }
+  .org__groups--row .org__group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(50% - 1.5px);
+    width: 3px;
+    height: var(--gap);
+    background: var(--line);
+  }
+  .org__groups--row .org__list { padding-left: 0; align-items: center; }
+  .org__groups--row .org__list li::before, .org__groups--row .org__list li::after { display: none; }
 
   .org__label {
     position: relative;
@@ -296,7 +328,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     gap: var(--sp-3);
   }
   .org__list li { position: relative; }
-  .org__groups:not(.org__groups--split) .org__list { align-items: center; }
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list { align-items: center; }
   .org__list li::before, .org__list li::after {
     content: '';
     position: absolute;
@@ -308,14 +340,14 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   .org__list li:last-child::after { bottom: calc(50% - 1.5px); }
   /* First rail piece reaches up into the label/drop above it. */
   .org__list li:first-child::after { top: -60px; }
-  .org__groups:not(.org__groups--split) .org__list li:first-child::after { top: 0; }
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list li:first-child::after { top: 0; }
 
   /* A lone report sits straight under its lead — no rail needed. */
-  .org__groups:not(.org__groups--split) .org__list { padding-left: 0; }
-  .org__groups:not(.org__groups--split) .org__list li::before,
-  .org__groups:not(.org__groups--split) .org__list li:first-child::after { display: none; }
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list { padding-left: 0; }
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list li::before,
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list li:first-child::after { display: none; }
   /* Several reports under one lead stack in a column, joined centre to centre. */
-  .org__groups:not(.org__groups--split) .org__list li:not(:first-child)::after {
+  .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list li:not(:first-child)::after {
     left: calc(50% - 1.5px);
     top: calc(-1 * var(--sp-3));
     bottom: auto;
@@ -356,12 +388,20 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 560px; }
     .org__branch > .org__bar { display: none; }
     .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
-    .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }
+    .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list { align-items: stretch; }
     /* Stacked, the small HR and Admissions branches come first and the
        long Head Teacher branch closes the chart. Only the first stacked
        branch (Kwanchanok) keeps its drop up to the principal. */
     .org__branch:first-child { order: 1; }
     .org__label { max-width: none; font-size: calc(var(--fs-xs) * 1.3); }
+    /* Stacked, the row turns into a column joined card to card. */
+    .org__groups--row { grid-template-columns: 1fr; width: 100%; margin-left: 0; }
+    .org__groups--row .org__group { padding-top: var(--sp-3); }
+    .org__groups--row .org__group:first-child { padding-top: 0; }
+    .org__groups--row .org__group:first-child::before { display: none; }
+    .org__groups--row .org__group::before { height: var(--sp-3); }
+    .org__groups--row .org__group > .org__bar { display: none; }
+    .org__groups--row .org__list { align-items: stretch; }
     .org__branch:not(:nth-child(2)) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
     .org__groups--split .org__group:last-child { margin-left: 0; }
