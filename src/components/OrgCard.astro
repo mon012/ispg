@@ -61,7 +61,9 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     border-radius: 999px;
     box-shadow: var(--shadow-sm);
   }
-  .org-card--md { padding-right: var(--sp-6); }
+  /* Every capsule in a tier is the same size, however long the name. */
+  .org-card--sm { height: 84px; width: 236px; max-width: 100%; }
+  .org-card--md { height: 112px; width: 268px; max-width: 100%; padding-right: var(--sp-5); }
   .org-card--lg { padding: 12px var(--sp-8) 12px 12px; width: auto; }
 
   .org-card__photo {
@@ -79,7 +81,13 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
 
   .org-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .org-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.02rem; line-height: 1.2; }
-  .org-card--md .org-card__name { font-size: 1.2rem; }
+  .org-card--md .org-card__name { font-size: 1.12rem; }
+  .org-card__name, .org-card__role {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
   .org-card--lg .org-card__name { font-size: 1.6rem; }
   .org-card__role { font-size: var(--fs-xs); letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
   .org-card--lg .org-card__role { font-size: var(--fs-sm); }

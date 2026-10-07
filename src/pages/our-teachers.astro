@@ -233,8 +233,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     gap: 0 var(--sp-6);
   }
   .org__branch { position: relative; display: flex; flex-direction: column; align-items: center; }
-  .org__branch > :global(.org-card) { width: auto; max-width: 100%; }
-
+  
   /* Bar across the top of the row: from each lead's centre to the gutter. */
   .org__branch > .org__bar { left: calc(var(--sp-6) / -2); right: calc(var(--sp-6) / -2); }
   .org__branch:first-child > .org__bar { left: 50%; }
@@ -286,6 +285,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     gap: var(--sp-3);
   }
   .org__list li { position: relative; }
+  .org__groups:not(.org__groups--split) .org__list { align-items: center; }
   .org__list li::before, .org__list li::after {
     content: '';
     position: absolute;
@@ -337,7 +337,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   @media (max-width: 960px) {
     .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 520px; }
     .org__branch > .org__bar { display: none; }
-    .org__branch > :global(.org-card) { width: 100%; }
+    .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
+    .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }
     .org__branch:not(:first-child) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
     .org__groups--split .org__group > .org__bar,
