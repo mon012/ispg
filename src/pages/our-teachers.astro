@@ -75,8 +75,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
       <div class="org" data-org>
         <div class="org__root">
           <OrgCard person={principal} clickable={hasProfile.has(principal.id)} size="lg" eager />
+          <span class="org__stem org__stem--root" style="--d:250ms" aria-hidden="true"></span>
         </div>
-        <span class="org__stem org__stem--root" style="--d:250ms" aria-hidden="true"></span>
 
         <div class="org__branches">
           {branches.map((b, bi) => (
@@ -230,7 +230,16 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   /* The chart needs more room than the standard container gives. */
   .container.org-wrap { max-width: 1360px; }
   .org { --line: var(--sky-400, #8cc8f0); --gap: 36px; display: flex; flex-direction: column; align-items: center; }
-  .org__root { display: flex; justify-content: center; }
+  /* The principal sits on the same grid as the row below, centred over
+     the middle (HR) column so the chart reads as one clean vertical. */
+  .org__root {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 630fr 283fr 283fr;
+    column-gap: var(--sp-6);
+    justify-items: center;
+  }
+  .org__root > :global(*) { grid-column: 2; }
 
   .org__stem, .org__drop, .org__bar { display: block; background: var(--line); border-radius: 2px; }
   .org__stem, .org__drop { width: 3px; height: var(--gap); margin: 0 auto; transform-origin: top; }
@@ -388,6 +397,8 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   /* Narrow screens: one column, every branch stacked under the principal. */
   @media (max-width: 1240px) {
     .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 560px; }
+    .org__root { grid-template-columns: 1fr; max-width: 560px; }
+    .org__root > :global(*) { grid-column: 1; }
     .org__branch > .org__bar { display: none; }
     .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
     .org__groups:not(.org__groups--split):not(.org__groups--row) .org__list { align-items: stretch; }
