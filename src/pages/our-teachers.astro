@@ -283,7 +283,9 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     width: calc(200% + var(--sp-6));
     margin-left: calc(-100% - var(--sp-6));
   }
-  .org__groups--row .org__group { padding-top: var(--gap); }
+  /* Drops run long so these cards sit level with the first row of the
+     Head Teacher's lists (which have a 60px label above them). */
+  .org__groups--row .org__group { padding-top: calc(var(--gap) + 60px); }
   .org__groups--row .org__group > .org__bar { left: 50%; right: calc(var(--sp-6) / -2); }
   .org__groups--row .org__group:last-child > .org__bar { left: calc(var(--sp-6) / -2); right: 50%; }
   .org__groups--row .org__group::before {
@@ -292,7 +294,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
     top: 0;
     left: calc(50% - 1.5px);
     width: 3px;
-    height: var(--gap);
+    height: calc(var(--gap) + 60px);
     background: var(--line);
   }
   .org__groups--row .org__list { padding-left: 0; align-items: center; }
