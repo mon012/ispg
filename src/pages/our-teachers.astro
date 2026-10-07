@@ -354,6 +354,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
        long Head Teacher branch closes the chart. Only the first stacked
        branch (Kwanchanok) keeps its drop up to the principal. */
     .org__branch:first-child { order: 1; }
+    .org__label { max-width: none; font-size: calc(var(--fs-xs) * 1.3); }
     .org__branch:not(:nth-child(2)) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }
     .org__groups--split .org__group:last-child { margin-left: 0; }
