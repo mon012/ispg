@@ -236,7 +236,7 @@ export const teachers: Teacher[] = [
     name: 'Thanwarat Phatthong',
     role: 'Reception',
     department: 'Operations',
-    reportsTo: 'kwanchanok',
+    reportsTo: 'chanya',
     photo: '/media/teachers/thanwarat-portrait.webp',
   },
   {

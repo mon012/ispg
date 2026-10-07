@@ -313,7 +313,14 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   /* A lone report sits straight under its lead — no rail needed. */
   .org__groups:not(.org__groups--split) .org__list { padding-left: 0; }
   .org__groups:not(.org__groups--split) .org__list li::before,
-  .org__groups:not(.org__groups--split) .org__list li::after { display: none; }
+  .org__groups:not(.org__groups--split) .org__list li:first-child::after { display: none; }
+  /* Several reports under one lead stack in a column, joined centre to centre. */
+  .org__groups:not(.org__groups--split) .org__list li:not(:first-child)::after {
+    left: calc(50% - 1.5px);
+    top: calc(-1 * var(--sp-3));
+    bottom: auto;
+    height: var(--sp-3);
+  }
 
   /* Entrance animation. A light pulse keeps running along the lines after. */
   :global(.js) .org__stem, :global(.js) .org__drop { transform: scaleY(0); }
