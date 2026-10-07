@@ -75,7 +75,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
             <div class:list={['org__branch', `org__branch--${b.lead.id}`]}>
               <span class="org__bar" style="--d:450ms" aria-hidden="true"></span>
               <span class="org__drop" style="--d:650ms" aria-hidden="true"></span>
-              <OrgCard person={b.lead} clickable={hasProfile.has(b.lead.id)} size="md" eager delay={750 + bi * 140} />
+              <OrgCard person={b.lead} clickable={hasProfile.has(b.lead.id)} size="md" delay={750 + bi * 140} />
 
               {b.groups.length > 0 && (
                 <>
