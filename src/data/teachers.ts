@@ -79,14 +79,14 @@ export const teachers: Teacher[] = [
   },
   {
     id: 'chanya',
-    name: 'Ms. Chanya Klinkanchan',
+    name: 'Chanya Klinkanchan',
     role: 'Head of Admissions',
     department: 'Leadership',
     photo: '/media/teachers/chanya-portrait.webp',
   },
   {
     id: 'kwanchanok',
-    name: 'Ms. Kwanchanok Mongkolsap',
+    name: 'Kwanchanok Mongkolsap',
     role: 'Human Resources',
     department: 'Leadership',
     photo: '/media/teachers/kwanchanok-portrait.webp',
