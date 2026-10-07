@@ -337,7 +337,7 @@ const hasProfile = new Set(profiles.map((p) => p.id));
   @media (max-width: 960px) {
     .org__branches { grid-template-columns: 1fr; gap: var(--sp-8); max-width: 520px; }
     .org__branch > .org__bar { display: none; }
-    .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
+    .org__root, .org__root :global(.org-card), .org__branch > :global(.org-card), .org__list :global(.org-card) { width: 100%; }
     .org__groups:not(.org__groups--split) .org__list { align-items: stretch; }
     .org__branch:not(:first-child) > .org__drop { display: none; }
     .org__groups--split { grid-template-columns: 1fr; }

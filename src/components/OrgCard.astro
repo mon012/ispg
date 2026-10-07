@@ -58,39 +58,32 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     color: #fff;
     background: linear-gradient(135deg, var(--navy-700), #1f4f86);
     border: 0;
-    border-radius: 999px;
+    border-radius: 14px;
     box-shadow: var(--shadow-sm);
   }
-  /* Every capsule in a tier is the same size, however long the name. */
-  .org-card--sm { height: 84px; width: 236px; max-width: 100%; }
-  .org-card--md { height: 112px; width: 268px; max-width: 100%; padding-right: var(--sp-5); }
-  .org-card--lg { padding: 12px var(--sp-8) 12px 12px; width: auto; }
+  /* One card size for everyone on the chart, however long the name. */
+  .org-card { width: 236px; max-width: 100%; height: 92px; }
 
   .org-card__photo {
     flex: none;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+    width: 68px;
+    height: 68px;
+    border-radius: 10px;
     overflow: hidden;
     background: var(--sky-100);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
   }
-  .org-card--md .org-card__photo { width: 88px; height: 88px; }
-  .org-card--lg .org-card__photo { width: 120px; height: 120px; box-shadow: 0 0 0 4px #fff; }
   .org-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 
   .org-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .org-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.02rem; line-height: 1.2; }
-  .org-card--md .org-card__name { font-size: 1.12rem; }
   .org-card__name, .org-card__role {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
-  .org-card--lg .org-card__name { font-size: 1.6rem; }
   .org-card__role { font-size: var(--fs-xs); letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); line-height: 1.35; }
-  .org-card--lg .org-card__role { font-size: var(--fs-sm); }
   /* Hidden until hover/focus — the breathing ring already marks the card
      as clickable, so the label only confirms it. */
   .org-card__more {
@@ -137,9 +130,4 @@ const px = size === 'lg' ? 120 : size === 'md' ? 88 : 64;
     :global(.org.is-in) .org-card--link::after { animation: none; }
   }
 
-  @media (max-width: 620px) {
-    .org-card--lg { width: 100%; padding-right: var(--sp-5); }
-    .org-card--lg .org-card__photo { width: 88px; height: 88px; }
-    .org-card--lg .org-card__name { font-size: 1.3rem; }
-  }
 </style>
