@@ -1,0 +1,11 @@
+# Cloudflare Pages response headers.
+# CSP is deliberately minimal (no script-src/frame-src allowlist) so GTM,
+# YouTube, Gumlet, Deftform and map embeds keep working; it only blocks
+# framing by other sites, plugins and <base> hijacking.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests
