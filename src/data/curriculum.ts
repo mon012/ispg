@@ -129,8 +129,8 @@ export const montessoriPrinciples = [
 
 /** The one connected journey, Nursery to Key Stage 2. */
 export const pathway = [
-  { stage: 'Nursery', ages: 'Ages 2–3', href: '/academics/kindergarten/#nursery', image: '/media/site/class/class-06.webp' },
-  { stage: 'Casa', ages: 'Ages 3–5', href: '/academics/kindergarten/#casa', image: '/media/site/class/class-14.webp' },
-  { stage: 'Key Stage 1', ages: 'Ages 5–8', href: '/academics/primary/#key-stage-1', image: '/media/site/class/class-04.webp' },
-  { stage: 'Key Stage 2', ages: 'Ages 8–11', href: '/academics/primary/#key-stage-2', image: '/media/site/class/class-25.webp' },
+  { stage: 'Nursery', ages: 'Ages 2–3', href: '/academics/kindergarten/#nursery', image: '/media/site/class/class-22.webp' },
+  { stage: 'Casa', ages: 'Ages 3–5', href: '/academics/kindergarten/#casa', image: '/media/site/class/class-03.webp' },
+  { stage: 'Key Stage 1', ages: 'Ages 5–8', href: '/academics/primary/#key-stage-1', image: '/media/site/class/class-18.webp' },
+  { stage: 'Key Stage 2', ages: 'Ages 8–11', href: '/academics/primary/#key-stage-2', image: '/media/site/class/class-26.webp' },
 ];

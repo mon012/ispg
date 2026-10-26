@@ -28,7 +28,7 @@ export const pillars: Pillar[] = [
     body:
       'Our Montessori foundation lets children follow their own questions, at their own pace, well past what a fixed timetable would allow. They choose what to explore, and that choice is what makes it stick.',
     accent: 'var(--flair-lifelong)',
-    image: '/media/site/class/class-18.webp',
+    image: '/media/site/class/class-04.webp',
   },
   {
     letter: 'A',
