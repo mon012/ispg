@@ -36,7 +36,7 @@ export const kindergarten: Stage[] = [
       { name: 'Imaginative Play & Creative Arts' },
       { name: 'Environmental Discovery & Nature Learning' },
     ],
-    image: '/media/site/circle-time.webp',
+    image: '/media/site/class/class-20.webp',
   },
   {
     slug: 'casa',
@@ -56,7 +56,7 @@ export const kindergarten: Stage[] = [
       { name: 'Social-Emotional Development' },
       { name: 'Nature & Outdoor Discovery' },
     ],
-    image: '/media/site/one-to-one.webp',
+    image: '/media/site/class/class-23.webp',
   },
 ];
 
@@ -81,7 +81,7 @@ export const primary: Stage[] = [
       { name: 'Wellbeing', detail: 'Mindfulness & Emotional Regulation' },
       { name: 'Innovation', detail: 'Computing & Digital Literacy' },
     ],
-    image: '/media/site/pupils-line.webp',
+    image: '/media/site/class/class-07.webp',
   },
   {
     slug: 'key-stage-2',
@@ -103,7 +103,7 @@ export const primary: Stage[] = [
       { name: 'Wellbeing', detail: 'Emotional Intelligence, Stress Management, Positive Habits' },
       { name: 'Innovation', detail: 'Computing & Digital Literacy' },
     ],
-    image: '/media/site/active.webp',
+    image: '/media/site/class/class-24.webp',
   },
 ];
 
@@ -129,8 +129,8 @@ export const montessoriPrinciples = [
 
 /** The one connected journey, Nursery to Key Stage 2. */
 export const pathway = [
-  { stage: 'Nursery', ages: 'Ages 2–3', href: '/academics/kindergarten/#nursery', image: '/media/site/portrait.webp' },
-  { stage: 'Casa', ages: 'Ages 3–5', href: '/academics/kindergarten/#casa', image: '/media/site/pupils.webp' },
-  { stage: 'Key Stage 1', ages: 'Ages 5–8', href: '/academics/primary/#key-stage-1', image: '/media/site/pupils-2.webp' },
-  { stage: 'Key Stage 2', ages: 'Ages 8–11', href: '/academics/primary/#key-stage-2', image: '/media/site/pupils-3.webp' },
+  { stage: 'Nursery', ages: 'Ages 2–3', href: '/academics/kindergarten/#nursery', image: '/media/site/class/class-06.webp' },
+  { stage: 'Casa', ages: 'Ages 3–5', href: '/academics/kindergarten/#casa', image: '/media/site/class/class-14.webp' },
+  { stage: 'Key Stage 1', ages: 'Ages 5–8', href: '/academics/primary/#key-stage-1', image: '/media/site/class/class-04.webp' },
+  { stage: 'Key Stage 2', ages: 'Ages 8–11', href: '/academics/primary/#key-stage-2', image: '/media/site/class/class-25.webp' },
 ];
