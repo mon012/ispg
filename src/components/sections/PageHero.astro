@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Eyebrow from '../ui/Eyebrow.astro';
-import { img } from '../../lib/images';
+import { img, altFor } from '../../lib/images';
 import { crumbsFor, type Crumb } from '../../lib/seo';
 
 /** Standard interior-page hero: a photograph under a navy protection gradient,
@@ -16,6 +16,8 @@ interface Props {
   /** Sub-brand logo shown beside the title — a transparent PNG/WebP. */
   emblem?: string;
   emblemAlt?: string;
+  /** Describes the photo; defaults to the shared description for `image`. */
+  imageAlt?: string;
   class?: string;
   /** Names the last breadcrumb when the URL slug is not a readable label. */
   crumbName?: string;
@@ -32,6 +34,7 @@ const {
   size = 'md',
   emblem,
   emblemAlt = '',
+  imageAlt,
   class: className = '',
   crumbName,
   crumbParent,
@@ -50,7 +53,7 @@ const crumbs = crumbsFor(Astro.url.pathname, { currentName: crumbName, parent: c
     {heroAsset ? (
       <Image
         src={heroAsset}
-        alt=""
+        alt={imageAlt ?? altFor(image)}
         widths={[768, 1280, 1920]}
         sizes="100vw"
         loading="eager"
@@ -58,7 +61,7 @@ const crumbs = crumbsFor(Astro.url.pathname, { currentName: crumbName, parent: c
         decoding="async"
       />
     ) : (
-      <img src={image} alt="" fetchpriority="high" decoding="async" />
+      <img src={image} alt={imageAlt ?? altFor(image)} fetchpriority="high" decoding="async" />
     )}
     <div class="phero__scrim"></div>
   </div>

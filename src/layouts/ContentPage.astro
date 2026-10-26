@@ -79,6 +79,7 @@ const schema = isArticle
     eyebrow={eyebrow ?? topic ?? undefined}
     title={title}
     image={hero ?? '/media/site/campus-aerial.webp'}
+    imageAlt={hero ? title : undefined}
     size={isArticle ? 'md' : 'sm'}
     crumbName={title}
     crumbParent={crumbParent}
@@ -133,8 +134,8 @@ const schema = isArticle
           {related.map((r) => (
             <a class="related__card" href={`/${r.slug}/`}>
               {r.hero && (img(r.hero)
-                ? <Image src={img(r.hero)!} alt="" widths={[360, 720]} sizes="(min-width: 900px) 360px, 90vw" loading="lazy" decoding="async" />
-                : <img src={r.hero} alt="" loading="lazy" decoding="async" />)}
+                ? <Image src={img(r.hero)!} alt={r.title} widths={[360, 720]} sizes="(min-width: 900px) 360px, 90vw" loading="lazy" decoding="async" />
+                : <img src={r.hero} alt={r.title} loading="lazy" decoding="async" />)}
               <div class="related__body">
                 {r.topic && <Badge tone="gold">{r.topic}</Badge>}
                 <h3>{r.title}</h3>

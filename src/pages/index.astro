@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { img } from '../lib/images';
+import { img, altFor } from '../lib/images';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
@@ -248,7 +248,7 @@ const stages = [
           {tile.kind === 'image' ? (
             <Image
               src={img(tile.src)!}
-              alt=""
+              alt={altFor(tile.src)}
               widths={[560, 1120]}
               sizes="(min-width: 900px) 560px, 100vw"
               loading="lazy"
