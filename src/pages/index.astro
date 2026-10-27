@@ -196,17 +196,8 @@ const stages = [
   {/* ------------------------------------------------------------ intro */}
   <section class="section">
     <div class="container narrow intro" data-reveal>
-      <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
-      <p class="intro__body">
-        Ages 2 to 11 on Koh Phangan, taught in English, in classes small enough that every
-        child is known by name.
-      </p>
-      <Button variant="secondary" href="/flair/">
-        Discover our approach
-        <Icon name="arrow-right" size={15} slot="icon-right" />
-      </Button>
       {SHOW_ACCREDITATION && (
-      <div class="accred">
+      <div class="accred accred--top">
         <span class="accred__by">Officially accredited by</span>
         <span class="accred__divider" aria-hidden="true"></span>
         <Image
@@ -219,6 +210,15 @@ const stages = [
         />
       </div>
       )}
+      <p class="intro__kicker">Rooted in nature, reaching for the world.</p>
+      <p class="intro__body">
+        Ages 2 to 11 on Koh Phangan, taught in English, in classes small enough that every
+        child is known by name.
+      </p>
+      <Button variant="secondary" href="/flair/">
+        Discover our approach
+        <Icon name="arrow-right" size={15} slot="icon-right" />
+      </Button>
       <div class="accred accred--thai">
         <span class="accred__by">Licensed &amp; quality-assured in Thailand</span>
         <span class="accred__divider" aria-hidden="true"></span>
@@ -648,7 +648,7 @@ const stages = [
   }
   .accred__divider { width: 1px; height: 32px; background: var(--border-strong); }
   .accred img { width: 180px; height: auto; }
-  .accred--thai { margin-top: 0; padding-top: var(--sp-5); border-top: 0; }
+  .accred--top { margin: 0 0 var(--sp-4); padding: 0 0 var(--sp-8); border-top: 0; border-bottom: 1px solid var(--border-hairline); }
   .accred__seals { display: flex; align-items: center; gap: var(--sp-4); }
   .accred__seals img { width: auto; height: 48px; }
 
