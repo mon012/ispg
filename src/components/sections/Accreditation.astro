@@ -1,0 +1,84 @@
+---
+/** The accreditation badges: Cambridge, and the Thai licensing and quality
+ *  seals. `show` picks which row(s) to render; `rule` draws the hairline above
+ *  or below the block so pages can slot it between other content. */
+import { Image } from 'astro:assets';
+import { img } from '../../lib/images';
+import { SHOW_ACCREDITATION } from '../../data/accreditation';
+
+interface Props {
+  show?: 'both' | 'cambridge' | 'thai';
+  rule?: 'top' | 'bottom' | 'none';
+}
+const { show = 'both', rule = 'top' } = Astro.props;
+
+const thaiSeals = [
+  { src: '/media/brand/moe.webp', alt: 'Ministry of Education, Thailand' },
+  { src: '/media/brand/opec.webp', alt: 'Office of the Private Education Commission (OPEC), Thailand' },
+  { src: '/media/brand/onesqa.webp', alt: 'Office for National Education Standards and Quality Assessment (ONESQA), Thailand' },
+];
+const showCambridge = SHOW_ACCREDITATION && show !== 'thai';
+const showThai = show !== 'cambridge';
+---
+{(showCambridge || showThai) && (
+<div class:list={['accred', `accred--rule-${rule}`]}>
+  {showCambridge && (
+  <div class="accred__row">
+    <span class="accred__by">Officially accredited by</span>
+    <span class="accred__divider" aria-hidden="true"></span>
+    <Image
+      class="accred__cambridge"
+      src={img('/media/brand/cambridge.webp')!}
+      alt="Cambridge Assessment International Education — Cambridge International School"
+      widths={[180, 360]}
+      sizes="180px"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  )}
+  {showThai && (
+  <div class="accred__row">
+    <span class="accred__by">Licensed &amp; quality-assured in Thailand</span>
+    <span class="accred__divider" aria-hidden="true"></span>
+    <span class="accred__seals">
+      {thaiSeals.map((s) => (
+        <Image src={img(s.src)!} alt={s.alt} widths={[48, 96]} sizes="48px" loading="lazy" decoding="async" />
+      ))}
+    </span>
+  </div>
+  )}
+</div>
+)}
+
+<style>
+  .accred {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+    align-self: stretch;
+  }
+  .accred--rule-top { margin-top: var(--sp-4); padding-top: var(--sp-8); border-top: 1px solid var(--border-hairline); }
+  .accred--rule-bottom { margin-bottom: var(--sp-4); padding-bottom: var(--sp-8); border-bottom: 1px solid var(--border-hairline); }
+  .accred__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-5);
+    flex-wrap: wrap;
+  }
+  .accred__by {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--accent-primary);
+  }
+  .accred__divider { width: 1px; height: 32px; background: var(--border-strong); }
+  .accred__cambridge { width: 180px; height: auto; }
+  .accred__seals { display: flex; align-items: center; gap: var(--sp-4); }
+  .accred__seals img { width: auto; height: 48px; }
+
+  @media (max-width: 480px) {
+    .accred__divider { display: none; }
+  }
+</style>
