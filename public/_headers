@@ -3,6 +3,7 @@
 # YouTube, Gumlet, Deftform and map embeds keep working; it only blocks
 # framing by other sites, plugins and <base> hijacking.
 /*
+  ! Access-Control-Allow-Origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
