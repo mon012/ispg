@@ -6,7 +6,9 @@ import PageHero from '../components/sections/PageHero.astro';
 import CtaBand from '../components/sections/CtaBand.astro';
 import Badge from '../components/ui/Badge.astro';
 import Icon from '../components/site/Icon.astro';
-import { articleSchema } from '../lib/seo';
+import FaqSection from '../components/sections/FaqSection.astro';
+import { articleSchema, faqSchema } from '../lib/seo';
+import { articleFaq } from '../data/faq';
 import '../styles/legacy-content.css';
 
 /** Renders migrated WordPress content. Copy is preserved close to verbatim and
@@ -64,6 +66,8 @@ const schema = isArticle
       topic: topic ?? null,
     })
   : undefined;
+const faq = articleFaq[slug] ?? [];
+const schemas = [schema, faq.length ? faqSchema(faq) : undefined].filter((g) => g !== undefined);
 ---
 
 <BaseLayout
@@ -73,7 +77,7 @@ const schema = isArticle
   image={hero ?? undefined}
   crumbName={title}
   crumbParent={crumbParent}
-  schema={schema}
+  schema={schemas}
 >
   <PageHero
     eyebrow={eyebrow ?? topic ?? undefined}
@@ -98,6 +102,8 @@ const schema = isArticle
       <div class="legacy-content" set:html={html} />
     </div>
   </article>
+
+  {faq.length > 0 && <FaqSection items={faq} alt />}
 
   {needsDeftform && <script is:inline src="https://cdn.deftform.com/embed.js" async />}
 

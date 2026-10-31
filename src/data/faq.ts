@@ -57,3 +57,30 @@ export const admissionFaq: FaqItem[] = [
     a: 'THB 3,000. It is non-refundable and non-transferable, covers the student assessment and the application procedure, and does not on its own guarantee a place.',
   },
 ];
+
+/** Article FAQs, keyed by slug. Each answers a question searchers bring to that
+ *  article, drawn from what the article itself says. */
+export const articleFaq: Record<string, FaqItem[]> = {
+  'why-montessori-education-better': [
+    {
+      q: 'Are Montessori schools good?',
+      a: 'When the method is implemented well, the evidence is strongly in its favour, particularly in early childhood. Studies of Montessori children consistently report stronger executive function, early reading and social-emotional understanding than peers in conventional classrooms. Quality varies, though: look for mixed-age classes, trained guides, proper Montessori materials and long uninterrupted work periods.',
+    },
+    {
+      q: 'What are the benefits of Montessori education?',
+      a: 'The main benefits are independence, concentration and intrinsic motivation. Children choose purposeful work, repeat it until they master it and learn at their own pace, which builds working memory, self-regulation and confidence. Mixed-age classrooms add social skills, as older children consolidate learning by helping younger ones.',
+    },
+    {
+      q: 'Is Montessori education better than traditional schooling?',
+      a: 'For most children in the early years, research suggests it is: Montessori pupils tend to match or outperform traditionally taught peers academically while also scoring higher on creativity and social-emotional measures. The open questions are about access and implementation quality, not whether the core method works.',
+    },
+    {
+      q: 'What age is Montessori best for?',
+      a: 'Montessori is most closely associated with ages 3 to 6, the period Maria Montessori called the absorbent mind, when children are especially receptive to language, order and movement. The approach continues into the primary years, where it supports self-directed research and collaboration.',
+    },
+    {
+      q: 'Does ISPG offer a Montessori education on Koh Phangan?',
+      a: 'ISPG builds Montessori foundations into its Nursery and Reception years, with hands-on materials, child-led choice and a calm prepared environment, inside an internationally recognised curriculum that continues through primary school.',
+    },
+  ],
+};

@@ -35,7 +35,9 @@ const {
   schema: pageSchema,
 } = Astro.props;
 
-const fullTitle = title === site.name ? title : `${title} — ${site.shortName}`;
+// Titles that already lead with the short name (the home page) skip the suffix.
+const fullTitle =
+  title === site.name || title.startsWith(site.shortName) ? title : `${title} — ${site.shortName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 // Social scrapers need an absolute URL to a file that actually exists. Site
 // imagery now lives in src/assets and is emitted under a content-hashed name,
@@ -47,7 +49,7 @@ const schema = {
   '@context': 'https://schema.org',
   '@type': 'School',
   name: site.name,
-  alternateName: site.shortName,
+  alternateName: [site.shortName, `${site.shortName} Koh Phangan`, site.legalName],
   legalName: site.legalName,
   description: site.description,
   url: site.url,
